@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  apiUrl: 'https://api.birminghamurbanobservatory.com',
+  audience: 'https://api.birminghamurbanobservatory.com'
 };
