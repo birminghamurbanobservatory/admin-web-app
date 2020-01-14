@@ -15,7 +15,8 @@ export class AuthService {
     createAuth0Client({
       domain: "birminghamurbanobservatory.eu.auth0.com",
       client_id: "SZUJnz2mCplP4FroWJT0gzGiCl0QMbiF",
-      redirect_uri: `${window.location.origin}`,
+      // I've add the /callback part
+      redirect_uri: `${window.location.origin}/callback`,
       audience: environment.audience
     })
   ) as Observable<Auth0Client>).pipe(
@@ -80,7 +81,8 @@ export class AuthService {
     this.auth0Client$.subscribe((client: Auth0Client) => {
       // Call method to log in
       client.loginWithRedirect({
-        redirect_uri: `${window.location.origin}`,
+        // I've add the /callback part
+        redirect_uri: `${window.location.origin}/callback`,
         appState: { target: redirectPath }
       });
     });
