@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {AuthGuard} from './auth.guard';
-import {AccountComponent} from './account/account.component';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {InterceptorService} from './interceptor.service';
-import {DeploymentComponent} from './deployment/deployment.component';
 import {CallbackComponent} from './callback/callback.component';
 
 
@@ -15,23 +13,24 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'callback',
-    component: CallbackComponent
+    path: 'deployments',
+    loadChildren: () => import('./deployment/deployment.module').then(m => m.DeploymentModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'sensors',
-    loadChildren: () => import('./sensor/sensor.module').then(m => m.SensorModule)
+    loadChildren: () => import('./sensor/sensor.module').then(m => m.SensorModule),
+    canActivate: [AuthGuard] // canLoad is probably better here, but I'm struggling to implement it
   },
   {
     path: 'account',
-    component: AccountComponent,
+    loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
     canActivate: [AuthGuard]
   },
   {
-    path: 'deployments',
-    component: DeploymentComponent,
-    canActivate: [AuthGuard]
-  }
+    path: 'callback',
+    component: CallbackComponent
+  },
 ];
 
 @NgModule({

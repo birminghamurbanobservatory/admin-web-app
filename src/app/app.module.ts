@@ -4,21 +4,20 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AccountComponent } from './account/account.component';
-import { DeploymentComponent } from './deployment/deployment.component';
 import { CallbackComponent } from './callback/callback.component';
+import {MyMaterialModule} from './material/my-material.module';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    AccountComponent,
-    DeploymentComponent,
     CallbackComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MyMaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

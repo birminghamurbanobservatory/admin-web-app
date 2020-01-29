@@ -1,4 +1,32 @@
+<div class="main-container" [class.is-mobile]="mobileQuery.matches">
+  
+  <mat-toolbar color="primary" class="main-toolbar">
+    <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+    <h1 class="app-name-header">Admin App</h1>
+    <span class="spacer"></span>
+    <button mat-raised-button color="accent" (click)="auth.logout()" *ngIf="auth.loggedIn">Log Out</button>
+  </mat-toolbar>
 
-<router-outlet></router-outlet>
+  <mat-sidenav-container class="sidenav-container">
+                         
+    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" [opened]="!mobileQuery.matches">
 
-<button (click)="auth.logout()" *ngIf="auth.loggedIn">Log Out</button>
+      <mat-nav-list>
+        <a mat-list-item [routerLink]="['/deployments']" routerLinkActive="text--accent" >Deployments</a>
+        <a mat-list-item [routerLink]="['/sensors']" routerLinkActive="text--accent">Sensors</a>
+        <a mat-list-item [routerLink]="['/account']" routerLinkActive="text--accent">Account</a>
+      </mat-nav-list>
+
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+
+      <router-outlet></router-outlet>
+
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+</div>
+
+

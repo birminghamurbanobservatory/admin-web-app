@@ -15,7 +15,7 @@ export class AuthService {
     createAuth0Client({
       domain: "birminghamurbanobservatory.eu.auth0.com",
       client_id: "SZUJnz2mCplP4FroWJT0gzGiCl0QMbiF",
-      // I've add the /callback part
+      // I've added the /callback part so that there's a component without a guard protecting it.
       redirect_uri: `${window.location.origin}/callback`,
       audience: environment.audience
     })
