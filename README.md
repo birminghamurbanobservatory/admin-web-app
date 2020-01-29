@@ -33,6 +33,10 @@ Authentication provided by Auth0, following this [tutorial](https://auth0.com/do
 Pretty looking components provided by [Angular Material](https://material.angular.io/).
 
 
+## Troubleshooting
+
+If you're having issues loading the page you may need to try clearing your cache. I had some issues running it in Google Chrome. 
+
 
 
 
