@@ -1,0 +1,38 @@
+<div class="container container--padded-top">
+
+  <div fxLayout="row" fxLayoutAlign="center">
+
+    <!-- TODO how to I make the width of this form responsive -->
+    <form class="form--max-width-600" [formGroup]="createDeploymentForm" (ngSubmit)="onSubmit(createDeploymentForm.value)">
+
+      <mat-form-field class="form__field--max-width" hintLabel="Max 10 characters">
+        <input matInput id="id" type="text" formControlName="id" maxlength="10" placeholder="ID">
+      </mat-form-field>
+
+      <br>
+
+      <mat-form-field class="form__field--max-width" hintLabel="Max 10 characters">
+        <input matInput id="name" type="text" formControlName="name" maxlength="10" placeholder="Name">
+      </mat-form-field>
+
+      <br>
+
+      <mat-form-field class="form__field--max-width">
+        <textarea matInput id="description" formControlName="description" maxlength="1000" placeholder="Description" rows="3"></textarea>
+      </mat-form-field>
+
+      <br>
+
+      <mat-slide-toggle formControlName="public">Public</mat-slide-toggle>
+
+      <br>
+
+      <div fxLayout="row" fxLayoutAlign="center">
+        <button mat-raised-button color="accent" type="submit">Create</button>
+      </div>
+
+    </form>  
+
+  </div>
+
+</div>

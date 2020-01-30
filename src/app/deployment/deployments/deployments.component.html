@@ -1,4 +1,20 @@
-<div class="container">
-  <p>deployments works!</p>
+<div class="container container--padded-top">
+
+  <div fxLayout="row" fxLayoutAlign="center">
+    <a [routerLink]="['./create']" mat-raised-button color="accent">Create new deployment</a>
+  </div>
+
+  <p>Deployments:</p>
+
+  <div *ngIf="deployments">
+    <pre>{{deployments | json}}</pre>
+  </div>
+
+  <div *ngIf="getDeploymentsErrorMessage">
+    <p class="text--warn">{{getDeploymentsErrorMessage}}</p>
+  </div>
+
+
+
 </div>
 

@@ -5,7 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CallbackComponent } from './callback/callback.component';
-import {MyMaterialModule} from './material/my-material.module';
+import {SharedModule} from './shared/shared.module';
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {MyMaterialModule} from './material/my-material.module';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MyMaterialModule
+    HttpClientModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
