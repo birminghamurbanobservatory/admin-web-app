@@ -3,7 +3,7 @@ import {MediaMatcher} from '@angular/cdk/layout';
 import {AuthService} from './auth.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'uo-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

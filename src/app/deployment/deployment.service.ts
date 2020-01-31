@@ -18,4 +18,8 @@ export class DeploymentService {
     return this.http.get<Deployment[]>(`${environment.apiUrl}/deployments`);
   }
 
+  createDeployment(deployment: Deployment): Observable<Deployment> {
+    return this.http.post<Deployment>(`${environment.apiUrl}/deployments`, deployment);
+  }
+
 }

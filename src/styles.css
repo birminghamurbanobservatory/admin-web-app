@@ -40,6 +40,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding-top: 15px;
 }
 
+.container--padded-bottom {
+  padding-bottom: 15px;
+}
+
 
 .form--max-width-600 {
   width: 100%; 

@@ -1,20 +1,41 @@
-<div class="container container--padded-top">
+<div class="container container--padded-top container--padded-bottom">
 
   <div fxLayout="row" fxLayoutAlign="center">
     <a [routerLink]="['./create']" mat-raised-button color="accent">Create new deployment</a>
   </div>
 
-  <p>Deployments:</p>
+  <br><br><br>
 
-  <div *ngIf="deployments">
-    <pre>{{deployments | json}}</pre>
+  <div *ngIf="state === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner></mat-spinner>
+    <p>Getting Deployments</p>
   </div>
 
-  <div *ngIf="getDeploymentsErrorMessage">
+  <div *ngIf="state === 'failed'">
     <p class="text--warn">{{getDeploymentsErrorMessage}}</p>
+  </div>  
+
+  <div *ngIf="state === 'got'">
+
+    <p>List of deployments:</p>
+
+    <!-- For now I've decided not to split each deployment out into a separate component, primarily because this way the styling is nice because it knows which is the first and last items in the accordion -->
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let deployment of deployments">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{deployment.name}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <uo-deployment [deployment]="deployment"></uo-deployment>
+        
+      </mat-expansion-panel>
+    </mat-accordion>
+
   </div>
 
 
-
+  
 </div>
 

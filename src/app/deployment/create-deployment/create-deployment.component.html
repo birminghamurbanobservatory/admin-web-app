@@ -5,14 +5,14 @@
     <!-- TODO how to I make the width of this form responsive -->
     <form class="form--max-width-600" [formGroup]="createDeploymentForm" (ngSubmit)="onSubmit(createDeploymentForm.value)">
 
-      <mat-form-field class="form__field--max-width" hintLabel="Max 10 characters">
-        <input matInput id="id" type="text" formControlName="id" maxlength="10" placeholder="ID">
+      <mat-form-field class="form__field--max-width" hintLabel="Max 30 characters">
+        <input matInput id="deployment-id" type="text" formControlName="id" maxlength="30" placeholder="ID">
       </mat-form-field>
 
       <br>
 
-      <mat-form-field class="form__field--max-width" hintLabel="Max 10 characters">
-        <input matInput id="name" type="text" formControlName="name" maxlength="10" placeholder="Name">
+      <mat-form-field class="form__field--max-width" hintLabel="Max 30 characters">
+        <input matInput id="deployment-name" type="text" formControlName="name" maxlength="30" placeholder="Name">
       </mat-form-field>
 
       <br>
@@ -28,7 +28,25 @@
       <br>
 
       <div fxLayout="row" fxLayoutAlign="center">
-        <button mat-raised-button color="accent" type="submit">Create</button>
+        <button mat-raised-button color="accent" type="submit" disabled="{{state !== 'pending'}}">
+          <!-- Pending -->
+          <span *ngIf="state === 'pending'">Create</span>
+          <!-- Creating -->
+          <div *ngIf="state === 'creating'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+            <span>Creating</span>
+            <mat-spinner diameter="18"></mat-spinner>
+          </div>
+          <!-- Created -->
+          <div *ngIf="state === 'created'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+            <span>Created</span>
+            <mat-icon aria-hidden="true">done</mat-icon>
+          </div>
+          <!-- Failed -->
+          <div *ngIf="state === 'failed'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+            <span>Failed</span>
+            <mat-icon aria-hidden="true">close</mat-icon>
+          </div>
+        </button>
       </div>
 
     </form>  

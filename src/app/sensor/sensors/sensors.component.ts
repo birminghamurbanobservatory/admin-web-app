@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-sensors',
+  selector: 'uo-sensors',
   templateUrl: './sensors.component.html',
   styleUrls: ['./sensors.component.css']
 })

@@ -6,7 +6,7 @@ import {throwError} from 'rxjs';
 
 
 @Component({
-  selector: 'app-deployments',
+  selector: 'uo-deployments',
   templateUrl: './deployments.component.html',
   styleUrls: ['./deployments.component.css']
 })
@@ -14,6 +14,7 @@ export class DeploymentsComponent implements OnInit {
 
   deployments: Deployment[];
   getDeploymentsErrorMessage: string;
+  state = 'getting';
 
   constructor(
     private deploymentService: DeploymentService
@@ -24,14 +25,17 @@ export class DeploymentsComponent implements OnInit {
   }
 
   getDeployments() {
+    this.state = 'getting';
     this.deploymentService.getDeployments()
       .pipe(
         catchError((error) => {
           this.getDeploymentsErrorMessage = error.message;
+          this.state = 'failed';
           return throwError(error);
         })
       )
       .subscribe((deployments: Deployment[]) => {
+        this.state = 'got';
         this.deployments = deployments;
       })
   }
