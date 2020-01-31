@@ -14,7 +14,6 @@ export class DeploymentService {
   ) { }
 
   getDeployments(): Observable<Deployment[]> {
-    // TODO: I'm going to need an interceptor or something that can spot an api error message object and pull out the bits I want, e.g. getting the specific error message from the JSON.
     return this.http.get<Deployment[]>(`${environment.apiUrl}/deployments`);
   }
 
@@ -23,3 +22,4 @@ export class DeploymentService {
   }
 
 }
+

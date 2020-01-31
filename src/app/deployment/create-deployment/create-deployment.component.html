@@ -3,29 +3,21 @@
   <div fxLayout="row" fxLayoutAlign="center">
 
     <!-- TODO how to I make the width of this form responsive -->
-    <form class="form--max-width-600" [formGroup]="createDeploymentForm" (ngSubmit)="onSubmit(createDeploymentForm.value)">
+    <form class="form--max-width-600" [formGroup]="createDeploymentForm" (ngSubmit)="onSubmit(createDeploymentForm.value)" fxLayout="column" fxLayoutGap="15px">
 
-      <mat-form-field class="form__field--max-width" hintLabel="Max 30 characters">
-        <input matInput id="deployment-id" type="text" formControlName="id" maxlength="30" placeholder="ID">
+      <mat-form-field class="form__field--max-width" hintLabel="Max 40 characters">
+        <input matInput id="deployment-name" type="text" formControlName="name" maxlength="40" placeholder="Name">
       </mat-form-field>
 
-      <br>
-
-      <mat-form-field class="form__field--max-width" hintLabel="Max 30 characters">
-        <input matInput id="deployment-name" type="text" formControlName="name" maxlength="30" placeholder="Name">
+      <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
+        <input matInput id="deployment-id" type="text" formControlName="id" maxlength="" placeholder="ID (optional)">
       </mat-form-field>
-
-      <br>
 
       <mat-form-field class="form__field--max-width">
         <textarea matInput id="description" formControlName="description" maxlength="1000" placeholder="Description" rows="3"></textarea>
       </mat-form-field>
 
-      <br>
-
       <mat-slide-toggle formControlName="public">Public</mat-slide-toggle>
-
-      <br>
 
       <div fxLayout="row" fxLayoutAlign="center">
         <button mat-raised-button color="accent" type="submit" disabled="{{state !== 'pending'}}">
@@ -47,6 +39,10 @@
             <mat-icon aria-hidden="true">close</mat-icon>
           </div>
         </button>
+      </div>
+
+      <div *ngIf="createErrorMessage" fxLayout="row" fxLayoutAlign="center">
+        <p class="text--warn">{{createErrorMessage}}</p>
       </div>
 
     </form>  

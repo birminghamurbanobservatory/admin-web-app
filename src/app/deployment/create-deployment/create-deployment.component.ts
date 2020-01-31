@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import {DeploymentService} from '../deployment.service';
-import {of, throwError} from 'rxjs';
-import {delay, catchError} from 'rxjs/operators';
+import {of, throwError, Observable, timer} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {NGXLogger} from 'ngx-logger';
 
 @Component({
   selector: 'uo-create-deployment',
@@ -12,12 +13,16 @@ import {delay, catchError} from 'rxjs/operators';
 export class CreateDeploymentComponent implements OnInit {
 
   createDeploymentForm;
+  createErrorMessage = '';
   state = 'pending';
 
   constructor(
     private deploymentService: DeploymentService,
-    private formBuilder: FormBuilder
-  ) {
+    private formBuilder: FormBuilder,
+    private logger: NGXLogger
+  ) {}
+
+  ngOnInit() {
 
     this.createDeploymentForm = this.formBuilder.group({
       id: '',
@@ -28,13 +33,11 @@ export class CreateDeploymentComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-  }
-
 
   onSubmit(deploymentToCreate) {
     this.state = 'creating';
-    console.log(deploymentToCreate);
+    this.createErrorMessage = '';
+    this.logger.debug(deploymentToCreate);
 
     if (deploymentToCreate.description === '') {
       delete deploymentToCreate.description;
@@ -44,7 +47,8 @@ export class CreateDeploymentComponent implements OnInit {
     .pipe(
       catchError((error) => {
         this.state = 'failed';
-        of(1).pipe(delay(1000)).subscribe(() => {
+        this.createErrorMessage = error.message;
+        this.briefDelay().subscribe(() => {
           this.state = 'pending';
         });
         return throwError(error);
@@ -52,18 +56,23 @@ export class CreateDeploymentComponent implements OnInit {
     )
     .subscribe((createdDeployment) => {
       this.state = 'created';
-      console.log(createdDeployment);
+      this.logger.debug(createdDeployment);
 
       // TODO: Clear the form?
       // TODO: Redirect back to the deployments list?
 
       // Might be a better way to do this.
-      of(1).pipe(delay(1000)).subscribe(() => {
+      this.briefDelay().subscribe(() => {
         this.state = 'pending';
       });
 
     })    
 
+  }
+
+
+  briefDelay(): Observable<number> {
+    return timer(1400);
   }
 
 

@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {AuthGuard} from './auth.guard';
+import {AuthGuard} from './auth/auth.guard';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import {InterceptorService} from './interceptor.service';
+import {AuthInterceptorService} from './auth/auth-interceptor.service';
 import {CallbackComponent} from './callback/callback.component';
+import {ApiErrorInterceptor} from './utils/api-error-interceptor.interceptor';
 
 
 const routes: Routes = [
@@ -39,7 +40,12 @@ const routes: Routes = [
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: InterceptorService,
+      useClass: AuthInterceptorService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiErrorInterceptor,
       multi: true
     }
   ]

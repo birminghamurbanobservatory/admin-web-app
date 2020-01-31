@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CallbackComponent } from './callback/callback.component';
 import {SharedModule} from './shared/shared.module';
 import {HttpClientModule} from '@angular/common/http';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 
 @NgModule({
@@ -19,7 +20,10 @@ import {HttpClientModule} from '@angular/common/http';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    SharedModule
+    SharedModule,
+    // TODO: change the level depending on the environment, i.e. production vs development
+    // Options: TRACE|DEBUG|INFO|LOG|WARN|ERROR|FATAL|OFF
+    LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG, timestampFormat: 'shortTime', enableSourceMaps: true})
   ],
   providers: [],
   bootstrap: [AppComponent]
