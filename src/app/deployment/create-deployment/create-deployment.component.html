@@ -7,6 +7,9 @@
 
       <mat-form-field class="form__field--max-width" hintLabel="Max 40 characters">
         <input matInput id="deployment-name" type="text" formControlName="name" maxlength="40" placeholder="Name">
+        <mat-error *ngIf="createDeploymentForm.get('name').errors && createDeploymentForm.get('name').errors.required">
+          Name is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
@@ -20,7 +23,7 @@
       <mat-slide-toggle formControlName="public">Public</mat-slide-toggle>
 
       <div fxLayout="row" fxLayoutAlign="center">
-        <button mat-raised-button color="accent" type="submit" disabled="{{state !== 'pending'}}">
+        <button mat-raised-button color="accent" type="submit" [disabled]="createDeploymentForm.invalid || state !== 'pending'">
           <!-- Pending -->
           <span *ngIf="state === 'pending'">Create</span>
           <!-- Creating -->

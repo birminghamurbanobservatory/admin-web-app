@@ -5,4 +5,8 @@
   <p>Created: {{deployment.createdAt| date:'long'}}</p>
   <p>Last Updated: {{deployment.updatedAt | date:'long'}}</p>
 
+  <div fxLayout="row" fxLayoutAlign="end">
+    <button mat-raised-button color="warn" (click)="deleteButtonClicked()">Delete</button>
+  </div>
+
 </div>

@@ -3,6 +3,7 @@ import {DeploymentService} from '../deployment.service';
 import {Deployment} from '../deployment';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
+import {NGXLogger} from 'ngx-logger';
 
 
 @Component({
@@ -17,7 +18,8 @@ export class DeploymentsComponent implements OnInit {
   state = 'getting';
 
   constructor(
-    private deploymentService: DeploymentService
+    private deploymentService: DeploymentService,
+    private logger: NGXLogger
   ) { }
 
   ngOnInit() {
@@ -38,6 +40,11 @@ export class DeploymentsComponent implements OnInit {
         this.state = 'got';
         this.deployments = deployments;
       })
+  }
+
+  onDeleted(deploymentId: string) {
+    this.logger.debug(`The deployments component is aware that the deployment ${deploymentId} has been deleted.`)
+    this.deployments = this.deployments.filter((deployment) => deployment.id !== deploymentId);
   }
 
 

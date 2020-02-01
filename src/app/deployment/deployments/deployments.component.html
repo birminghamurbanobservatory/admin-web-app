@@ -28,7 +28,7 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
 
-        <uo-deployment [deployment]="deployment"></uo-deployment>
+        <uo-deployment [deployment]="deployment" (deleted)="onDeleted($event)"></uo-deployment>
         
       </mat-expansion-panel>
     </mat-accordion>

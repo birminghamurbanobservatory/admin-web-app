@@ -21,5 +21,9 @@ export class DeploymentService {
     return this.http.post<Deployment>(`${environment.apiUrl}/deployments`, deployment);
   }
 
+  deleteDeployment(deploymentId: string): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/deployments/${deploymentId}`)
+  }
+
 }
 

@@ -6,7 +6,7 @@ import { DeploymentRoutingModule } from './deployment-routing.module';
 import { DeploymentsComponent } from './deployments/deployments.component';
 import { CreateDeploymentComponent } from './create-deployment/create-deployment.component';
 import { EditDeploymentComponent } from './edit-deployment/edit-deployment.component';
-import { DeploymentComponent } from './deployment/deployment.component';
+import { DeploymentComponent, DeleteDeploymentDialog } from './deployment/deployment.component';
 
 
 @NgModule({
@@ -14,12 +14,16 @@ import { DeploymentComponent } from './deployment/deployment.component';
     DeploymentsComponent, 
     CreateDeploymentComponent, 
     EditDeploymentComponent, 
-    DeploymentComponent
+    DeploymentComponent,
+    DeleteDeploymentDialog
   ],
   imports: [
     CommonModule,
     DeploymentRoutingModule,
     SharedModule
+  ],
+  entryComponents: [
+    DeleteDeploymentDialog
   ]
 })
 export class DeploymentModule { }

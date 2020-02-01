@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import {DeploymentService} from '../deployment.service';
 import {of, throwError, Observable, timer} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -18,15 +18,15 @@ export class CreateDeploymentComponent implements OnInit {
 
   constructor(
     private deploymentService: DeploymentService,
-    private formBuilder: FormBuilder,
-    private logger: NGXLogger
+    private logger: NGXLogger,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
 
-    this.createDeploymentForm = this.formBuilder.group({
+    this.createDeploymentForm = this.fb.group({
+      name: ['', Validators.required],
       id: '',
-      name: '',
       description: '',
       public: true
     });
@@ -39,6 +39,9 @@ export class CreateDeploymentComponent implements OnInit {
     this.createErrorMessage = '';
     this.logger.debug(deploymentToCreate);
 
+    if (deploymentToCreate.id === '') {
+      delete deploymentToCreate.id;
+    }
     if (deploymentToCreate.description === '') {
       delete deploymentToCreate.description;
     }

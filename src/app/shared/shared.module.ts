@@ -15,6 +15,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatRadioModule,
     MatProgressSpinnerModule,
     MatSlideToggleModule,  
-    MatExpansionModule  
+    MatExpansionModule,
+    MatDialogModule
   ]
 })
 export class SharedModule { }
