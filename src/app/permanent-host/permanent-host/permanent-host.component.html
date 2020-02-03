@@ -1,0 +1,14 @@
+<div>
+  
+  <p>ID: {{permanentHost.id}}</p>
+  <p>Description: {{permanentHost.description}}</p>
+  <p>Registration Key: {{permanentHost.registrationKey}}</p>
+  <p>Static: {{permanentHost.static}}</p>
+  <p>Created: {{permanentHost.createdAt| date:'long'}}</p>
+  <p>Last Updated: {{permanentHost.updatedAt | date:'long'}}</p>
+
+  <div fxLayout="row" fxLayoutAlign="end">
+    <button mat-raised-button color="warn" (click)="deleteButtonClicked()">Delete</button>
+  </div>
+
+</div>

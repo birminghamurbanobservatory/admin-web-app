@@ -1,7 +1,8 @@
 <div>
   
+  <p>ID: {{deployment.id}}</p>
   <p>{{deployment.public ? 'Public' : 'Private'}}</p>
-  <p>{{deployment.description}}</p>
+  <p>Description: {{deployment.description}}</p>
   <p>Created: {{deployment.createdAt| date:'long'}}</p>
   <p>Last Updated: {{deployment.updatedAt | date:'long'}}</p>
 

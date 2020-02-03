@@ -1,14 +1,15 @@
 <div class="container container--padded-top container--padded-bottom">
 
   <div fxLayout="row" fxLayoutAlign="center">
-    <a [routerLink]="['./create']" mat-raised-button color="accent">Create new deployment</a>
+    <a [routerLink]="['./create']" mat-raised-button color="accent">Create new permanent host</a>
   </div>
+
 
   <br><br><br>
 
   <div *ngIf="state === 'getting'" fxLayout="column" fxLayoutAlign="center center">
     <mat-spinner></mat-spinner>
-    <p>Getting Deployments</p>
+    <p>Getting Permanent Hosts</p>
   </div>
 
   <div *ngIf="state === 'failed'">
@@ -17,17 +18,17 @@
 
   <div *ngIf="state === 'got'">
 
-    <p>List of deployments:</p>
+    <p>List of permanent hosts:</p>
 
     <mat-accordion>
-      <mat-expansion-panel *ngFor="let deployment of deployments">
+      <mat-expansion-panel *ngFor="let permanentHost of permanentHosts">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <strong>{{deployment.name}}</strong>
+            <strong>{{permanentHost.name}}</strong>
           </mat-panel-title>
         </mat-expansion-panel-header>
 
-        <uo-deployment [deployment]="deployment" (deleted)="onDeleted($event)"></uo-deployment>
+        <uo-permanent-host [permanentHost]="permanentHost" (deleted)="onDeleted($event)"></uo-permanent-host>
         
       </mat-expansion-panel>
     </mat-accordion>

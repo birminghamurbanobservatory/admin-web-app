@@ -14,7 +14,7 @@ import {NGXLogger} from 'ngx-logger';
 export class DeploymentsComponent implements OnInit {
 
   deployments: Deployment[];
-  getDeploymentsErrorMessage: string;
+  getErrorMessage: string;
   state = 'getting';
 
   constructor(
@@ -29,17 +29,17 @@ export class DeploymentsComponent implements OnInit {
   getDeployments() {
     this.state = 'getting';
     this.deploymentService.getDeployments()
-      .pipe(
-        catchError((error) => {
-          this.getDeploymentsErrorMessage = error.message;
-          this.state = 'failed';
-          return throwError(error);
-        })
-      )
-      .subscribe((deployments: Deployment[]) => {
-        this.state = 'got';
-        this.deployments = deployments;
+    .pipe(
+      catchError((error) => {
+        this.getErrorMessage = error.message;
+        this.state = 'failed';
+        return throwError(error);
       })
+    )
+    .subscribe((deployments: Deployment[]) => {
+      this.state = 'got';
+      this.deployments = deployments;
+    })
   }
 
   onDeleted(deploymentId: string) {
