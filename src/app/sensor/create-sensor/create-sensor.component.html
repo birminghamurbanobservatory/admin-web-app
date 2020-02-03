@@ -3,27 +3,26 @@
   <div fxLayout="row" fxLayoutAlign="center">
 
     <!-- TODO how to I make the width of this form responsive -->
-    <form class="form--max-width-600" [formGroup]="createPermanentHostForm" (ngSubmit)="onSubmit(createPermanentHostForm.value)" fxLayout="column" fxLayoutGap="15px">
+    <form class="form--max-width-600" [formGroup]="createSensorForm" (ngSubmit)="onSubmit(createSensorForm.value)" fxLayout="column" fxLayoutGap="15px">
+
+      <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
+        <input matInput id="deployment-id" type="text" formControlName="id" maxlength="" placeholder="ID">
+      </mat-form-field>
 
       <mat-form-field class="form__field--max-width" hintLabel="Max 40 characters">
         <input matInput id="deployment-name" type="text" formControlName="name" maxlength="40" placeholder="Name">
-        <mat-error *ngIf="createPermanentHostForm.get('name').errors && createPermanentHostForm.get('name').errors.required">
-          Name is required
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
-        <input matInput id="deployment-id" type="text" formControlName="id" maxlength="" placeholder="ID (optional)">
       </mat-form-field>
 
       <mat-form-field class="form__field--max-width">
         <textarea matInput id="description" formControlName="description" maxlength="1000" placeholder="Description" rows="3"></textarea>
       </mat-form-field>
 
-      <mat-slide-toggle formControlName="static">Static</mat-slide-toggle>
+      <!-- TODO: Need permanentHost and inDeployment fields with autocomplete support -->
+      <!-- Try using mongodb's $regex method and use a “prefix expression” for the fastest solution, i.e. "begins with". You'll need to add a __begins modifier to the api -->
+      <!-- https://material.angular.io/components/autocomplete/overview -->
 
       <div fxLayout="row" fxLayoutAlign="center">
-        <button mat-raised-button color="accent" type="submit" [disabled]="createPermanentHostForm.invalid || state !== 'pending'">
+        <button mat-raised-button color="accent" type="submit" [disabled]="createSensorForm.invalid || state !== 'pending'">
           <!-- Pending -->
           <span *ngIf="state === 'pending'">Create</span>
           <!-- Creating -->
@@ -49,8 +48,6 @@
       </div>
 
     </form>  
-
-    <!-- TODO: Add a section that pops up when a permanent host is created with a link to create sensors on this permanent host. I.e. it takes them to the create-sensor form, but with a query string parameter that will pre-populate the permanentHost property -->
 
   </div>
 

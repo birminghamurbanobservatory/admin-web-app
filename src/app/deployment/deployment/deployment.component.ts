@@ -5,6 +5,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import {DeploymentService} from '../deployment.service';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'uo-deployment',
@@ -15,11 +16,13 @@ export class DeploymentComponent implements OnInit {
 
   @Input() deployment: Deployment;
   @Output() deleted = new EventEmitter<string>();
+  state = 'pending';
 
   constructor(
     private logger: NGXLogger,
     public dialog: MatDialog,
-    public deploymentService: DeploymentService
+    private deploymentService: DeploymentService,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -34,12 +37,13 @@ export class DeploymentComponent implements OnInit {
 
   deleteDeployment() {
     this.logger.debug(`Deleting deployment '${this.deployment.id}'`)
+    this.state = 'deleting';
     this.deploymentService.deleteDeployment(this.deployment.id)
-    // TODO: Add a spinner to the delete button
     .pipe(
       catchError((error) => {
-        // TODO: Use a toaster to display the error?
         this.logger.error(`Failed to delete deployment ${this.deployment.id}`);
+        this.showErrorSnackBar(error.message);
+        this.state = 'pending';
         return throwError(error);
       })
     )
@@ -47,6 +51,12 @@ export class DeploymentComponent implements OnInit {
       this.logger.debug(`Deployment ${this.deployment.id} successfully deleted`);
       this.deleted.emit(this.deployment.id);
     })  
+  }
+
+  showErrorSnackBar(message: string) {
+    this._snackBar.open(message, 'Close', {
+      duration: 8000,
+    });
   }
 
 

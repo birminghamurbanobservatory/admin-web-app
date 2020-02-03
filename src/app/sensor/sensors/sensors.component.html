@@ -4,6 +4,36 @@
     <a [routerLink]="['./create']" mat-raised-button color="accent">Create new sensor</a>
   </div>
 
+  <br><br><br>
+
+  <div *ngIf="state === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner></mat-spinner>
+    <p>Getting Sensors</p>
+  </div>
+
+  <div *ngIf="state === 'failed'">
+    <p class="text--warn">{{getErrorMessage}}</p>
+  </div>  
+
+  <div *ngIf="state === 'got'">
+
+    <p>List of sensors:</p>
+
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let sensor of sensors">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <strong>{{sensor.id}}</strong>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <uo-sensor [sensor]="sensor" (deleted)="onDeleted($event)"></uo-sensor>
+        
+      </mat-expansion-panel>
+    </mat-accordion>
+
+  </div>
+
 
   
 </div>

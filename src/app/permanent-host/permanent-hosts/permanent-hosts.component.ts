@@ -31,10 +31,10 @@ export class PermanentHostsComponent implements OnInit {
     this.state = 'getting';
     this.permanentHostService.getPermanentHosts()
     .pipe(
-      catchError((error) => {
-        this.getErrorMessage = error.message;
+      catchError((err) => {
+        this.getErrorMessage = err.message;
         this.state = 'failed';
-        return throwError(error);
+        return throwError(err);
       })
     )
     .subscribe((permanentHosts: PermanentHost[]) => {

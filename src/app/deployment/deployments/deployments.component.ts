@@ -30,10 +30,10 @@ export class DeploymentsComponent implements OnInit {
     this.state = 'getting';
     this.deploymentService.getDeployments()
     .pipe(
-      catchError((error) => {
-        this.getErrorMessage = error.message;
+      catchError((err) => {
+        this.getErrorMessage = err.message;
         this.state = 'failed';
-        return throwError(error);
+        return throwError(err);
       })
     )
     .subscribe((deployments: Deployment[]) => {

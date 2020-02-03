@@ -1,1 +1,26 @@
-<p>sensor works!</p>
+<div>
+  
+  <p *ngIf="sensor.name">Name: {{sensor.name}}</p>
+  <p *ngIf="sensor.description">Description: {{sensor.description}}</p>
+  <p *ngIf="sensor.inDeployment">In Deployment: {{sensor.inDeployment}}</p>
+  <p *ngIf="sensor.permanentHost">Permanent Host: {{sensor.permanentHost}}</p>
+  <div *ngIf="sensor.defaults">
+    <p>Defaults:</p>
+    <pre>{{sensor.defaults | json}}</pre>
+  </div>
+  <p>Created: {{sensor.createdAt| date:'long'}}</p>
+  <p>Last Updated: {{sensor.updatedAt | date:'long'}}</p>
+
+  <div fxLayout="row" fxLayoutAlign="end">
+    <button mat-raised-button color="warn" (click)="deleteButtonClicked()">
+      <span *ngIf="state === 'pending'">
+        Delete
+      </span>
+      <div *ngIf="state === 'deleting'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+        <span>Deleting</span>
+        <mat-spinner diameter="18"></mat-spinner>
+      </div>
+    </button>
+  </div>
+
+</div>

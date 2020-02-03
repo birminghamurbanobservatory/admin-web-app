@@ -8,7 +8,15 @@
   <p>Last Updated: {{permanentHost.updatedAt | date:'long'}}</p>
 
   <div fxLayout="row" fxLayoutAlign="end">
-    <button mat-raised-button color="warn" (click)="deleteButtonClicked()">Delete</button>
+    <button mat-raised-button color="warn" (click)="deleteButtonClicked()">
+      <span *ngIf="state === 'pending'">
+        Delete
+      </span>
+      <div *ngIf="state === 'deleting'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+        <span>Deleting</span>
+        <mat-spinner diameter="18"></mat-spinner>
+      </div>
+    </button>
   </div>
 
 </div>

@@ -16,6 +16,7 @@ export class PermanentHostComponent implements OnInit {
 
   @Input() permanentHost: PermanentHost;
   @Output() deleted = new EventEmitter<string>();
+  state = 'pending';
 
   constructor(
     private logger: NGXLogger,
@@ -36,13 +37,13 @@ export class PermanentHostComponent implements OnInit {
 
   deletePermanentHost() {
     this.logger.debug(`Deleting permamentHost '${this.permanentHost.id}'`)
+    this.state = 'deleting';
     this.permanentHostService.deletePermanentHost(this.permanentHost.id)
-    // TODO: Add a spinner to the delete button
     .pipe(
       catchError((error) => {
-        // TODO: Use a toaster to display the error?
         this.logger.error(`Failed to delete permanent host '${this.permanentHost.id}'`);
         this.showErrorSnackBar(error.message);
+        this.state = 'pending';
         return throwError(error);
       })
     )
