@@ -18,20 +18,26 @@
 
   <div *ngIf="state === 'got'">
 
-    <p>List of permanent hosts:</p>
 
-    <mat-accordion>
-      <mat-expansion-panel *ngFor="let permanentHost of permanentHosts">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <strong>{{permanentHost.name}}</strong>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+    <div *ngIf="permanentHosts.length > 0">
+      <p>List of permanent hosts:</p>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let permanentHost of permanentHosts">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <strong>{{permanentHost.name}}</strong>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-        <uo-permanent-host [permanentHost]="permanentHost" (deleted)="onDeleted($event)"></uo-permanent-host>
-        
-      </mat-expansion-panel>
-    </mat-accordion>
+          <uo-permanent-host [permanentHost]="permanentHost" (deleted)="onDeleted($event)"></uo-permanent-host>
+          
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <div *ngIf="permanentHosts.length === 0" fxLayout="row" fxLayoutAlign="center">
+      <p>You don't appear to have any permanent hosts yet</p>
+    </div>    
 
   </div>
 

@@ -50,8 +50,14 @@
 
     </form>  
 
-    <!-- TODO: Add a section that pops up when a permanent host is created with a link to create sensors on this permanent host. I.e. it takes them to the create-sensor form, but with a query string parameter that will pre-populate the permanentHost property -->
+  </div>
 
+  <br>
+
+  <div fxLayout="row" fxLayoutAlign="end" *ngIf="createdPermanentHost">
+    <a mat-stroked-button color="primary" [routerLink]="['/sensors/create', {permanentHost: createdPermanentHost.id}]">
+      Add sensors to {{createdPermanentHost.name}}
+    </a>
   </div>
 
 </div>

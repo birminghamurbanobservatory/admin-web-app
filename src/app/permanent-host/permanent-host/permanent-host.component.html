@@ -7,7 +7,13 @@
   <p>Created: {{permanentHost.createdAt| date:'long'}}</p>
   <p>Last Updated: {{permanentHost.updatedAt | date:'long'}}</p>
 
-  <div fxLayout="row" fxLayoutAlign="end">
+  
+  <div fxLayout="row" fxLayoutAlign="space-around">
+
+    <a [routerLink]="['/sensors/create', { permanentHost: permanentHost.id }]" mat-raised-button color="primary">
+      Add Sensors
+    </a>
+
     <button mat-raised-button color="warn" (click)="deleteButtonClicked()">
       <span *ngIf="state === 'pending'">
         Delete
@@ -17,6 +23,7 @@
         <mat-spinner diameter="18"></mat-spinner>
       </div>
     </button>
+
   </div>
 
 </div>

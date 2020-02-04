@@ -3,7 +3,11 @@ import {timer, Observable, throwError} from 'rxjs';
 import {NGXLogger} from 'ngx-logger';
 import {SensorService} from '../sensor.service';
 import {FormBuilder, Validators} from '@angular/forms';
-import {catchError} from 'rxjs/operators';
+import {catchError, switchMap, map, filter, debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {UtilsService} from 'src/app/utils/utils.service';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {PermanentHostService} from 'src/app/permanent-host/permanent-host.service';
+import {DeploymentService} from 'src/app/deployment/deployment.service';
 
 @Component({
   selector: 'uo-create-sensor',
@@ -15,11 +19,17 @@ export class CreateSensorComponent implements OnInit {
   createSensorForm;
   createErrorMessage = '';
   state = 'pending';
+  permanentHostChoices = [];
+  deploymentChoices = [];
 
   constructor(
     private sensorService: SensorService,
     private logger: NGXLogger,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private utilsService: UtilsService,
+    private route: ActivatedRoute,
+    private permanentHostService: PermanentHostService,  
+    private deploymentService: DeploymentService
   ) {}
 
   ngOnInit() {
@@ -28,10 +38,44 @@ export class CreateSensorComponent implements OnInit {
       name: '',
       id: '',
       description: '',
-      // TODO: allow for the permanent host to be passed in via a querystring parameter so it can be used as the default for permanentHost, and use it at the start of the id too.
-      permanentHost: '', 
-      inDeployment: ''
+      // N.B. this snapshot approach is fine as long as you never reuse the component, i.e. you always naviagate to another component before coming back to this one, e.g. with a different permanentHost.
+      permanentHost: this.route.snapshot.paramMap.get('permanentHost') || '', 
+      inDeployment: this.route.snapshot.paramMap.get('inDeployment') || ''
+      // TODO: Invalidate the form and show errors when both permanentHost and inDeployment defined, might be able to do this with a custom validator for each that looks to see if the other is defined.
       // TODO: add defaults
+    });
+
+    this.onChanges();
+
+  }
+
+
+  onChanges() {
+
+    // subscribe to permanentHost form value changes
+    this.createSensorForm.get('permanentHost').valueChanges
+    .pipe(
+      filter((value: string) => value.length > 2),
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap((value: string) => this.permanentHostService.getPermanentHosts({id: {begins: value}}))
+    )
+    .subscribe(permanentHosts => {
+      this.permanentHostChoices = permanentHosts;
+      console.log(permanentHosts);
+    });
+
+    // subscribe to inDeployment form value changes
+    this.createSensorForm.get('inDeployment').valueChanges
+    .pipe(
+      filter((value: string) => value.length > 2),
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap((value: string) => this.deploymentService.getDeployments({id: {begins: value}}))
+    )
+    .subscribe(deployments => {
+      this.deploymentChoices = deployments;
+      console.log(deployments);
     });
 
   }
@@ -42,24 +86,9 @@ export class CreateSensorComponent implements OnInit {
     this.createErrorMessage = '';
     this.logger.debug(sensorToCreate);
 
-    // TODO: Make a function that deletes empty strings from objects rather than doing the following
-    if (sensorToCreate.id === '') {
-      delete sensorToCreate.id;
-    }
-    if (sensorToCreate.name === '') {
-      delete sensorToCreate.name;
-    }
-    if (sensorToCreate.description === '') {
-      delete sensorToCreate.description;
-    }
-    if (sensorToCreate.permanentHost === '') {
-      delete sensorToCreate.permanentHost;
-    }
-    if (sensorToCreate.inDeployment === '') {
-      delete sensorToCreate.inDeployment;
-    }
+    const cleanedSensor = this.utilsService.stripEmptyStrings(sensorToCreate);
 
-    this.sensorService.createSensor(sensorToCreate)
+    this.sensorService.createSensor(cleanedSensor)
     .pipe(
       catchError((error) => {
         this.state = 'failed';

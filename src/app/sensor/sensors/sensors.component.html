@@ -17,20 +17,25 @@
 
   <div *ngIf="state === 'got'">
 
-    <p>List of sensors:</p>
+    <div *ngIf="sensors.length > 0">
+      <p>List of sensors:</p>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let sensor of sensors">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <strong>{{sensor.id}}</strong>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-    <mat-accordion>
-      <mat-expansion-panel *ngFor="let sensor of sensors">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <strong>{{sensor.id}}</strong>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+          <uo-sensor [sensor]="sensor" (deleted)="onDeleted($event)"></uo-sensor>
+          
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
 
-        <uo-sensor [sensor]="sensor" (deleted)="onDeleted($event)"></uo-sensor>
-        
-      </mat-expansion-panel>
-    </mat-accordion>
+    <div *ngIf="sensors.length === 0" fxLayout="row" fxLayoutAlign="center">
+      <p>You don't appear to have any sensors yet</p>
+    </div>  
 
   </div>
 

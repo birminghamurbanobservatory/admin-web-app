@@ -17,9 +17,26 @@
         <textarea matInput id="description" formControlName="description" maxlength="1000" placeholder="Description" rows="3"></textarea>
       </mat-form-field>
 
-      <!-- TODO: Need permanentHost and inDeployment fields with autocomplete support -->
-      <!-- Try using mongodb's $regex method and use a “prefix expression” for the fastest solution, i.e. "begins with". You'll need to add a __begins modifier to the api -->
-      <!-- https://material.angular.io/components/autocomplete/overview -->
+      <mat-form-field class="form__field--max-width" hintLabel="begin typing its id">
+        <input type="text" placeholder="Permanent Host" matInput formControlName="permanentHost" [matAutocomplete]="autoPermHost">
+        <mat-autocomplete #autoPermHost="matAutocomplete">
+          <mat-option *ngFor="let permanentHostChoice of permanentHostChoices" [value]="permanentHostChoice.id">
+            {{permanentHostChoice.id}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field> 
+
+      <mat-form-field class="form__field--max-width" hintLabel="begin typing its id">
+        <input type="text" placeholder="In Deployment" matInput formControlName="inDeployment" [matAutocomplete]="autoDep">
+        <mat-autocomplete #autoDep="matAutocomplete">
+          <mat-option *ngFor="let deploymentChoice of deploymentChoices" [value]="deploymentChoice.id">
+            {{deploymentChoice.id}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>         
+
+
+      <!-- TODO: defaults, e.g. for observedProperty -->
 
       <div fxLayout="row" fxLayoutAlign="center">
         <button mat-raised-button color="accent" type="submit" [disabled]="createSensorForm.invalid || state !== 'pending'">

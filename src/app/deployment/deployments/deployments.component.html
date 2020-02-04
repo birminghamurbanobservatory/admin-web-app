@@ -17,20 +17,26 @@
 
   <div *ngIf="state === 'got'">
 
-    <p>List of deployments:</p>
+    <div *ngIf="deployments.length > 0">
+      <p>List of deployments:</p>
 
-    <mat-accordion>
-      <mat-expansion-panel *ngFor="let deployment of deployments">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <strong>{{deployment.name}}</strong>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let deployment of deployments">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <strong>{{deployment.name}}</strong>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-        <uo-deployment [deployment]="deployment" (deleted)="onDeleted($event)"></uo-deployment>
-        
-      </mat-expansion-panel>
-    </mat-accordion>
+          <uo-deployment [deployment]="deployment" (deleted)="onDeleted($event)"></uo-deployment>
+          
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <div *ngIf="deployments.length === 0" fxLayout="row" fxLayoutAlign="center">
+      <p>You don't appear to have any deployments yet</p>
+    </div>
 
   </div>
 

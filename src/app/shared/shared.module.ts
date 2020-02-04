@@ -17,6 +17,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatSlideToggleModule,  
     MatExpansionModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatAutocompleteModule
   ]
 })
 export class SharedModule { }

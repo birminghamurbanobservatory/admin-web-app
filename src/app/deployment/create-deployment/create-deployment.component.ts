@@ -4,6 +4,7 @@ import {DeploymentService} from '../deployment.service';
 import {of, throwError, Observable, timer} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {NGXLogger} from 'ngx-logger';
+import {UtilsService} from 'src/app/utils/utils.service';
 
 @Component({
   selector: 'uo-create-deployment',
@@ -19,7 +20,8 @@ export class CreateDeploymentComponent implements OnInit {
   constructor(
     private deploymentService: DeploymentService,
     private logger: NGXLogger,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private utilsService: UtilsService
   ) {}
 
   ngOnInit() {
@@ -39,14 +41,9 @@ export class CreateDeploymentComponent implements OnInit {
     this.createErrorMessage = '';
     this.logger.debug(deploymentToCreate);
 
-    if (deploymentToCreate.id === '') {
-      delete deploymentToCreate.id;
-    }
-    if (deploymentToCreate.description === '') {
-      delete deploymentToCreate.description;
-    }
+    const cleanedDeployment = this.utilsService.stripEmptyStrings(deploymentToCreate);
 
-    this.deploymentService.createDeployment(deploymentToCreate)
+    this.deploymentService.createDeployment(cleanedDeployment)
     .pipe(
       catchError((error) => {
         this.state = 'failed';

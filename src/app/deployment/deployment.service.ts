@@ -3,6 +3,7 @@ import {Deployment} from './deployment';
 import {HttpClient} from '@angular/common/http';
 import {environment} from './../../environments/environment';
 import {Observable} from 'rxjs';
+import {UtilsService} from '../utils/utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,12 @@ export class DeploymentService {
 
   constructor(
     private http: HttpClient,
+    private utilsService: UtilsService
   ) { }
 
-  getDeployments(): Observable<Deployment[]> {
-    return this.http.get<Deployment[]>(`${environment.apiUrl}/deployments`);
+  getDeployments(where?: {id: any}): Observable<Deployment[]> {
+    const qs = this.utilsService.whereToQueryString(where);
+    return this.http.get<Deployment[]>(`${environment.apiUrl}/deployments${qs}`);
   }
 
   createDeployment(deployment: Deployment): Observable<Deployment> {

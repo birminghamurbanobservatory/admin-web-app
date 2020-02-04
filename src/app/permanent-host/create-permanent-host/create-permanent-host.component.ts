@@ -4,6 +4,8 @@ import {catchError} from 'rxjs/operators';
 import {NGXLogger} from 'ngx-logger';
 import {FormBuilder, Validators} from '@angular/forms';
 import {PermanentHostService} from '../permanent-host.service';
+import {UtilsService} from 'src/app/utils/utils.service';
+import {PermanentHost} from '../permanent-host';
 
 @Component({
   selector: 'uo-create-permanent-host',
@@ -15,11 +17,13 @@ export class CreatePermanentHostComponent implements OnInit {
   createPermanentHostForm;
   createErrorMessage = '';
   state = 'pending';
+  createdPermanentHost: PermanentHost;
 
   constructor(
     private permanentHostService: PermanentHostService,
     private logger: NGXLogger,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private utilsService: UtilsService
   ) {}
 
   ngOnInit() {
@@ -39,14 +43,9 @@ export class CreatePermanentHostComponent implements OnInit {
     this.createErrorMessage = '';
     this.logger.debug(permanentHostToCreate);
 
-    if (permanentHostToCreate.id === '') {
-      delete permanentHostToCreate.id;
-    }
-    if (permanentHostToCreate.description === '') {
-      delete permanentHostToCreate.description;
-    }
+    const cleanedPermanentHost = this.utilsService.stripEmptyStrings(permanentHostToCreate);
 
-    this.permanentHostService.createPermanentHost(permanentHostToCreate)
+    this.permanentHostService.createPermanentHost(cleanedPermanentHost)
     .pipe(
       catchError((err) => {
         this.state = 'failed';
@@ -60,7 +59,7 @@ export class CreatePermanentHostComponent implements OnInit {
     .subscribe((createdPermanentHost) => {
       this.state = 'created';
       this.logger.debug(createdPermanentHost);
-
+      this.createdPermanentHost = createdPermanentHost;
       // Might be a better way to do this.
       this.briefDelay().subscribe(() => {
         this.state = 'pending';
