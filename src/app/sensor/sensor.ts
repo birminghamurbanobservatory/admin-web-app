@@ -7,7 +7,7 @@ export class Sensor {
   permanentHost?: string;
   defaults?: Defaults;
   createdAt?: string;
-  deletedAt?: string;
+  updatedAt?: string;
 }
 
 class Defaults {
