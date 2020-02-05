@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist",
+    "public": "dist/admin-web-app",
     "site": "uo-admin",
     "ignore": [
       "firebase.json",
@@ -9,6 +9,3 @@
     ]
   }
 }
-
-
-

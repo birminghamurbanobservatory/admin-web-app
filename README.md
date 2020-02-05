@@ -10,7 +10,11 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 1. It's worth committing any recent changes then incrementing the version number, e.g. with `npm version patch` or `npm version minor`.
 2. Then build a production version with `ng build --prod`. The build will be stored in the `dist/` directory.
-3. Deploy to firebase using `firebase deploy -m "1.0.1" --only hosting:uo-admin`
+3. Deploy to firebase using `firebase deploy -m "99.99.99"`. Use the version number listed in package.json for consistency.
+
+Because a "site" property is listed in _firebase.json_, it knows which site this code is for. I.e. because I have multiple Urban Observatory sites and web apps hosted under the same project on firebase.
+
+If you want to build and serve the production version locally use `ng build --prod`, e.g. to check it works ok with the production environment variables.
 
 ## Running unit tests
 
