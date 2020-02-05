@@ -1,11 +1,18 @@
 {
   "hosting": {
     "public": "dist",
-    "site": "uo-admin",
+    "site": "urban-obs-admin",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   }
 }
+
