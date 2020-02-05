@@ -6,13 +6,11 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+## Build & Deploy
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build, i.e. `ng build --prod`.
+1. It's worth committing any recent changes then incrementing the version number, e.g. with `npm version patch` or `npm version minor`.
+2. Then build a production version with `ng build --prod`. The build will be stored in the `dist/` directory.
+3. Deploy to firebase using `firebase deploy -m "1.0.1" --only hosting:uo-admin`
 
 ## Running unit tests
 
