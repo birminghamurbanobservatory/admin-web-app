@@ -13,7 +13,10 @@
       </mat-form-field>
 
       <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
-        <input matInput id="deployment-id" type="text" formControlName="id" maxlength="" placeholder="ID (optional)">
+        <input matInput id="deployment-id" type="text" formControlName="id" maxlength="44" placeholder="ID (optional)">
+        <mat-error *ngIf="createDeploymentForm.get('id').errors && createDeploymentForm.get('id').errors.pattern">
+          invalid format
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field class="form__field--max-width">

@@ -6,7 +6,12 @@
   <p>Created: {{deployment.createdAt| date:'long'}}</p>
   <p>Last Updated: {{deployment.updatedAt | date:'long'}}</p>
 
-  <div fxLayout="row" fxLayoutAlign="end">
+  <div fxLayout="row" fxLayoutAlign="space-around">
+
+    <a [routerLink]="['/sensors/create', {inDeployment: deployment.id}]" mat-raised-button color="primary">
+      Add Sensors
+    </a>    
+
     <button mat-raised-button color="warn" (click)="deleteButtonClicked()">
       <span *ngIf="state === 'pending'">
         Delete

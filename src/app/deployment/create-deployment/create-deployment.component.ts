@@ -28,7 +28,7 @@ export class CreateDeploymentComponent implements OnInit {
 
     this.createDeploymentForm = this.fb.group({
       name: ['', Validators.required],
-      id: '',
+      id: ['', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
       description: '',
       public: true
     });

@@ -30,7 +30,7 @@ export class CreatePermanentHostComponent implements OnInit {
 
     this.createPermanentHostForm = this.fb.group({
       name: ['', Validators.required],
-      id: '',
+      id: ['', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
       description: '',
       static: false
     });
