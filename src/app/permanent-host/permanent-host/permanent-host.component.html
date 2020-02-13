@@ -7,7 +7,8 @@
   <p>Created: {{permanentHost.createdAt| date:'long'}}</p>
   <p>Last Updated: {{permanentHost.updatedAt | date:'long'}}</p>
 
-  
+  <!-- TODO: Need a box that let's me enter the name of a deployment (with autocomplete) and registers this permanent host to that deployment. It could then pop up with a link to more information about the platform that was created from it? -->
+
   <div fxLayout="row" fxLayoutAlign="space-around">
 
     <a [routerLink]="['/sensors/create', { permanentHost: permanentHost.id }]" mat-raised-button color="primary">
