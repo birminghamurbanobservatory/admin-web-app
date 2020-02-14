@@ -15,6 +15,8 @@
     <p class="text--warn">{{getErrorMessage}}</p>
   </div>  
 
+  <!-- TODO: I need to add some form elements to allow me to filter the sensors, e.g. filter by permanentHost or inDeployment, etc, many of the filter parameters should be able to be passed in via the paramMap, i.e. URL parameters. -->
+
   <div *ngIf="state === 'got'">
 
     <div *ngIf="sensors.length > 0">

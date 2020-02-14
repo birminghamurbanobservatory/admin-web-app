@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {NGXLogger} from 'ngx-logger';
 import {SensorService} from '../sensor.service';
 import {Sensor} from '../sensor';
-import {catchError} from 'rxjs/operators';
+import {catchError, switchMap} from 'rxjs/operators';
 import {throwError} from 'rxjs';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
   selector: 'uo-sensors',
@@ -15,19 +16,36 @@ export class SensorsComponent implements OnInit {
   sensors: Sensor[];
   getErrorMessage: string;
   state = 'getting';
+  selectedPermanentHostId: string;
 
   constructor(
     private sensorService: SensorService,
-    private logger: NGXLogger
+    private logger: NGXLogger,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
-    this.getSensors();
+
+    this.route.paramMap.subscribe((params: ParamMap) => {
+
+      this.selectedPermanentHostId = params.get('permanentHost');
+      this.logger.debug(`Permanent host id '${this.selectedPermanentHostId}' was retrieved from the url`);
+      
+      const where: any = {};
+
+      if (this.selectedPermanentHostId) {
+        where.permanentHost = this.selectedPermanentHostId;
+      }
+
+      this.getSensors(where);
+
+    });
+
   }
 
-  getSensors() {
+  getSensors(where) {
     this.state = 'getting';
-    this.sensorService.getSensors()
+    this.sensorService.getSensors(where)
     .pipe(
       catchError((err) => {
         this.getErrorMessage = err.message;

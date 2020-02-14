@@ -11,6 +11,10 @@
 
   <div fxLayout="row" fxLayoutAlign="space-around">
 
+    <a [routerLink]="['/sensors', { permanentHost: permanentHost.id }]" mat-raised-button color="primary">
+      View its Sensors
+    </a>
+
     <a [routerLink]="['/sensors/create', { permanentHost: permanentHost.id }]" mat-raised-button color="primary">
       Add Sensors
     </a>
