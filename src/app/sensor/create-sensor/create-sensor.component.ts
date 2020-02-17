@@ -71,7 +71,7 @@ export class CreateSensorComponent implements OnInit {
     )
     .subscribe(permanentHosts => {
       this.permanentHostChoices = permanentHosts;
-      console.log(permanentHosts);
+      this.logger.debug(permanentHosts);
     });
 
     // autoComplete for inDeployment
@@ -84,7 +84,7 @@ export class CreateSensorComponent implements OnInit {
     )
     .subscribe(deployments => {
       this.deploymentChoices = deployments;
-      console.log(deployments);
+      this.logger.debug(deployments);
     });
 
     // Toggle permanentHost vs inDeployment in response to permanentHost changes

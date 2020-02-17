@@ -5,6 +5,7 @@ export class PermanentHost {
   static: boolean;
   updateLocationWithSensor: string;
   registrationKey: string;
+  registeredAs: string;
   createdAt: string;
   updatedAt: string;
 }

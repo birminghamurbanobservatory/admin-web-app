@@ -8,7 +8,12 @@ import { PermanentHostComponent, DeletePermanentHostDialog } from './permanent-h
 
 
 @NgModule({
-  declarations: [PermanentHostsComponent, CreatePermanentHostComponent, PermanentHostComponent, DeletePermanentHostDialog],
+  declarations: [
+    PermanentHostsComponent,
+    CreatePermanentHostComponent,
+    PermanentHostComponent,
+    DeletePermanentHostDialog
+  ],
   imports: [
     CommonModule,
     PermanentHostRoutingModule,

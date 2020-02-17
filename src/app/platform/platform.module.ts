@@ -5,15 +5,25 @@ import { SharedModule } from '../shared/shared.module';
 import { PlatformRoutingModule } from './platform-routing.module';
 import { CreatePlatformComponent } from './create-platform/create-platform.component';
 import {PlatformsComponent} from './platforms/platforms.component';
-import { PlatformComponent } from './platform/platform.component';
+import { PlatformComponent, DeletePlatformDialog } from './platform/platform.component';
+import { ViewPlatformComponent } from './view-platform/view-platform.component';
 
 
 @NgModule({
-  declarations: [CreatePlatformComponent, PlatformsComponent, PlatformComponent],
+  declarations: [
+    CreatePlatformComponent, 
+    PlatformsComponent, 
+    PlatformComponent, 
+    ViewPlatformComponent,
+    DeletePlatformDialog
+  ],
   imports: [
     CommonModule,
     PlatformRoutingModule,
     SharedModule
+  ],
+  entryComponents: [
+    DeletePlatformDialog
   ]
 })
 export class PlatformModule { }

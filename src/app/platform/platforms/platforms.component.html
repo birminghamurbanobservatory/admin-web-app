@@ -4,8 +4,46 @@
     <a [routerLink]="['./create']" mat-raised-button color="accent">Create new platform</a>
   </div>
 
+  <br><br><br>
+
+  <div *ngIf="state === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner></mat-spinner>
+    <p>Getting Platforms</p>
+  </div>
+
+  <div *ngIf="state === 'failed'">
+    <p class="text--warn">{{getErrorMessage}}</p>
+  </div>  
+
+  <div *ngIf="state === 'got'">
+
+    <div *ngIf="platforms.length > 0">
+      <!-- TODO: Could provide various different view options here, e.g. the standard list view, or a map view, or a tree view.  -->
+      <p>List of platforms:</p>
+
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let platform of platforms">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <strong>{{platform.name}}</strong>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <uo-platform [platform]="platform" (deleted)="onDeleted($event)"></uo-platform>
+          
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <div *ngIf="platforms.length === 0" fxLayout="row" fxLayoutAlign="center">
+      <p>You don't appear to have any platforms yet</p>
+    </div>
+
+  </div>
 
 
   
 </div>
+
+
 

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {PlatformsComponent} from './platforms/platforms.component';
 import {CreatePlatformComponent} from './create-platform/create-platform.component';
+import {ViewPlatformComponent} from './view-platform/view-platform.component';
 
 
 const routes: Routes = [
@@ -12,7 +13,11 @@ const routes: Routes = [
   {
     path: 'create',
     component: CreatePlatformComponent
-  }    
+  },
+  {
+    path: 'view/:platformId',
+    component: ViewPlatformComponent
+  }
 ];
 
 @NgModule({

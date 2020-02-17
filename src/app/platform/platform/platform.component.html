@@ -1,1 +1,34 @@
-<p>platform works!</p>
+<div>
+  
+  <p>ID: {{platform.id}}</p>
+  <p>Name: {{platform.name}}</p>
+  <p>Description: {{platform.description}}</p>
+  <p>Owner deployment: {{platform.ownerDeployment}}</p>
+  <p>In deployments: {{platform.inDeployments}}</p>
+  <p *ngIf="platform.hostedByPath">
+    Hosted by: {{platform.hostedByPath}}
+  </p>
+  <p>Static: {{platform.static}}</p>
+  <p *ngIf="platform.updateLocationWithSensor">
+    Location updated by sensor: {{platform.updateLocationWithSensor}}
+  </p>
+  <p>Created: {{platform.createdAt| date:'long'}}</p>
+  <p>Last Updated: {{platform.updatedAt | date:'long'}}</p>
+
+
+  <div fxLayout="row" fxLayoutAlign="space-around">
+
+    <button mat-raised-button color="warn" (click)="deleteButtonClicked()">
+      <span *ngIf="deleteState === 'pending'">
+        Delete
+      </span>
+      <div *ngIf="deleteState === 'deleting'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+        <span>Deleting</span>
+        <mat-spinner diameter="18"></mat-spinner>
+      </div>
+    </button>
+
+  </div>
+
+
+</div>

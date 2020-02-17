@@ -3,9 +3,11 @@ import {PermanentHost} from '../permanent-host';
 import {NGXLogger} from 'ngx-logger';
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {PermanentHostService} from '../permanent-host.service';
-import {catchError} from 'rxjs/operators';
-import {throwError} from 'rxjs';
+import {catchError, filter, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
+import {throwError, Observable, timer} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {FormControl} from '@angular/forms';
+import {DeploymentService} from 'src/app/deployment/deployment.service';
 
 @Component({
   selector: 'uo-permanent-host',
@@ -16,17 +18,71 @@ export class PermanentHostComponent implements OnInit {
 
   @Input() permanentHost: PermanentHost;
   @Output() deleted = new EventEmitter<string>();
-  state = 'pending';
+  deleteState = 'pending';
+  registerToDeploymentId;
+  deploymentChoices = [];
+  registerState = 'pending';
+  registerErrorMessage = '';
 
   constructor(
     private logger: NGXLogger,
     public dialog: MatDialog,
     public permanentHostService: PermanentHostService,
+    public deploymentService: DeploymentService,
     private _snackBar: MatSnackBar    
   ) { }
 
   ngOnInit() {
+
+    if (!this.permanentHost.registeredAs) {
+      this.registerToDeploymentId = new FormControl('');
+      this.watchForDeploymentIdChanges();
+    }
+
   }
+
+  watchForDeploymentIdChanges() {
+
+    this.registerToDeploymentId.valueChanges
+    .pipe(
+      filter((value: string) => value.length > 2),
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap((value: string) => this.deploymentService.getDeployments({id: {begins: value}}))
+    )
+    .subscribe(deployments => {
+      this.deploymentChoices = deployments;
+      this.logger.debug(deployments);
+    });
+
+  }
+
+
+  register() {
+
+    this.registerState = 'registering';
+    this.registerErrorMessage = '';
+    this.logger.debug(`Registering permanent host to deployment '${this.registerToDeploymentId.value}' using key ${this.permanentHost.registrationKey}`);
+
+    this.permanentHostService.register(this.permanentHost.registrationKey, this.registerToDeploymentId.value)
+    .pipe(
+      catchError((error) => {
+        this.registerState = 'failed';
+        this.registerErrorMessage = error.message;
+        timer(1400).subscribe(() => {
+          this.registerState = 'pending';
+        });
+        return throwError(error);
+      })
+    )
+    .subscribe((createdPlatform) => {
+      this.logger.debug(createdPlatform);
+      this.permanentHost.registeredAs = createdPlatform.id;
+      this.registerState = 'pending';
+    })    
+
+  }
+
 
 
   deleteButtonClicked() {
@@ -37,13 +93,13 @@ export class PermanentHostComponent implements OnInit {
 
   deletePermanentHost() {
     this.logger.debug(`Deleting permamentHost '${this.permanentHost.id}'`)
-    this.state = 'deleting';
+    this.deleteState = 'deleting';
     this.permanentHostService.deletePermanentHost(this.permanentHost.id)
     .pipe(
       catchError((error) => {
         this.logger.error(`Failed to delete permanent host '${this.permanentHost.id}'`);
         this.showErrorSnackBar(error.message);
-        this.state = 'pending';
+        this.deleteState = 'pending';
         return throwError(error);
       })
     )

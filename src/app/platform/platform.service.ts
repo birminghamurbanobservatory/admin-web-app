@@ -24,8 +24,12 @@ export class PlatformService {
     return this.http.post<Platform>(`${environment.apiUrl}/platforms`, platform);
   }
 
-  deletePlatform(platformId: string): Observable<void> {
-    return this.http.delete<void>(`${environment.apiUrl}/platforms/${platformId}`)
+  getPlatform(platformId): Observable<Platform> {
+    return this.http.get<Platform>(`${environment.apiUrl}/platforms/${platformId}`);
+  }
+
+  deletePlatform(ownerDeploymentId: string, platformId: string): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/deployments/${ownerDeploymentId}/platforms/${platformId}`);
   }
 
 

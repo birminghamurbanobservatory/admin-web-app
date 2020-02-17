@@ -2,12 +2,59 @@
   
   <p>ID: {{permanentHost.id}}</p>
   <p>Description: {{permanentHost.description}}</p>
-  <p>Registration Key: {{permanentHost.registrationKey}}</p>
   <p>Static: {{permanentHost.static}}</p>
   <p>Created: {{permanentHost.createdAt| date:'long'}}</p>
   <p>Last Updated: {{permanentHost.updatedAt | date:'long'}}</p>
+  <p>Registration Key: {{permanentHost.registrationKey}}</p>
+
+  <div *ngIf="permanentHost.registeredAs">
+    <p>Registered as <a [routerLink]="['/platforms/view', permanentHost.registeredAs]">{{permanentHost.registeredAs}}</a></p>
+  </div>
 
   <!-- TODO: Need a box that let's me enter the name of a deployment (with autocomplete) and registers this permanent host to that deployment. It could then pop up with a link to more information about the platform that was created from it? -->
+  <div *ngIf="!permanentHost.registeredAs" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+
+    <div>
+      Register to deployment: 
+    </div>
+
+    <div>
+      <mat-form-field>
+        <input type="text" matInput [formControl]="registerToDeploymentId" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let deploymentChoice of deploymentChoices" [value]="deploymentChoice.id">
+            {{deploymentChoice.id}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-hint *ngIf="!registerToDeploymentId.value">begin typing deployment's id</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <button mat-raised-button color="primary" *ngIf="registerToDeploymentId.value" (click)="register()">
+        <!-- Pending -->
+        <span *ngIf="registerState === 'pending'">Register</span>
+        <!-- Creating -->
+        <div *ngIf="registerState === 'registering'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+          <span>Registering</span>
+          <mat-spinner diameter="18" color="accent"></mat-spinner>
+        </div>
+        <!-- Failed -->
+        <div *ngIf="registerState === 'failed'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+          <span>Failed</span>
+          <mat-icon aria-hidden="true">close</mat-icon>
+        </div>
+      </button>
+    </div>
+
+    <div *ngIf="registerErrorMessage">
+      <p class="text--warn">{{registerErrorMessage}}</p>
+    </div>
+
+  </div>
+
+
+  <br>
 
   <div fxLayout="row" fxLayoutAlign="space-around">
 
@@ -20,10 +67,10 @@
     </a>
 
     <button mat-raised-button color="warn" (click)="deleteButtonClicked()">
-      <span *ngIf="state === 'pending'">
+      <span *ngIf="deleteState === 'pending'">
         Delete
       </span>
-      <div *ngIf="state === 'deleting'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+      <div *ngIf="deleteState === 'deleting'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
         <span>Deleting</span>
         <mat-spinner diameter="18"></mat-spinner>
       </div>
