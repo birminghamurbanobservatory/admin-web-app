@@ -26,19 +26,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 @media (min-width: 768px) {
   .container {
-    width: 750px;
+    /* IMPORTANT: These container widths are less that what bootstrap uses as we have to account for the sidebar. Basically we've subtracted the sidebar width. */
+    width: 625; /* was 750 */
   }
 }
 @media (min-width: 992px) {
   .container {
-    width: 970px;
+    width: 845px; /* was 970 */
   }
 }
 @media (min-width: 1200px) {
   .container {
-    width: 1170px;
+    width: 1045px; /* was 1170 */
   }
 }
+
 
 .container--padded-top {
   padding-top: 15px;
@@ -56,4 +58,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .form__field--max-width {
   width: 100%;
+}
+
+.btn__my-5 {
+  margin-top: 3px !important; 
+  margin-bottom: 3px !important;
 }

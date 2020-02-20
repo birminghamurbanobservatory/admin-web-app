@@ -54,8 +54,8 @@ export class SensorsComponent implements OnInit {
       })
     )
     .subscribe((sensors: Sensor[]) => {
-      this.state = 'got';
       this.sensors = sensors;
+      this.state = 'got';
     })
   }
 

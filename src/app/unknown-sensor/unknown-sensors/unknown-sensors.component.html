@@ -1,0 +1,41 @@
+<div class="container container--padded-top container--padded-bottom">
+
+  <br><br>
+
+  <div *ngIf="state === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner></mat-spinner>
+    <p>Getting Unknown Sensors</p>
+  </div>
+
+  <div *ngIf="state === 'failed'">
+    <p class="text--warn">{{getErrorMessage}}</p>
+  </div>  
+
+  <div *ngIf="state === 'got'">
+
+    <div *ngIf="unknownSensors.length > 0">
+      <p>List of unknown sensors:</p>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let unknownSensor of unknownSensors">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <strong>{{unknownSensor.id}}</strong>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <uo-unknown-sensor [unknownSensor]="unknownSensor"></uo-unknown-sensor>
+          
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <div *ngIf="unknownSensors.length === 0" fxLayout="row" fxLayoutAlign="center">
+      <p>There's currently no unknown sensors</p>
+    </div>  
+
+  </div>
+
+
+  
+</div>
+

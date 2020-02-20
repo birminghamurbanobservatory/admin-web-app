@@ -1,0 +1,7 @@
+<div>
+  <p>No. of observations: {{unknownSensor.nObservations}}</p>
+  <p>First seen: {{unknownSensor.createdAt| date:'long'}}</p>
+  <p>Last seen: {{unknownSensor.updatedAt| date:'long'}}</p>
+  <p>Last observation:</p>
+  <pre>{{unknownSensor.lastObservation | json}}</pre>
+</div>

@@ -29,6 +29,11 @@ const routes: Routes = [
     canActivate: [AuthGuard] // canLoad is probably better here, but I'm struggling to implement it
   },
   {
+    path: 'unknown-sensors',
+    loadChildren: () => import('./unknown-sensor/unknown-sensor.module').then(m => m.UnknownSensorModule),
+    canActivate: [AuthGuard] // canLoad is probably better here, but I'm struggling to implement it
+  },
+  {
     path: 'platforms',
     loadChildren: () => import('./platform/platform.module').then(m => m.PlatformModule),
     canActivate: [AuthGuard] // canLoad is probably better here, but I'm struggling to implement it
