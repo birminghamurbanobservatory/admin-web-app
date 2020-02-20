@@ -29,7 +29,7 @@
     </div>
 
     <div *ngIf="getPermissionsState === 'failed'">
-      <p class="text--warn">{{getErrorMessage}}</p>
+      <p class="text--warn">{{getPermissionsErrorMessage}}</p>
     </div>  
 
     <div *ngIf="getPermissionsState === 'got'">
