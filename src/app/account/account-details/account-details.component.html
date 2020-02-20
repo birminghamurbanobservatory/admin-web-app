@@ -1,7 +1,54 @@
 <div class="container container--padded-top">
 
-  <pre *ngIf="auth.userProfile$ | async as profile"><code>{{ profile | json }}</code></pre>
+  <section>
 
-  <!-- TODO: Show the user's permissions -->
-  
+    <div fxLayout="row" fxLayoutAlign="center">
+      <h1 class="text--accent">Your Account</h1>
+    </div>
+
+    <div *ngIf="auth.userProfile$ | async as profile">
+      <p *ngIf="profile.nickname">Nickname: {{profile.nickname}}</p>
+      <p *ngIf="profile.name">Name: {{profile.name}}</p>
+      <p *ngIf="profile.email">Email: {{profile.email}}</p>
+      <p *ngIf="profile.email_verified">Email verified: {{profile.email_verified}}</p>
+      <p>User ID: {{profile.sub}}</p>
+    </div>
+
+  </section>
+
+
+  <section>
+
+    <div fxLayout="row" fxLayoutAlign="center">
+      <h2 class="text--accent">Your Permissions</h2>
+    </div>
+
+    <div *ngIf="getPermissionsState === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner></mat-spinner>
+      <p>Getting Permissions</p>
+    </div>
+
+    <div *ngIf="getPermissionsState === 'failed'">
+      <p class="text--warn">{{getErrorMessage}}</p>
+    </div>  
+
+    <div *ngIf="getPermissionsState === 'got'">
+
+      <div *ngIf="permissions.length > 0">
+        <div fxLayout="row wrap">
+          <span fxFlex="100" fxFlex.gt-sm="50" fxFlex.gt-md="33" *ngFor="let permission of permissions" class="permission">
+            {{permission}}
+          </span>
+        </div>
+      </div>
+
+      <div *ngIf="permissions.length === 0" fxLayout="row" fxLayoutAlign="center">
+        <p>You don't appear to have any permissions.</p>
+      </div>  
+
+    </div>
+
+  </section>
+
+
 </div>

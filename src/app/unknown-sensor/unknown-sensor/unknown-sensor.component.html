@@ -1,4 +1,7 @@
 <div id="lastobservation">
+  <a [routerLink]="['/sensors/create', {id: unknownSensor.id}]" mat-raised-button color="primary">
+    Create this sensor
+  </a>  
   <p>No. of observations: {{unknownSensor.nObservations}}</p>
   <p>First seen: {{unknownSensor.createdAt| date:'long'}}</p>
   <p>Last seen: {{unknownSensor.updatedAt| date:'long'}}</p>

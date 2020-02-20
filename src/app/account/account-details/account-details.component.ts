@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from 'src/app/auth/auth.service';
+import {AccountService} from '../account.service';
+import {catchError} from 'rxjs/operators';
+import {throwError} from 'rxjs';
+import {sortBy} from 'lodash';
 
 @Component({
   selector: 'uo-account-details',
@@ -8,13 +12,36 @@ import {AuthService} from 'src/app/auth/auth.service';
 })
 export class AccountDetailsComponent implements OnInit {
 
-  constructor(public auth: AuthService) { 
+  permissions: string[];
+  getPermissionsState = 'getting';
+  getPermissionsErrorMessage: string;
 
-  }
+  constructor(
+    public auth: AuthService,
+    private accountService: AccountService
+  ) { }
 
   ngOnInit() {
+
+    this.getPermissions();
+
   }
 
-  // TODO: It'll be worth showing the user's list of permissions in this account section. To get this list why not create an endpoint in the API gateway which when called returns the permissions of the user that called it.
+  getPermissions() {
+    this.getPermissionsState = 'getting';
+    this.accountService.getPermissions()
+    .pipe(
+      catchError((err) => {
+        this.getPermissionsErrorMessage = err.message;
+        this.getPermissionsState = 'failed';
+        return throwError(err);
+      })
+    )
+    .subscribe((permissions: string[]) => {
+      this.permissions = sortBy(permissions);
+      this.getPermissionsState = 'got';
+    })
+  }
+
 
 }

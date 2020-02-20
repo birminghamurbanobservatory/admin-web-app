@@ -16,6 +16,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   color: #F44236 !important;
 }
 
+.text__center {
+  text-align: center;
+}
+
 
 /* Replicate a bootstrap container */
 .container {
@@ -85,3 +89,4 @@ prettyjson .boolean {
 prettyjson .null {
   color: #B31B4D !important;
 }
+

@@ -37,7 +37,7 @@ export class CreateSensorComponent implements OnInit {
 
     this.createSensorForm = this.fb.group({
       name: '',
-      id: ['', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
+      id: [this.route.snapshot.paramMap.get('id') || '', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
       description: '',
       // N.B. this snapshot approach is fine as long as you never reuse the component, i.e. you always naviagate to another component before coming back to this one, e.g. with a different permanentHost.
       permanentHost: [this.route.snapshot.paramMap.get('permanentHost') || '', Validators.required], 
