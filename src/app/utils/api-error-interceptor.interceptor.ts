@@ -3,14 +3,14 @@ import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse}
 
 import { Observable, throwError } from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {NGXLogger} from 'ngx-logger';
+import {UoLoggerService} from './uo-logger.service';
 
 /** Pass untouched request through to the next request handler. */
 @Injectable()
 export class ApiErrorInterceptor implements HttpInterceptor {
 
   constructor(
-    private logger: NGXLogger
+    private logger: UoLoggerService
   ) {
 
   }

@@ -4,6 +4,7 @@ import {throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {UnknownSensorService} from '../unknown-sensor.service';
 import {NGXLogger} from 'ngx-logger';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 @Component({
   selector: 'uo-unknown-sensors',
@@ -18,7 +19,7 @@ export class UnknownSensorsComponent implements OnInit {
 
   constructor(
     private unknownSensorService: UnknownSensorService,
-    private logger: NGXLogger,
+    private logger: UoLoggerService,
   ) { }
 
   ngOnInit() {

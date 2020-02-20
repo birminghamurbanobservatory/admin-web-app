@@ -3,7 +3,7 @@ import {DeploymentService} from '../deployment.service';
 import {Deployment} from '../deployment';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
-import {NGXLogger} from 'ngx-logger';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class DeploymentsComponent implements OnInit {
 
   constructor(
     private deploymentService: DeploymentService,
-    private logger: NGXLogger
+    private logger: UoLoggerService
   ) { }
 
   ngOnInit() {

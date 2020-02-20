@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {NGXLogger} from 'ngx-logger';
 import {SensorService} from '../sensor.service';
 import {Sensor} from '../sensor';
 import {catchError, switchMap} from 'rxjs/operators';
 import {throwError} from 'rxjs';
 import {ActivatedRoute, ParamMap} from '@angular/router';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 @Component({
   selector: 'uo-sensors',
@@ -20,7 +20,7 @@ export class SensorsComponent implements OnInit {
 
   constructor(
     private sensorService: SensorService,
-    private logger: NGXLogger,
+    private logger: UoLoggerService,
     private route: ActivatedRoute,
   ) { }
 

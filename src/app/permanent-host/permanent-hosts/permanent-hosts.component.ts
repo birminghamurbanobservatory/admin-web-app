@@ -3,7 +3,7 @@ import {PermanentHostService} from '../permanent-host.service';
 import {throwError} from 'rxjs';
 import {PermanentHost} from '../permanent-host';
 import {catchError} from 'rxjs/operators';
-import {NGXLogger} from 'ngx-logger';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 @Component({
   selector: 'uo-permanent-hosts',
@@ -17,7 +17,7 @@ export class PermanentHostsComponent implements OnInit {
   permanentHosts: PermanentHost[];
 
   constructor(
-    private logger: NGXLogger,
+    private logger: UoLoggerService,
     private permanentHostService: PermanentHostService,
   ) { }
 

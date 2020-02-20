@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import {Platform} from '../platform';
 import {MAT_DIALOG_DATA, MatDialogRef, MatDialog} from '@angular/material/dialog';
-import {NGXLogger} from 'ngx-logger';
 import {PlatformService} from '../platform.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 @Component({
   selector: 'uo-platform',
@@ -19,7 +19,7 @@ export class PlatformComponent implements OnInit {
   deleteState = 'pending';
 
   constructor(
-    private logger: NGXLogger,
+    private logger: UoLoggerService,
     public dialog: MatDialog,
     private platformService: PlatformService,
     private _snackBar: MatSnackBar

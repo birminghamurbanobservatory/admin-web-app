@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080',
-  audience: 'https://api.birminghamurbanobservatory.com'
+  audience: 'https://api.birminghamurbanobservatory.com',
+  logLevel: 'debug' // off, debug, info, warn, error
 };
 
 /*

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import {PermanentHost} from '../permanent-host';
-import {NGXLogger} from 'ngx-logger';
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {PermanentHostService} from '../permanent-host.service';
 import {catchError, filter, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
@@ -8,6 +7,7 @@ import {throwError, Observable, timer} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {FormControl} from '@angular/forms';
 import {DeploymentService} from 'src/app/deployment/deployment.service';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 @Component({
   selector: 'uo-permanent-host',
@@ -25,7 +25,7 @@ export class PermanentHostComponent implements OnInit {
   registerErrorMessage = '';
 
   constructor(
-    private logger: NGXLogger,
+    private logger: UoLoggerService,
     public dialog: MatDialog,
     public permanentHostService: PermanentHostService,
     public deploymentService: DeploymentService,

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {NGXLogger} from 'ngx-logger';
 import {PlatformService} from '../platform.service';
 import {Platform} from '../platform';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 @Component({
   selector: 'uo-platforms',
@@ -18,7 +18,7 @@ export class PlatformsComponent implements OnInit {
 
   constructor(
     private platformService: PlatformService,
-    private logger: NGXLogger
+    private logger: UoLoggerService
   ) { }
 
   ngOnInit() {

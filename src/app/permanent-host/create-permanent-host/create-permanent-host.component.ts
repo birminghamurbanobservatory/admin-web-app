@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {timer, Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {NGXLogger} from 'ngx-logger';
 import {FormBuilder, Validators} from '@angular/forms';
 import {PermanentHostService} from '../permanent-host.service';
 import {UtilsService} from 'src/app/utils/utils.service';
 import {PermanentHost} from '../permanent-host';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 @Component({
   selector: 'uo-create-permanent-host',
@@ -21,7 +21,7 @@ export class CreatePermanentHostComponent implements OnInit {
 
   constructor(
     private permanentHostService: PermanentHostService,
-    private logger: NGXLogger,
+    private logger: UoLoggerService,
     private fb: FormBuilder,
     private utilsService: UtilsService
   ) {}

@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import {Sensor} from '../sensor';
-import {NGXLogger} from 'ngx-logger';
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SensorService} from '../sensor.service';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 @Component({
   selector: 'uo-sensor',
@@ -19,7 +19,7 @@ export class SensorComponent implements OnInit {
   state = 'pending';
 
   constructor(
-    private logger: NGXLogger,
+    private logger: UoLoggerService,
     public dialog: MatDialog,
     private sensorService: SensorService,
     private _snackBar: MatSnackBar

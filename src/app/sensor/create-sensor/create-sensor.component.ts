@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {timer, Observable, throwError} from 'rxjs';
-import {NGXLogger} from 'ngx-logger';
 import {SensorService} from '../sensor.service';
 import {FormBuilder, Validators} from '@angular/forms';
 import {catchError, switchMap, map, filter, debounceTime, distinctUntilChanged} from 'rxjs/operators';
@@ -8,6 +7,7 @@ import {UtilsService} from 'src/app/utils/utils.service';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {PermanentHostService} from 'src/app/permanent-host/permanent-host.service';
 import {DeploymentService} from 'src/app/deployment/deployment.service';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 @Component({
   selector: 'uo-create-sensor',
@@ -25,7 +25,7 @@ export class CreateSensorComponent implements OnInit {
 
   constructor(
     private sensorService: SensorService,
-    private logger: NGXLogger,
+    private logger: UoLoggerService,
     private fb: FormBuilder,
     private utilsService: UtilsService,
     private route: ActivatedRoute,

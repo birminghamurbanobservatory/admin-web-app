@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {NGXLogger} from 'ngx-logger';
 import {PlatformService} from '../platform.service';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Platform} from '../platform';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 // This is simply a wrapper around the PlatformComponent that makes it easy to reuse the PlatformComponent for both the PlatformsComponent where loads of platforms are viewed in a list, and for viewing a single platform as is the case here.
 
@@ -22,7 +22,7 @@ export class ViewPlatformComponent implements OnInit {
   getErrorMessage = '';
 
   constructor(
-    private logger: NGXLogger,
+    private logger: UoLoggerService,
     private platformService: PlatformService,
     private route: ActivatedRoute
   ) { }

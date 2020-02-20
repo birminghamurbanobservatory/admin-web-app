@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import {Deployment} from '../deployment';
-import {NGXLogger} from 'ngx-logger';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {DeploymentService} from '../deployment.service';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 @Component({
   selector: 'uo-deployment',
@@ -19,7 +19,7 @@ export class DeploymentComponent implements OnInit {
   state = 'pending';
 
   constructor(
-    private logger: NGXLogger,
+    private logger: UoLoggerService,
     public dialog: MatDialog,
     private deploymentService: DeploymentService,
     private _snackBar: MatSnackBar

@@ -3,8 +3,8 @@ import { Validators, FormBuilder } from '@angular/forms';
 import {DeploymentService} from '../deployment.service';
 import {of, throwError, Observable, timer} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {NGXLogger} from 'ngx-logger';
 import {UtilsService} from 'src/app/utils/utils.service';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 
 @Component({
   selector: 'uo-create-deployment',
@@ -19,7 +19,7 @@ export class CreateDeploymentComponent implements OnInit {
 
   constructor(
     private deploymentService: DeploymentService,
-    private logger: NGXLogger,
+    private logger: UoLoggerService,
     private fb: FormBuilder,
     private utilsService: UtilsService
   ) {}
