@@ -64,3 +64,24 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin-top: 3px !important; 
   margin-bottom: 3px !important;
 }
+
+
+/* Custom styling for prettyjson components */
+prettyjson pre span {
+  white-space: normal;
+}
+prettyjson .key {
+  color: #FF4081 !important;
+}
+prettyjson .string {
+  color: #3F51B5 !important;
+}
+prettyjson .number {
+  color: #09B319 !important;
+}
+prettyjson .boolean {
+  color: #FF5B33 !important;
+}
+prettyjson .null {
+  color: #B31B4D !important;
+}
