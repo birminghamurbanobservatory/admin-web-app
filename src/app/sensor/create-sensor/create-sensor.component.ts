@@ -22,6 +22,7 @@ export class CreateSensorComponent implements OnInit {
   permanentHostChoices = [];
   deploymentChoices = [];
   hostOrDep = 'neither';
+  sensorDefaults = [];
 
   constructor(
     private sensorService: SensorService,
@@ -40,12 +41,8 @@ export class CreateSensorComponent implements OnInit {
       id: [this.route.snapshot.paramMap.get('id') || '', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
       description: '',
       // N.B. this snapshot approach is fine as long as you never reuse the component, i.e. you always naviagate to another component before coming back to this one, e.g. with a different permanentHost.
-      permanentHost: [this.route.snapshot.paramMap.get('permanentHost') || '', Validators.required], 
-      inDeployment: [this.route.snapshot.paramMap.get('inDeployment') || '', Validators.required],
-      // TODO: Invalidate the form and show errors when both permanentHost and inDeployment defined, might be able to do this with a custom validator for each that looks to see if the other is defined.
-      observedProperty: ['', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
-      hasFeatureOfInterest: ['', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
-      usedProcedures: ['', Validators.pattern('[a-z0-9,-]*')], // we'll ask the user for a comma separated list.
+      permanentHost: [this.route.snapshot.paramMap.get('permanentHost') || ''],
+      inDeployment: [this.route.snapshot.paramMap.get('inDeployment') || ''],
     });
 
     if (this.route.snapshot.paramMap.get('permanentHost')) {
@@ -144,26 +141,11 @@ export class CreateSensorComponent implements OnInit {
 
     const cleanedSensor = this.utilsService.stripEmptyStrings(sensorToCreate);
 
-    // Build defaults array
-    cleanedSensor.defaults = [];
-    if (cleanedSensor.observedProperty) {
-      cleanedSensor.defaults.push({
-        observedProperty: cleanedSensor.observedProperty
-      });
-      delete cleanedSensor.observedProperty;
-    }
-    if (cleanedSensor.hasFeatureOfInterest) {
-      cleanedSensor.defaults.push({
-        hasFeatureOfInterest: cleanedSensor.hasFeatureOfInterest
-      });
-      delete cleanedSensor.hasFeatureOfInterest;
-    }
-    if (cleanedSensor.usedProcedures) {
-      cleanedSensor.defaults.push({
-        usedProcedures: cleanedSensor.usedProcedures.split(',')
-      });
-      delete cleanedSensor.usedProcedures;
-    }
+    // Add the defaults
+    cleanedSensor.defaults = this.sensorDefaults.map((def) => {
+      delete def.id;
+      return def;
+    });
 
     this.sensorService.createSensor(cleanedSensor)
     .pipe(
@@ -189,6 +171,12 @@ export class CreateSensorComponent implements OnInit {
 
   briefDelay(): Observable<number> {
     return timer(1400);
+  }
+
+  onDefaultsChanged(newDefaults) {
+    this.logger.debug('create-sensor component is aware that the defaults have changed');
+    this.logger.debug(newDefaults);
+    this.sensorDefaults = newDefaults;
   }
 
 

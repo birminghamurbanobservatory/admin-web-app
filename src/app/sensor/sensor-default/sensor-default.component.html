@@ -1,0 +1,21 @@
+<form [formGroup]="defaultForm">
+
+  <mat-form-field>
+    <mat-label>Property</mat-label>
+    <mat-select formControlName="key">
+      <mat-option *ngFor="let keyOption of keyOptions" [value]="keyOption">
+        {{keyOption}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput type="text" formControlName="value" placeholder="Value">
+  </mat-form-field>
+
+  <button (click)="delete()" type="button">Delete</button>
+
+</form>
+
+
+

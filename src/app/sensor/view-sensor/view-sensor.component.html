@@ -1,0 +1,27 @@
+<div class="container container--padded-top container--padded-bottom">
+
+  <mat-card>
+
+    <div *ngIf="deleteState === 'pending'">
+      <div *ngIf="getState === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner></mat-spinner>
+        <p>Getting sensor {{sensorId}}</p>
+      </div>
+
+      <div *ngIf="getState === 'failed' && getErrorMessage" fxLayout="row" fxLayoutAlign="center">
+        <p class="text--warn">{{getErrorMessage}}</p>
+      </div>
+
+      <div *ngIf="getState === 'got' && sensor">
+        <uo-sensor [sensor]="sensor" (deleted)="onDeleted($event)"></uo-sensor>
+      </div>
+    </div>
+
+    <div *ngIf="deleteState === 'deleted'" fxLayout="column" fxLayoutAlign="center center">
+      <p>Sensor <em>{{sensor.id}}</em> has been deleted.</p>
+      <a mat-stroked-button color="primary" [routerLink]="['/sensors']">Return to all sensors</a>
+    </div>
+
+  </mat-card>
+
+</div>

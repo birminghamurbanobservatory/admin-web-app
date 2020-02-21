@@ -56,17 +56,21 @@
 
   <br>
 
-  <div fxLayout="row" fxLayoutAlign="space-around">
+  <div fxLayout="row wrap" fxLayoutAlign="space-around">
 
-    <a [routerLink]="['/sensors', { permanentHost: permanentHost.id }]" mat-raised-button color="primary">
+    <a [routerLink]="['/permanent-hosts/edit', permanentHost.id]" mat-raised-button color="accent" class="btn--m-5">
+      <mat-icon aria-label="edit">edit</mat-icon> Edit
+    </a>
+
+    <a [routerLink]="['/sensors', { permanentHost: permanentHost.id }]" mat-raised-button color="primary" class="btn--m-5">
       View its Sensors
     </a>
 
-    <a [routerLink]="['/sensors/create', { permanentHost: permanentHost.id }]" mat-raised-button color="primary">
+    <a [routerLink]="['/sensors/create', { permanentHost: permanentHost.id }]" mat-raised-button color="primary" class="btn--m-5">
       Add Sensors
     </a>
 
-    <button mat-raised-button color="warn" (click)="deleteButtonClicked()">
+    <button mat-raised-button color="warn" (click)="deleteButtonClicked()" class="btn--m-5">
       <span *ngIf="deleteState === 'pending'">
         Delete
       </span>

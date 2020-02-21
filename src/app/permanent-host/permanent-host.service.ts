@@ -21,6 +21,10 @@ export class PermanentHostService {
     return this.http.get<PermanentHost[]>(`${environment.apiUrl}/permanent-hosts${qs}`);
   }
 
+  getPermanentHost(permanentHostId: string): Observable<PermanentHost> {
+    return this.http.get<PermanentHost>(`${environment.apiUrl}/permanent-hosts/${permanentHostId}`);
+  }
+
   createPermanentHost(permanentHost: PermanentHost): Observable<PermanentHost> {
     return this.http.post<PermanentHost>(`${environment.apiUrl}/permanent-hosts`, permanentHost);
   }

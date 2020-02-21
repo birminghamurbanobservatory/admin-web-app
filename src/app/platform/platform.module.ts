@@ -7,6 +7,7 @@ import { CreatePlatformComponent } from './create-platform/create-platform.compo
 import {PlatformsComponent} from './platforms/platforms.component';
 import { PlatformComponent, DeletePlatformDialog } from './platform/platform.component';
 import { ViewPlatformComponent } from './view-platform/view-platform.component';
+import { EditPlatformComponent } from './edit-platform/edit-platform.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { ViewPlatformComponent } from './view-platform/view-platform.component';
     PlatformsComponent, 
     PlatformComponent, 
     ViewPlatformComponent,
-    DeletePlatformDialog
+    DeletePlatformDialog,
+    EditPlatformComponent
   ],
   imports: [
     CommonModule,

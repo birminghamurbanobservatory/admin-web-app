@@ -15,10 +15,14 @@ export class SensorService {
     private utilsService: UtilsService
   ) { }
 
-  // TODO: Add an argument for filtering the sensors.
+
   getSensors(where: {permanentHost: string}): Observable<Sensor[]> {
     const qs = this.utilsService.whereToQueryString(where);
     return this.http.get<Sensor[]>(`${environment.apiUrl}/sensors${qs}`);
+  }
+
+  getSensor(sensorId: string): Observable<Sensor> {
+    return this.http.get<Sensor>(`${environment.apiUrl}/sensors/${sensorId}`);
   }
 
   createSensor(sensor: Sensor): Observable<Sensor> {

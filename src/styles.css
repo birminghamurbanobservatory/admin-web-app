@@ -64,9 +64,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   width: 100%;
 }
 
-.btn__my-5 {
+.btn--my-5 {
   margin-top: 3px !important; 
   margin-bottom: 3px !important;
+}
+
+.btn--m-5 {
+  margin: 5px !important;
 }
 
 
@@ -88,5 +92,9 @@ prettyjson .boolean {
 }
 prettyjson .null {
   color: #B31B4D !important;
+}
+
+.icon--20 {
+  font-size: 20px;
 }
 

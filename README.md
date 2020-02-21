@@ -36,6 +36,7 @@ Pretty looking components provided by [Angular Material](https://material.angula
 
 Flexbox functionality provided via [@angular/flex-layout](https://github.com/angular/flex-layout). See the options in action [here](https://tburleson-layouts-demos.firebaseapp.com/#/docs). I needed to install a v8 version of this package for it to work with Angular 8 (`npm i @angular/flex-layout@8.0.0-beta.27`).
 
+Icons are available through [Angular Material](https://material.angular.io/components/icon/overview). You can see the available icons [here](https://material.io/resources/icons).
 
 ## Troubleshooting
 

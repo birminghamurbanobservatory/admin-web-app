@@ -5,6 +5,8 @@ import { PermanentHostsComponent } from './permanent-hosts/permanent-hosts.compo
 import { CreatePermanentHostComponent } from './create-permanent-host/create-permanent-host.component';
 import {SharedModule} from '../shared/shared.module';
 import { PermanentHostComponent, DeletePermanentHostDialog } from './permanent-host/permanent-host.component';
+import { ViewPermanentHostComponent } from './view-permanent-host/view-permanent-host.component';
+import { EditPermanentHostComponent } from './edit-permanent-host/edit-permanent-host.component';
 
 
 @NgModule({
@@ -12,7 +14,9 @@ import { PermanentHostComponent, DeletePermanentHostDialog } from './permanent-h
     PermanentHostsComponent,
     CreatePermanentHostComponent,
     PermanentHostComponent,
-    DeletePermanentHostDialog
+    DeletePermanentHostDialog,
+    ViewPermanentHostComponent,
+    EditPermanentHostComponent
   ],
   imports: [
     CommonModule,

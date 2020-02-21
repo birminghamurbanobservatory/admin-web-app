@@ -1,0 +1,27 @@
+<div class="container container--padded-top container--padded-bottom">
+
+  <mat-card>
+
+    <div *ngIf="deleteState === 'pending'">
+      <div *ngIf="getState === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner></mat-spinner>
+        <p>Getting deployment {{deploymentId}}</p>
+      </div>
+
+      <div *ngIf="getState === 'failed' && getErrorMessage" fxLayout="row" fxLayoutAlign="center">
+        <p class="text--warn">{{getErrorMessage}}</p>
+      </div>
+
+      <div *ngIf="getState === 'got' && deployment">
+        <uo-deployment [deployment]="deployment" (deleted)="onDeleted($event)"></uo-deployment>
+      </div>
+    </div>
+
+    <div *ngIf="deleteState === 'deleted'" fxLayout="column" fxLayoutAlign="center center">
+      <p>Deployment <em>{{deployment.id}}</em> has been deleted.</p>
+      <a mat-stroked-button color="primary" [routerLink]="['/deployments']">Return to all deployments</a>
+    </div>
+
+  </mat-card>
+
+</div>

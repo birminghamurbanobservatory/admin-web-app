@@ -20,6 +20,10 @@ export class DeploymentService {
     return this.http.get<Deployment[]>(`${environment.apiUrl}/deployments${qs}`);
   }
 
+  getDeployment(deploymentId: string): Observable<Deployment> {
+    return this.http.get<Deployment>(`${environment.apiUrl}/deployments/${deploymentId}`);
+  }
+
   createDeployment(deployment: Deployment): Observable<Deployment> {
     return this.http.post<Deployment>(`${environment.apiUrl}/deployments`, deployment);
   }
