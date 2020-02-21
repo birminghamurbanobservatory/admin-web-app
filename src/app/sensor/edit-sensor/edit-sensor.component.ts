@@ -130,6 +130,7 @@ export class EditSensorComponent implements OnInit {
   onSubmit(updates) {
     this.logger.debug(updates);
     this.updateState = 'updating';
+    // TODO: Need to actually call the service
     // TODO: Need to merge in the editedDefaults - Need to decide whether to keep the original IDs or not
   }
 
