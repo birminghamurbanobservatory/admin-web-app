@@ -2,65 +2,74 @@
 
   <div fxLayout="row" fxLayoutAlign="center">
 
-    <!-- TODO how to I make the width of this form responsive -->
-    <form class="form--max-width-600" [formGroup]="createPermanentHostForm" (ngSubmit)="onSubmit(createPermanentHostForm.value)" fxLayout="column" fxLayoutGap="15px">
+    <mat-card class="card--max-width-600">
 
-      <mat-form-field class="form__field--max-width" hintLabel="Max 40 characters">
-        <input matInput id="permanent-host-name" type="text" formControlName="name" maxlength="40" placeholder="Name">
-        <mat-error *ngIf="createPermanentHostForm.get('name').errors && createPermanentHostForm.get('name').errors.required">
-          Name is required
-        </mat-error>
-      </mat-form-field>
+      <form class="form--max-width-600" [formGroup]="createPermanentHostForm" (ngSubmit)="onSubmit(createPermanentHostForm.value)" fxLayout="column" fxLayoutGap="15px">
 
-      <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
-        <input matInput id="permanent-host-id" type="text" formControlName="id" maxlength="44" placeholder="ID (optional)">
-        <mat-error *ngIf="createPermanentHostForm.get('id').errors && createPermanentHostForm.get('id').errors.pattern">
-          invalid format
-        </mat-error>
-      </mat-form-field>
+        <mat-form-field class="form__field--max-width" hintLabel="Max 40 characters">
+          <input matInput id="permanent-host-name" type="text" formControlName="name" maxlength="40" placeholder="Name">
+          <mat-error *ngIf="createPermanentHostForm.get('name').errors && createPermanentHostForm.get('name').errors.required">
+            Name is required
+          </mat-error>
+        </mat-form-field>
 
-      <mat-form-field class="form__field--max-width">
-        <textarea matInput id="description" formControlName="description" maxlength="1000" placeholder="Description" rows="3"></textarea>
-      </mat-form-field>
+        <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
+          <input matInput id="permanent-host-id" type="text" formControlName="id" maxlength="44" placeholder="ID (optional)">
+          <mat-error *ngIf="createPermanentHostForm.get('id').errors && createPermanentHostForm.get('id').errors.pattern">
+            invalid format
+          </mat-error>
+        </mat-form-field>
 
-      <mat-slide-toggle formControlName="static">Static</mat-slide-toggle>
+        <mat-form-field class="form__field--max-width">
+          <textarea matInput id="description" formControlName="description" maxlength="1000" placeholder="Description" rows="3"></textarea>
+        </mat-form-field>
 
-      <div fxLayout="row" fxLayoutAlign="center">
-        <button mat-raised-button color="accent" type="submit" [disabled]="createPermanentHostForm.invalid || state !== 'pending'">
-          <!-- Pending -->
-          <span *ngIf="state === 'pending'">Create</span>
-          <!-- Creating -->
-          <div *ngIf="state === 'creating'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
-            <span>Creating</span>
-            <mat-spinner diameter="18"></mat-spinner>
+        <mat-radio-group aria-label="Static or Mobile" formControlName="static">
+          <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="20px">
+            <mat-radio-button [value]="true">Static</mat-radio-button>
+            <mat-radio-button [value]="false">Mobile</mat-radio-button>
           </div>
-          <!-- Created -->
-          <div *ngIf="state === 'created'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
-            <span>Created</span>
-            <mat-icon aria-hidden="true">done</mat-icon>
-          </div>
-          <!-- Failed -->
-          <div *ngIf="state === 'failed'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
-            <span>Failed</span>
-            <mat-icon aria-hidden="true">close</mat-icon>
-          </div>
-        </button>
+        </mat-radio-group>
+
+        <div fxLayout="row" fxLayoutAlign="center">
+          <button mat-raised-button color="accent" type="submit" [disabled]="createPermanentHostForm.invalid || state !== 'pending'">
+            <!-- Pending -->
+            <span *ngIf="state === 'pending'">Create</span>
+            <!-- Creating -->
+            <div *ngIf="state === 'creating'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+              <span>Creating</span>
+              <mat-spinner diameter="18"></mat-spinner>
+            </div>
+            <!-- Created -->
+            <div *ngIf="state === 'created'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+              <span>Created</span>
+              <mat-icon aria-hidden="true">done</mat-icon>
+            </div>
+            <!-- Failed -->
+            <div *ngIf="state === 'failed'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+              <span>Failed</span>
+              <mat-icon aria-hidden="true">close</mat-icon>
+            </div>
+          </button>
+        </div>
+
+        <div *ngIf="createErrorMessage" fxLayout="row" fxLayoutAlign="center">
+          <p class="text--warn">{{createErrorMessage}}</p>
+        </div>
+
+      </form>  
+
+      <div fxLayout="row" fxLayoutAlign="end" *ngIf="createdPermanentHost">
+        <a mat-stroked-button color="primary" [routerLink]="['/sensors/create', {permanentHost: createdPermanentHost.id}]">
+          Add sensors to {{createdPermanentHost.name}}
+        </a>
       </div>
-
-      <div *ngIf="createErrorMessage" fxLayout="row" fxLayoutAlign="center">
-        <p class="text--warn">{{createErrorMessage}}</p>
-      </div>
-
-    </form>  
+      
+    </mat-card>  
 
   </div>
 
   <br>
 
-  <div fxLayout="row" fxLayoutAlign="end" *ngIf="createdPermanentHost">
-    <a mat-stroked-button color="primary" [routerLink]="['/sensors/create', {permanentHost: createdPermanentHost.id}]">
-      Add sensors to {{createdPermanentHost.name}}
-    </a>
-  </div>
 
 </div>

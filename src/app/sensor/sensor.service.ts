@@ -29,6 +29,10 @@ export class SensorService {
     return this.http.post<Sensor>(`${environment.apiUrl}/sensors`, sensor);
   }
 
+  updateSensor(sensorId: string, updates: any): Observable<Sensor> {
+    return this.http.patch<Sensor>(`${environment.apiUrl}/sensors/${sensorId}`, updates);
+  }
+
   deleteSensor(sensorId: string): Observable<void> {
     return this.http.delete<void>(`${environment.apiUrl}/sensors/${sensorId}`)
   }

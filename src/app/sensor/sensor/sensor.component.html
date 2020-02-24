@@ -1,15 +1,54 @@
 <div>
-  
-  <p *ngIf="sensor.name">Name: {{sensor.name}}</p>
-  <p *ngIf="sensor.description">Description: {{sensor.description}}</p>
-  <p *ngIf="sensor.inDeployment">In Deployment: <a [routerLink]="['/deployments/view', sensor.inDeployment]">{{sensor.inDeployment}}</a></p>
-  <p *ngIf="sensor.permanentHost">Permanent Host: <a [routerLink]="['/permanent-hosts/view', sensor.permanentHost]"> {{sensor.permanentHost}}</a></p>
-  <div *ngIf="sensor.defaults">
-    <p>Defaults:</p>
-    <pre>{{sensor.defaults | json}}</pre>
+
+  <div class="detail">
+    <h4 class="detail__title">ID</h4>
+    <p class="detail__value"><a [routerLink]="['/sensors/view', sensor.id]">{{sensor.id}}</a></p>
   </div>
-  <p>Created: {{sensor.createdAt| date:'long'}}</p>
-  <p>Last Updated: {{sensor.updatedAt | date:'long'}}</p>
+
+  <div class="detail">
+    <h4 class="detail__title">Name</h4>
+    <p class="detail__value">{{sensor.name || 'not defined'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Description</h4>
+    <p class="detail__value">{{sensor.description || 'none'}}</p>
+  </div>
+
+  <div class="detail" *ngIf="sensor.inDeployment">
+    <h4 class="detail__title">In Deployment</h4>
+    <p class="detail__value"><a [routerLink]="['/deployments/view', sensor.inDeployment]">{{sensor.inDeployment}}</a></p>
+  </div>
+
+  <div class="detail" *ngIf="sensor.isHostedBy">
+    <h4 class="detail__title">Hosted by platform</h4>
+    <p class="detail__value"><a [routerLink]="['/platforms/view', sensor.isHostedBy]">{{sensor.isHostedBy}}</a></p>
+  </div>
+  
+  <div class="detail" *ngIf="sensor.permanentHost">
+    <h4 class="detail__title">Permanent Host</h4>
+    <p class="detail__value"><a [routerLink]="['/permanent-hosts/view', sensor.permanentHost]">{{sensor.permanentHost}}</a></p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Created</h4>
+    <p class="detail__value">{{sensor.createdAt| date:'long'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Last Updated</h4>
+    <p class="detail__value">{{sensor.updatedAt| date:'long'}}</p>
+  </div>
+
+
+  <div class="detail" *ngIf="sensor.defaults">
+    <h4 class="detail__title">Defaults</h4>
+    <div *ngFor="let def of sensor.defaults">
+      <p class="detail__value" *ngIf="def.observedProperty">observedProperty: {{def.observedProperty}}</p>
+      <p class="detail__value" *ngIf="def.hasFeatureOfInterest">hasFeatureOfInterest: {{def.hasFeatureOfInterest}}</p>
+      <p class="detail__value" *ngIf="def.usedProcedures">usedProcedures are {{def.usedProcedures}}</p>
+    </div>
+  </div>
 
   <div fxLayout="row wrap" fxLayoutAlign="space-around">
 

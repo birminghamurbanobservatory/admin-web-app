@@ -1,19 +1,27 @@
 <form [formGroup]="defaultForm">
 
-  <mat-form-field>
-    <mat-label>Property</mat-label>
-    <mat-select formControlName="key">
-      <mat-option *ngFor="let keyOption of keyOptions" [value]="keyOption">
-        {{keyOption}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="20px">
 
-  <mat-form-field>
-    <input matInput type="text" formControlName="value" placeholder="Value">
-  </mat-form-field>
+    <mat-form-field>
+      <mat-select formControlName="key">
+        <mat-option *ngFor="let keyOption of keyOptions" [value]="keyOption">
+          {{keyOption}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <button (click)="delete()" type="button">Delete</button>
+    <p>is</p>
+
+    <mat-form-field>
+      <input matInput type="text" formControlName="value" placeholder="enter value here" id="default-value">
+    </mat-form-field>
+
+    <button mat-button color="warn" (click)="delete()" type="button">
+      <mat-icon aria-label="delete">delete</mat-icon>
+    </button>
+
+  </div>
+
 
 </form>
 

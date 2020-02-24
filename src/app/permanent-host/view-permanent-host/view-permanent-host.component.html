@@ -5,7 +5,7 @@
     <div *ngIf="deleteState === 'pending'">
       <div *ngIf="getState === 'getting'" fxLayout="column" fxLayoutAlign="center center">
         <mat-spinner></mat-spinner>
-        <p>Getting permanent host {{permanentHost.id}}</p>
+        <p>Getting permanent host {{permanentHostId}}</p>
       </div>
 
       <div *ngIf="getState === 'failed' && getErrorMessage" fxLayout="row" fxLayoutAlign="center">
@@ -18,7 +18,7 @@
     </div>
 
     <div *ngIf="deleteState === 'deleted'" fxLayout="column" fxLayoutAlign="center center">
-      <p>Permanent host <em>{{permanentHost.id}}</em> has been deleted.</p>
+      <p>Permanent host <em>{{permanentHostId}}</em> has been deleted.</p>
       <a mat-stroked-button color="primary" [routerLink]="['/permanent-hosts']">Return to all permanent hosts</a>
     </div>
 

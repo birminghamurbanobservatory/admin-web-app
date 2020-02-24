@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {cloneDeep} from 'lodash';
+import {cloneDeep, isEqual, isObject} from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +52,20 @@ export class UtilsService {
       return '';
     }
 
+  }
+
+  removeUnchangedUpdates(updates: object, reference: object, keys?: string[]) {
+
+    const keysToCheck = keys ? keys : Object.keys(updates);
+    const output = cloneDeep(updates);
+
+    keysToCheck.forEach((key) => {
+      if (isEqual(output[key], reference[key])) {
+        delete output[key];
+      }
+    });
+
+    return output;
   }
 
 

@@ -39,12 +39,13 @@ export class CreatePermanentHostComponent implements OnInit {
 
 
   onSubmit(permanentHostToCreate) {
+    
     this.state = 'creating';
     this.createErrorMessage = '';
-    this.logger.debug(permanentHostToCreate);
 
     const cleanedPermanentHost = this.utilsService.stripEmptyStrings(permanentHostToCreate);
-
+    this.logger.debug(cleanedPermanentHost);
+    
     this.permanentHostService.createPermanentHost(cleanedPermanentHost)
     .pipe(
       catchError((err) => {

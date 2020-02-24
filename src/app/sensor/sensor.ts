@@ -5,18 +5,20 @@ export class Sensor {
   inDeployment?: string;
   isHostedBy?: string;
   permanentHost?: string;
-  defaults?: Defaults;
+  defaults?: Default[];
   createdAt?: string;
   updatedAt?: string;
 }
 
-class Defaults {
-  observedProperty?: {value: string};
-  hasFeatureOfInterest?: {value: string; ifs?: IF[]};
-  usedProcedures?: {value: string[]};  
+export class Default {
+  id?: string;
+  observedProperty?: string;
+  hasFeatureOfInterest?: string;
+  usedProcedures?: string[];
+  when?: When;
 }
 
-class IF {
-  if: any;
-  value: any;
+export class When {
+  observedProperty?: string;
+  hasFeatureOfInterest?: string;
 }

@@ -17,7 +17,10 @@ import { SensorDefaultComponent } from './sensor-default/sensor-default.componen
     SensorsComponent, 
     CreateSensorComponent, 
     DeleteSensorDialog, 
-    EditSensorComponent, ViewSensorComponent, SensorDefaultsComponent, SensorDefaultComponent
+    EditSensorComponent, 
+    ViewSensorComponent, 
+    SensorDefaultsComponent, 
+    SensorDefaultComponent
   ],
   imports: [
     CommonModule,

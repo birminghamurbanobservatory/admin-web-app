@@ -1,55 +1,88 @@
 <div>
-  
-  <p>ID: {{permanentHost.id}}</p>
-  <p>Description: {{permanentHost.description}}</p>
-  <p>Static: {{permanentHost.static}}</p>
-  <p>Created: {{permanentHost.createdAt| date:'long'}}</p>
-  <p>Last Updated: {{permanentHost.updatedAt | date:'long'}}</p>
-  <p>Registration Key: {{permanentHost.registrationKey}}</p>
 
-  <div *ngIf="permanentHost.registeredAs">
-    <p>Registered as <a [routerLink]="['/platforms/view', permanentHost.registeredAs]">{{permanentHost.registeredAs}}</a></p>
+  <div class="detail">
+    <h4 class="detail__title">ID</h4>
+    <p class="detail__value"><a [routerLink]="['/permanent-hosts/view', permanentHost.id]">{{permanentHost.id}}</a></p>
   </div>
 
-  <!-- TODO: Need a box that let's me enter the name of a deployment (with autocomplete) and registers this permanent host to that deployment. It could then pop up with a link to more information about the platform that was created from it? -->
-  <div *ngIf="!permanentHost.registeredAs" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+  <div class="detail">
+    <h4 class="detail__title">Description</h4>
+    <p class="detail__value">{{permanentHost.description || 'none'}}</p>
+  </div>
 
-    <div>
-      Register to deployment: 
-    </div>
+  <div class="detail">
+    <h4 class="detail__title">Static/Mobile</h4>
+    <p class="detail__value">{{permanentHost.static ? 'static' : 'mobile'}}</p>
+  </div>
 
-    <div>
-      <mat-form-field>
-        <input type="text" matInput [formControl]="registerToDeploymentId" [matAutocomplete]="auto">
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let deploymentChoice of deploymentChoices" [value]="deploymentChoice.id">
-            {{deploymentChoice.id}}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-hint *ngIf="!registerToDeploymentId.value">begin typing deployment's id</mat-hint>
-      </mat-form-field>
-    </div>
+  <div class="detail">
+    <h4 class="detail__title">ID</h4>
+    <p class="detail__value">{{permanentHost.id}}</p>
+  </div>
 
-    <div>
-      <button mat-raised-button color="primary" *ngIf="registerToDeploymentId.value" (click)="register()">
-        <!-- Pending -->
-        <span *ngIf="registerState === 'pending'">Register</span>
-        <!-- Creating -->
-        <div *ngIf="registerState === 'registering'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
-          <span>Registering</span>
-          <mat-spinner diameter="18" color="accent"></mat-spinner>
-        </div>
-        <!-- Failed -->
-        <div *ngIf="registerState === 'failed'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
-          <span>Failed</span>
-          <mat-icon aria-hidden="true">close</mat-icon>
-        </div>
-      </button>
-    </div>
+  <div class="detail">
+    <h4 class="detail__title">Created</h4>
+    <p class="detail__value">{{permanentHost.createdAt| date:'long'}}</p>
+  </div>
 
-    <div *ngIf="registerErrorMessage">
-      <p class="text--warn">{{registerErrorMessage}}</p>
-    </div>
+  <div class="detail">
+    <h4 class="detail__title">Last Updated</h4>
+    <p class="detail__value">{{permanentHost.updatedAt| date:'long'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Registration Key</h4>
+    <p class="detail__value">{{permanentHost.registrationKey}}</p>
+  </div>
+  
+  <div *ngIf="permanentHost.registeredAs" class="detail">
+    <h4 class="detail__title">Registered as Platform</h4>
+    <p class="detail__value"><a [routerLink]="['/platforms/view', permanentHost.registeredAs]">{{permanentHost.registeredAs}}</a></p>
+  </div>
+
+  <!-- TODO once it has been registered as a platform, updated the platform in the component so that this section closes and the platform id appears as a link above -->
+  <div *ngIf="!permanentHost.registeredAs" class="detail">
+
+    <h4 class="detail__title">
+      Register to deployment
+    </h4>
+
+    <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+
+      <div>
+        <mat-form-field>
+          <input type="text" matInput [formControl]="registerToDeploymentId" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let deploymentChoice of deploymentChoices" [value]="deploymentChoice.id">
+              {{deploymentChoice.id}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-hint *ngIf="!registerToDeploymentId.value">begin typing deployment's id</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <button mat-raised-button color="primary" [disabled]="!registerToDeploymentId.value" (click)="register()">
+          <!-- Pending -->
+          <span *ngIf="registerState === 'pending'">Register</span>
+          <!-- Creating -->
+          <div *ngIf="registerState === 'registering'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+            <span>Registering</span>
+            <mat-spinner diameter="18" color="accent"></mat-spinner>
+          </div>
+          <!-- Failed -->
+          <div *ngIf="registerState === 'failed'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+            <span>Failed</span>
+            <mat-icon aria-hidden="true">close</mat-icon>
+          </div>
+        </button>
+      </div>
+
+      <div *ngIf="registerErrorMessage">
+        <p class="text--warn">{{registerErrorMessage}}</p>
+      </div>
+
+    </div>  
 
   </div>
 

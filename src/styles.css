@@ -64,6 +64,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   width: 100%;
 }
 
+.card--max-width-600 {
+  width: 100%; 
+  max-width: 600px;
+}
+
 .btn--my-5 {
   margin-top: 3px !important; 
   margin-bottom: 3px !important;
@@ -96,5 +101,20 @@ prettyjson .null {
 
 .icon--20 {
   font-size: 20px;
+}
+
+
+.detail {
+  padding-bottom: 15px;
+}
+
+.detail__title {
+  margin: 0px;
+  color: #FF4081;
+  font-weight: normal;
+}
+
+.detail__value {
+  margin: 0px;
 }
 

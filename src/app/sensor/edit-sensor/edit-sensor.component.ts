@@ -3,11 +3,13 @@ import {Sensor} from '../sensor';
 import {SensorService} from '../sensor.service';
 import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 import {catchError, filter, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
-import {throwError} from 'rxjs';
+import {throwError, timer} from 'rxjs';
 import {ParamMap, ActivatedRoute} from '@angular/router';
 import {FormBuilder, Validators} from '@angular/forms';
 import {PermanentHostService} from 'src/app/permanent-host/permanent-host.service';
 import {DeploymentService} from 'src/app/deployment/deployment.service';
+import {UtilsService} from 'src/app/utils/utils.service';
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'uo-edit-sensor',
@@ -22,6 +24,7 @@ export class EditSensorComponent implements OnInit {
   getErrorMessage: string;
   editSensorForm;
   updateState = 'pending';
+  updateErrorMessage: string;
   deploymentChoices = [];
   permanentHostChoices = [];
   editedDefaults;
@@ -33,6 +36,7 @@ export class EditSensorComponent implements OnInit {
     private fb: FormBuilder,
     private permanentHostService: PermanentHostService, 
     private deploymentService: DeploymentService, 
+    private utilsService: UtilsService
   ) { }
 
   ngOnInit() {
@@ -71,18 +75,7 @@ export class EditSensorComponent implements OnInit {
         ],
         permanentHost: [
           sensor.permanentHost || ''
-        ],
-        // TODO: I need a completely different way of handling the following context properties, i.e. that deals with the fact defaults is an array, and its objects can have a when object.
-        observedProperty: [
-          '', 
-          Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')
-        ],
-        hasFeatureOfInterest: [
-          '', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')
-        ],
-        usedProcedures: [
-          '', Validators.pattern('[a-z0-9,-]*')
-        ],
+        ]
       });
 
       this.getState = 'got';
@@ -128,10 +121,70 @@ export class EditSensorComponent implements OnInit {
 
 
   onSubmit(updates) {
-    this.logger.debug(updates);
+
     this.updateState = 'updating';
-    // TODO: Need to actually call the service
-    // TODO: Need to merge in the editedDefaults - Need to decide whether to keep the original IDs or not
+    this.updateErrorMessage = '';
+
+    const updatesWithAnyDefaults = cloneDeep(updates);
+    if (this.editedDefaults) {
+      const defaultsWithoutIds = cloneDeep(this.editedDefaults).map((def) => {
+        delete def.id;
+        return def;
+      });
+      updatesWithAnyDefaults.defaults = defaultsWithoutIds;
+    }
+
+    // If some of the properties haven't even changed then don't bother sending them to the server.
+    const cleanedUpdates = this.utilsService.removeUnchangedUpdates(updatesWithAnyDefaults, this.sensor);
+
+    if (cleanedUpdates.permanentHost === '') {
+      if (this.sensor.permanentHost) {
+        cleanedUpdates.permanentHost = null;
+      } else {
+        delete cleanedUpdates.permanentHost;
+      }
+    }
+
+    if (cleanedUpdates.inDeployment === '') {
+      if (this.sensor.inDeployment) {
+        cleanedUpdates.inDeployment = null;
+      } else {
+        delete cleanedUpdates.inDeployment;
+      }
+    }
+
+    this.logger.debug('Updates that have changed:')
+    this.logger.debug(cleanedUpdates);
+
+    if (Object.keys(cleanedUpdates).length === 0) {
+      this.updateErrorMessage = 'None of the details were any different.';
+      this.updateState = 'pending';
+      
+    } else {
+      this.sensorService.updateSensor(this.sensorId, cleanedUpdates)
+      .pipe(
+        catchError((error) => {
+          this.updateState = 'failed';
+          this.updateErrorMessage = error.message;
+          timer(1400).subscribe(() => {
+            this.updateState = 'pending';
+          });
+          return throwError(error);
+        })
+      )
+      .subscribe((updatedSensor) => {
+        this.updateState = 'updated';
+        this.sensor = updatedSensor;
+        this.logger.debug(updatedSensor);
+
+        // Might be a better way to do this.
+        timer(1400).subscribe(() => {
+          this.updateState = 'pending';
+        });
+
+      })    
+    }
+  
   }
 
 

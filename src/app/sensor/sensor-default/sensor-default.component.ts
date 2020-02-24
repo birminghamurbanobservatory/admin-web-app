@@ -13,7 +13,7 @@ export class SensorDefaultComponent implements OnInit {
   @Input() default: Default;
   @Output() updated = new EventEmitter<any>();
   @Output() deleted = new EventEmitter<string>();
-  keyOptions = ['observedProperty', 'featureOfInterest', 'usedProcedures'];
+  keyOptions = ['observedProperty', 'hasFeatureOfInterest', 'usedProcedures'];
   defaultForm;
 
   constructor(
@@ -28,9 +28,11 @@ export class SensorDefaultComponent implements OnInit {
     });
     // TODO: Need to add support for the 'when' object
 
+    const keyOptionIdx = this.keyOptions.indexOf(contextKey);
+
     this.defaultForm = this.fb.group({
       id: [this.default.id],
-      key: [contextKey || this.keyOptions[0]],
+      key: [keyOptionIdx >= 0 ? this.keyOptions[keyOptionIdx] : this.keyOptions[0]],
       value: [this.default[contextKey] || '']
     });
 

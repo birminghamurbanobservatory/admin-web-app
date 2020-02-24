@@ -1,23 +1,27 @@
 <div class="container container--padded-top container--padded-bottom">
 
-  <div *ngIf="deleteState === 'pending'">
-    <div *ngIf="getState === 'getting'" fxLayout="column" fxLayoutAlign="center center">
-      <mat-spinner></mat-spinner>
-      <p>Getting platform {{platformId}}</p>
+  <mat-card>
+
+    <div *ngIf="deleteState === 'pending'">
+      <div *ngIf="getState === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner></mat-spinner>
+        <p>Getting platform {{platformId}}</p>
+      </div>
+
+      <div *ngIf="getState === 'failed' && getErrorMessage" fxLayout="row" fxLayoutAlign="center">
+        <p class="text--warn">{{getErrorMessage}}</p>
+      </div>
+
+      <div *ngIf="getState === 'got' && platform">
+        <uo-platform [platform]="platform" (deleted)="onDeleted($event)"></uo-platform>
+      </div>
     </div>
 
-    <div *ngIf="getState === 'failed' && getErrorMessage" fxLayout="row" fxLayoutAlign="center">
-      <p class="text--warn">{{getErrorMessage}}</p>
+    <div *ngIf="deleteState === 'deleted'" fxLayout="column" fxLayoutAlign="center center">
+      <p>Platform <em>{{platform.id}}</em> has been deleted.</p>
+      <a mat-stroked-button color="primary" [routerLink]="['/platforms']">Return to all platforms</a>
     </div>
 
-    <div *ngIf="getState === 'got' && platform">
-      <uo-platform [platform]="platform" (deleted)="onDeleted($event)"></uo-platform>
-    </div>
-  </div>
-
-  <div *ngIf="deleteState === 'deleted'" fxLayout="column" fxLayoutAlign="center center">
-    <p>Platform <em>{{platform.id}}</em> has been deleted.</p>
-    <a mat-stroked-button color="primary" [routerLink]="['/platforms']">Return to all platforms</a>
-  </div>
+  </mat-card>
 
 </div>

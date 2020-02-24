@@ -41,6 +41,13 @@ export class SensorDefaultsComponent implements OnInit {
     this.logger.debug(`The SensorDefaultsComponent is aware that the default with ID ${newValues.id} has been updated.`)
     const idx = this.defaults.findIndex((def) => def.id === newValues.id);
     if (idx >= 0) {
+      // Need to first delete any previous properties that may have been set
+      Object.keys((this.defaults[idx])).forEach((existingKey) => {
+        if (existingKey !== 'id') {
+          delete this.defaults[idx][existingKey]
+        }
+      })
+      // Now we can add the new property
       this.defaults[idx][newValues.key] = newValues.value;
     }
     this.emitDefaults();

@@ -29,6 +29,10 @@ export class PermanentHostService {
     return this.http.post<PermanentHost>(`${environment.apiUrl}/permanent-hosts`, permanentHost);
   }
 
+  updatePermanentHost(permanentHostId: string, updates: any): Observable<PermanentHost> {
+    return this.http.patch<PermanentHost>(`${environment.apiUrl}/permanent-hosts/${permanentHostId}`, updates);
+  }
+
   deletePermanentHost(permanentHostId: string): Observable<void> {
     return this.http.delete<void>(`${environment.apiUrl}/permanent-hosts/${permanentHostId}`);
   }

@@ -3,7 +3,7 @@
   <p>ID: {{platform.id}}</p>
   <p>Name: {{platform.name}}</p>
   <p>Description: {{platform.description}}</p>
-  <p>Owner deployment: {{platform.ownerDeployment}}</p>
+  <p>Owner deployment: <a [routerLink]="['/deployments/view', platform.ownerDeployment]" >{{platform.ownerDeployment}}</a></p>
   <p>In deployments: {{platform.inDeployments}}</p>
   <p *ngIf="platform.hostedByPath">
     Hosted by: {{platform.hostedByPath}}

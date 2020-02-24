@@ -1,15 +1,39 @@
 <div>
   
-  <p>ID: {{deployment.id}}</p>
-  <p>Name: {{deployment.name}}</p>
-  <p>{{deployment.public ? 'Public' : 'Private'}}</p>
-  <p>Description: {{deployment.description}}</p>
-  <p>Created: {{deployment.createdAt| date:'long'}}</p>
-  <p>Last Updated: {{deployment.updatedAt | date:'long'}}</p>
+  <div class="detail">
+    <h4 class="detail__title">ID</h4>
+    <p class="detail__value"><a [routerLink]="['/deployments/view', deployment.id]">{{deployment.id}}</a></p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Name</h4>
+    <p class="detail__value">{{deployment.name}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Public/Private</h4>
+    <p class="detail__value">{{deployment.public ? 'Public' : 'Private'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Description</h4>
+    <p class="detail__value">{{deployment.description || 'none'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Created</h4>
+    <p class="detail__value">{{deployment.createdAt| date:'long'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Last updated</h4>
+    <p class="detail__value">{{deployment.updatedAt| date:'long'}}</p>
+  </div>
+
 
   <div fxLayout="row wrap" fxLayoutAlign="space-around">
 
-    <a [routerLink]="['/deployments/edit', deployment.id]" mat-raised-button color="accent" class="btn--m-5">
+    <a [routerLink]="['/deployments/edit', deployment.id]" mat-raised-button color="primary" class="btn--m-5">
       <mat-icon aria-label="edit">edit</mat-icon> Edit
     </a>
 
