@@ -27,7 +27,8 @@ export class EditSensorComponent implements OnInit {
   updateErrorMessage: string;
   deploymentChoices = [];
   permanentHostChoices = [];
-  editedDefaults;
+  editedInitialConfigs;
+  editedCurrentConfigs;
 
   constructor(
     private logger: UoLoggerService,
@@ -115,27 +116,50 @@ export class EditSensorComponent implements OnInit {
   }
 
 
-  onDefaultsChanged(updatedDefaults) {
-    this.editedDefaults = updatedDefaults;
+  onInitialConfigChange(updatedConfig) {
+    this.editedInitialConfigs = updatedConfig;
+  }
+
+  onCurrentConfigChange(updatedConfig) {
+    this.editedCurrentConfigs = updatedConfig;
   }
 
 
   onSubmit(updates) {
 
+    this.logger.debug('Updates before processing')
+    this.logger.debug(updates);
+
     this.updateState = 'updating';
     this.updateErrorMessage = '';
 
-    const updatesWithAnyDefaults = cloneDeep(updates);
-    if (this.editedDefaults) {
-      const defaultsWithoutIds = cloneDeep(this.editedDefaults).map((def) => {
-        delete def.id;
-        return def;
+    const updatesWithAnyConfigs = cloneDeep(updates);
+    if (this.editedInitialConfigs) {
+      const initialConfigWithoutIds = cloneDeep(this.editedInitialConfigs).map((config) => {
+        delete config.id;
+        return config;
       });
-      updatesWithAnyDefaults.defaults = defaultsWithoutIds;
+      updatesWithAnyConfigs.initialConfig = initialConfigWithoutIds;
+    }
+    if (this.editedCurrentConfigs) {
+      const currentConfigWithoutIds = cloneDeep(this.editedCurrentConfigs).map((config) => {
+        delete config.id;
+        return config;
+      });
+      updatesWithAnyConfigs.currentConfig = currentConfigWithoutIds;
     }
 
     // If some of the properties haven't even changed then don't bother sending them to the server.
-    const cleanedUpdates = this.utilsService.removeUnchangedUpdates(updatesWithAnyDefaults, this.sensor);
+    const cleanedUpdates = this.utilsService.removeUnchangedUpdates(updatesWithAnyConfigs, this.sensor);
+
+    // TODO: Remove this code repetition
+    if (cleanedUpdates.name === '') {
+      if (this.sensor.name) {
+        cleanedUpdates.name = null;
+      } else {
+        delete cleanedUpdates.name;
+      }
+    }
 
     if (cleanedUpdates.permanentHost === '') {
       if (this.sensor.permanentHost) {
@@ -153,7 +177,7 @@ export class EditSensorComponent implements OnInit {
       }
     }
 
-    this.logger.debug('Updates that have changed:')
+    this.logger.debug('Updates after processing:')
     this.logger.debug(cleanedUpdates);
 
     if (Object.keys(cleanedUpdates).length === 0) {

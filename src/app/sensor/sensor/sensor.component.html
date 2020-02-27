@@ -41,12 +41,15 @@
   </div>
 
 
-  <div class="detail" *ngIf="sensor.defaults">
-    <h4 class="detail__title">Defaults</h4>
-    <div *ngFor="let def of sensor.defaults">
-      <p class="detail__value" *ngIf="def.observedProperty">observedProperty: {{def.observedProperty}}</p>
-      <p class="detail__value" *ngIf="def.hasFeatureOfInterest">hasFeatureOfInterest: {{def.hasFeatureOfInterest}}</p>
-      <p class="detail__value" *ngIf="def.usedProcedures">usedProcedures are {{def.usedProcedures}}</p>
+  <div class="detail" *ngIf="sensor.initialConfig">
+    <h4 class="detail__title">Initial Config</h4>
+    <div *ngFor="let config of sensor.initialConfig">
+      <p class="detail__value">When observedProperty: {{config.observedProperty}} <span *ngIf="config.hasPriority">(default)</span></p>
+      <div style="padding-left: 10px;">
+        <p class="detail__value" *ngIf="config.hasFeatureOfInterest">hasFeatureOfInterest: {{config.hasFeatureOfInterest}}</p>
+        <p class="detail__value" *ngIf="config.usedProcedure">usedProcedure's are {{config.usedProcedure}}</p>
+        <p class="detail__value" *ngIf="config.discipline">discipline's are {{config.discipline}}</p>
+      </div>
     </div>
   </div>
 

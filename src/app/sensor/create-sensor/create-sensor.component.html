@@ -40,9 +40,7 @@
           </mat-autocomplete>
         </mat-form-field>
 
-        <uo-sensor-defaults (defaultsChanged)="onDefaultsChanged($event)"></uo-sensor-defaults>
-
-        <!-- <pre>{{sensorDefaults | json}}</pre> -->
+        <uo-sensor-config-tool (configChanged)="onInitialConfigChange($event)"></uo-sensor-config-tool>
 
         <div fxLayout="row" fxLayoutAlign="center">
           <button mat-raised-button color="accent" type="submit" [disabled]="createSensorForm.invalid || state !== 'pending'">

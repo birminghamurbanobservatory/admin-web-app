@@ -7,8 +7,10 @@ import {SharedModule} from '../shared/shared.module';
 import { CreateSensorComponent } from './create-sensor/create-sensor.component';
 import { EditSensorComponent } from './edit-sensor/edit-sensor.component';
 import { ViewSensorComponent } from './view-sensor/view-sensor.component';
-import { SensorDefaultsComponent } from './sensor-defaults/sensor-defaults.component';
-import { SensorDefaultComponent } from './sensor-default/sensor-default.component';
+import { SensorConfigsComponent } from './sensor-configs/sensor-configs.component';
+import { SensorConfigComponent } from './sensor-config/sensor-config.component';
+import { SensorConfigToolComponent } from './sensor-config-tool/sensor-config-tool.component';
+import { NgJsonEditorModule } from 'ang-jsoneditor'
 
 
 @NgModule({
@@ -19,13 +21,14 @@ import { SensorDefaultComponent } from './sensor-default/sensor-default.componen
     DeleteSensorDialog, 
     EditSensorComponent, 
     ViewSensorComponent, 
-    SensorDefaultsComponent, 
-    SensorDefaultComponent
+    SensorConfigsComponent, 
+    SensorConfigComponent, SensorConfigToolComponent
   ],
   imports: [
     CommonModule,
     SensorRoutingModule,
-    SharedModule
+    SharedModule,
+    NgJsonEditorModule
   ],
   entryComponents: [
     DeleteSensorDialog

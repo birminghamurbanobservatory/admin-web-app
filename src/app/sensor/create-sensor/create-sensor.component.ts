@@ -22,7 +22,7 @@ export class CreateSensorComponent implements OnInit {
   permanentHostChoices = [];
   deploymentChoices = [];
   hostOrDep = 'neither';
-  sensorDefaults = [];
+  sensorInitialConfig = [];
 
   constructor(
     private sensorService: SensorService,
@@ -141,10 +141,10 @@ export class CreateSensorComponent implements OnInit {
 
     const cleanedSensor = this.utilsService.stripEmptyStrings(sensorToCreate);
 
-    // Add the defaults
-    cleanedSensor.defaults = this.sensorDefaults.map((def) => {
-      delete def.id;
-      return def;
+    // Add the initialConfig
+    cleanedSensor.initialConfig = this.sensorInitialConfig.map((config) => {
+      delete config.id;
+      return config;
     });
 
     this.sensorService.createSensor(cleanedSensor)
@@ -173,10 +173,10 @@ export class CreateSensorComponent implements OnInit {
     return timer(1400);
   }
 
-  onDefaultsChanged(newDefaults) {
-    this.logger.debug('create-sensor component is aware that the defaults have changed');
-    this.logger.debug(newDefaults);
-    this.sensorDefaults = newDefaults;
+  onInitialConfigChange(newConfig) {
+    this.logger.debug('create-sensor component is aware that the initialConfig has changed');
+    this.logger.debug(newConfig);
+    this.sensorInitialConfig = newConfig;
   }
 
 

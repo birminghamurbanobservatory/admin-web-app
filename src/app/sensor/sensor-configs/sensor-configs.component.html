@@ -1,0 +1,11 @@
+<div>
+
+  <div *ngFor="let config of configs">
+    <uo-sensor-config [config]="config" (updated)="onConfigUpdated($event)" (deleted)="onConfigDeleted($event)"></uo-sensor-config>
+  </div>
+
+  <button (click)="add()" type="button" mat-raised-button color="primary">
+    Add {{configs.length > 0 ? 'another' : 'a'}} config
+  </button>
+
+</div>
