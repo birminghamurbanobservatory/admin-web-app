@@ -46,7 +46,7 @@ export class PermanentHostComponent implements OnInit {
     this.registerToDeploymentId.valueChanges
     .pipe(
       filter((value: string) => value.length > 0),
-      debounceTime(200),
+      debounceTime(400),
       distinctUntilChanged(),
       switchMap((value: string) => this.deploymentService.getDeployments({id: {begins: value}}))
     )

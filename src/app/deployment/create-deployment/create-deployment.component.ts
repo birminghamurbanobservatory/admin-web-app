@@ -48,7 +48,7 @@ export class CreateDeploymentComponent implements OnInit {
       catchError((error) => {
         this.state = 'failed';
         this.createErrorMessage = error.message;
-        this.briefDelay().subscribe(() => {
+        timer(1400).subscribe(() => {
           this.state = 'pending';
         });
         return throwError(error);
@@ -61,19 +61,12 @@ export class CreateDeploymentComponent implements OnInit {
       // TODO: Clear the form?
       // TODO: Redirect back to the deployments list?
 
-      // Might be a better way to do this.
-      this.briefDelay().subscribe(() => {
+      timer(1400).subscribe(() => {
         this.state = 'pending';
       });
 
     })    
 
   }
-
-
-  briefDelay(): Observable<number> {
-    return timer(1400);
-  }
-
 
 }

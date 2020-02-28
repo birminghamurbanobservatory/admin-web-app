@@ -15,6 +15,11 @@
   <p>Created: {{platform.createdAt| date:'long'}}</p>
   <p>Last Updated: {{platform.updatedAt | date:'long'}}</p>
 
+  <div *ngIf="platform.location">
+    <p>GeoJSON</p>
+    <pre>{{platform.location | json}}</pre>
+  </div>
+
 
   <div fxLayout="row" fxLayoutAlign="space-around">
 

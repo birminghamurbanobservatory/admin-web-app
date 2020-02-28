@@ -20,12 +20,16 @@ export class PlatformService {
     return this.http.get<Platform[]>(`${environment.apiUrl}/platforms${qs}`);
   }
 
-  createPlatform(platform: Platform): Observable<Platform> {
-    return this.http.post<Platform>(`${environment.apiUrl}/platforms`, platform);
+  createPlatform(platform: Platform, ownerDeploymentId: string): Observable<Platform> {
+    return this.http.post<Platform>(`${environment.apiUrl}/deployments/${ownerDeploymentId}/platforms/`, platform);
   }
 
   getPlatform(platformId): Observable<Platform> {
     return this.http.get<Platform>(`${environment.apiUrl}/platforms/${platformId}`);
+  }
+
+  updatePlatform(platformId: string, ownerDeploymentId: string, updates: any): Observable<Platform> {
+    return this.http.patch<Platform>(`${environment.apiUrl}/deployments/${ownerDeploymentId}/platforms/${platformId}`, updates);
   }
 
   deletePlatform(ownerDeploymentId: string, platformId: string): Observable<void> {

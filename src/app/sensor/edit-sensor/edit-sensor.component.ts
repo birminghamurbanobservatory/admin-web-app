@@ -91,7 +91,7 @@ export class EditSensorComponent implements OnInit {
     this.editSensorForm.get('inDeployment').valueChanges
     .pipe(
       filter((value: string) => value.length > 2),
-      debounceTime(200),
+      debounceTime(400),
       distinctUntilChanged(),
       switchMap((value: string) => this.deploymentService.getDeployments({id: {begins: value}}))
     )
@@ -104,7 +104,7 @@ export class EditSensorComponent implements OnInit {
     this.editSensorForm.get('permanentHost').valueChanges
     .pipe(
       filter((value: string) => value.length > 2),
-      debounceTime(200),
+      debounceTime(400),
       distinctUntilChanged(),
       switchMap((value: string) => this.permanentHostService.getPermanentHosts({id: {begins: value}}))
     )
