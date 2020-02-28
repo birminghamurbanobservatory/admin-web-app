@@ -13,7 +13,7 @@ export class SensorConfigToolComponent implements OnInit {
   @Input() previousConfig: Config;
   @Output() configChanged = new EventEmitter<any>();
   editorOptions: JsonEditorOptions;
-  jsonData: any;
+  jsonDataForTool: any;
   @ViewChild(JsonEditorComponent, { static: true }) editor: JsonEditorComponent;
 
   constructor(
@@ -29,40 +29,39 @@ export class SensorConfigToolComponent implements OnInit {
     // this.editorOptions.navigationBar = false; // only applicable when mode is not 'code'
 
     if (this.previousConfig) {
-      this.jsonData = this.previousConfig; 
+      this.jsonDataForTool = this.previousConfig; 
     } else {
-      this.jsonData = [
+      this.jsonDataForTool = [
         {
           hasPriority: true,
           observedProperty: 'AirTemperature',
-          discipline: ["Meterology"],
+          discipline: ["Meteorology"],
           hasFeatureOfInterest: "EarthAtmosphere",
           usedProcedure: ["PointSample"]
         }
       ];
-      // Emit this default value
-      this.emitConfig();
     }
 
+    // Emit the initial value.
+    this.configChanged.emit(this.jsonDataForTool);
   }
 
-  onJsonDataChange(newJsonData) {
-    this.logger.debug(newJsonData);
-    this.emitConfig();
+  onJsonDataChange(updatedJsonData) {
+    // The JSON Editor event sometimes emits a weird object with a isTrusted property, I'll want to ignore this
+    const isWeirdIsTrustedEvent = Object.keys(updatedJsonData).includes('isTrusted');
+    if (!isWeirdIsTrustedEvent) {
+      this.configChanged.emit(updatedJsonData);
+    }
   }
 
   // TODO: should I emit a value of null when the JSON is invalid? So the parent controller knows it shouldn't use the current config. Current no functions are triggered when an invalid JSON is present, looking at the jsoneditor controller code I'm not even sure we can watch for these events.
 
-  emitConfig() {
-    this.configChanged.emit(this.jsonData);
-  }
-
   reset() {
-    this.jsonData = [{
+    this.jsonDataForTool = [{
       hasPriority: true,
       observedProperty: ""
     }];
-    this.emitConfig();
+    this.configChanged.emit(this.jsonDataForTool);
   }
 
 }

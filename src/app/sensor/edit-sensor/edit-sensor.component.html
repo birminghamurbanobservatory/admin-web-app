@@ -41,7 +41,11 @@
             </mat-autocomplete>
           </mat-form-field>
 
+          <p>Initial Configuration (applied when a sensor is moved to a new deployment)</p>
+
           <uo-sensor-config-tool [previousConfig]="sensor.initialConfig" (configChanged)="onInitialConfigChange($event)"></uo-sensor-config-tool>
+
+          <p>Current configuration</p>
 
           <uo-sensor-config-tool [previousConfig]="sensor.currentConfig" (configChanged)="onCurrentConfigChange($event)"></uo-sensor-config-tool>
 

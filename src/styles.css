@@ -3,6 +3,10 @@
 /* Import the css recommended to make the jsoneditor look good */
 @import "~jsoneditor/dist/jsoneditor.min.css";
 
+.ace_editor.ace-jsoneditor {
+  min-height: 220px;
+}
+
 
 
 html, body { height: 100%; }

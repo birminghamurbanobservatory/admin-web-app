@@ -40,6 +40,9 @@
           </mat-autocomplete>
         </mat-form-field>
 
+        <p>Configuration</p>
+
+        <!-- TODO: Might be worth only showing this JSON editor tool when a button labelled "Advanced" is clicked, otherwise show a simple view where the user selects values for just the first config object -->
         <uo-sensor-config-tool (configChanged)="onInitialConfigChange($event)"></uo-sensor-config-tool>
 
         <div fxLayout="row" fxLayoutAlign="center">

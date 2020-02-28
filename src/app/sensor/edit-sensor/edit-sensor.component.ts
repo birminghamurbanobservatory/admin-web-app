@@ -117,67 +117,55 @@ export class EditSensorComponent implements OnInit {
 
 
   onInitialConfigChange(updatedConfig) {
+    this.logger.debug('edit-sensor component is aware that the initial config has changed');
+    this.logger.debug(updatedConfig);
     this.editedInitialConfigs = updatedConfig;
   }
 
   onCurrentConfigChange(updatedConfig) {
+    this.logger.debug('edit-sensor component is aware that the current config has changed');
+    this.logger.debug(updatedConfig);
     this.editedCurrentConfigs = updatedConfig;
   }
 
 
   onSubmit(updates) {
 
-    this.logger.debug('Updates before processing')
-    this.logger.debug(updates);
-
     this.updateState = 'updating';
     this.updateErrorMessage = '';
 
-    const updatesWithAnyConfigs = cloneDeep(updates);
-    if (this.editedInitialConfigs) {
-      const initialConfigWithoutIds = cloneDeep(this.editedInitialConfigs).map((config) => {
-        delete config.id;
-        return config;
-      });
-      updatesWithAnyConfigs.initialConfig = initialConfigWithoutIds;
-    }
-    if (this.editedCurrentConfigs) {
-      const currentConfigWithoutIds = cloneDeep(this.editedCurrentConfigs).map((config) => {
-        delete config.id;
-        return config;
-      });
-      updatesWithAnyConfigs.currentConfig = currentConfigWithoutIds;
-    }
+    const updatesWithConfigAdded = cloneDeep(updates);
+    updatesWithConfigAdded.initialConfig = this.editedInitialConfigs;
+    updatesWithConfigAdded.currentConfig = this.editedCurrentConfigs;
+
+    this.logger.debug('Updates before tidying')
+    this.logger.debug(updatesWithConfigAdded);
 
     // If some of the properties haven't even changed then don't bother sending them to the server.
-    const cleanedUpdates = this.utilsService.removeUnchangedUpdates(updatesWithAnyConfigs, this.sensor);
+    const cleanedUpdates = this.utilsService.removeUnchangedUpdates(updatesWithConfigAdded, this.sensor);
 
-    // TODO: Remove this code repetition
-    if (cleanedUpdates.name === '') {
-      if (this.sensor.name) {
-        cleanedUpdates.name = null;
-      } else {
-        delete cleanedUpdates.name;
-      }
+    // I don't want any IDs included for the config objects
+    if (cleanedUpdates.initialConfig) {
+      cleanedUpdates.initialConfig = cleanedUpdates.initialConfig.map(this.stripIdFromObject); 
+    }
+    if (cleanedUpdates.currentConfig) {
+      cleanedUpdates.currentConfig = cleanedUpdates.currentConfig.map(this.stripIdFromObject);
     }
 
-    if (cleanedUpdates.permanentHost === '') {
-      if (this.sensor.permanentHost) {
-        cleanedUpdates.permanentHost = null;
-      } else {
-        delete cleanedUpdates.permanentHost;
+    const keysToNullOrRemove = ['name', 'permanentHost', 'inDeployment'];
+    keysToNullOrRemove.forEach((key) => {  
+      if (cleanedUpdates[key] === '') {
+        if (this.sensor[key]) {
+          // Allows this property to be unset
+          cleanedUpdates[key] = null;
+        } else {
+          // Won't unset a property that wasn't previously set.
+          delete cleanedUpdates[key];
+        }
       }
-    }
+    })
 
-    if (cleanedUpdates.inDeployment === '') {
-      if (this.sensor.inDeployment) {
-        cleanedUpdates.inDeployment = null;
-      } else {
-        delete cleanedUpdates.inDeployment;
-      }
-    }
-
-    this.logger.debug('Updates after processing:')
+    this.logger.debug('Updates after tidying:')
     this.logger.debug(cleanedUpdates);
 
     if (Object.keys(cleanedUpdates).length === 0) {
@@ -209,6 +197,12 @@ export class EditSensorComponent implements OnInit {
       })    
     }
   
+  }
+
+  stripIdFromObject(obj: object): object {
+    const newObj = cloneDeep(obj);
+    delete newObj.id;
+    return newObj;
   }
 
 
