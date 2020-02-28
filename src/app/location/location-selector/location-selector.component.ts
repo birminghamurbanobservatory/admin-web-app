@@ -153,25 +153,6 @@ export class LocationSelectorComponent implements OnInit {
   }
 
 
-  isValidLocation(l) {
-    let result = false;
-    if (this.isObject(l)) {
-      if (this.isNumber(l.lat) && this.isNumber(l.lng)) {
-        if ((l.lat >= -90 && l.lat <= 90) && (l.lng >= -180 && l.lng <= 180)) {
-          result = true;
-        }
-      }
-    }
-    return result;
-  }
-
-  isObject(x) {
-    return x !== null && typeof x === 'object';
-  }
-
-  isNumber(n) {
-    return n === parseFloat(n) && isFinite(n);
-  }
 
 
   generateUniqueId() {
