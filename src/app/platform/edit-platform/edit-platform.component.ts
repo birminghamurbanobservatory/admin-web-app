@@ -84,10 +84,13 @@ export class EditPlatformComponent implements OnInit {
       this.platform = platform;
 
       this.getSensorChoices();
-
+ 
     })
 
   }
+
+
+  // TODO: I need to listen for changes to the isHostedBy field and offer autocomplete suggestions.
 
 
   getSensorChoices() {
@@ -119,6 +122,8 @@ export class EditPlatformComponent implements OnInit {
 
     this.updateState = 'updating';
     this.updateErrorMessage = '';
+
+    // TODO: I need to add the location to the updates if it has been set/updated.
 
     // If some of the properties haven't even changed then don't bother sending them to the server.
     const cleanedUpdates = this.utilsService.removeUnchangedUpdates(updates, this.platform);
