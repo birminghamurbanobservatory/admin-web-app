@@ -10,6 +10,8 @@ import {PermanentHostService} from 'src/app/permanent-host/permanent-host.servic
 import {DeploymentService} from 'src/app/deployment/deployment.service';
 import {UtilsService} from 'src/app/utils/utils.service';
 import {cloneDeep} from 'lodash';
+import {Deployment} from 'src/app/deployment/deployment';
+import {PermanentHost} from 'src/app/permanent-host/permanent-host';
 
 @Component({
   selector: 'uo-edit-sensor',
@@ -25,8 +27,8 @@ export class EditSensorComponent implements OnInit {
   editSensorForm;
   updateState = 'pending';
   updateErrorMessage: string;
-  deploymentChoices = [];
-  permanentHostChoices = [];
+  deploymentChoices: Deployment[] = [];
+  permanentHostChoices: PermanentHost[] = [];
   editedInitialConfigs;
   editedCurrentConfigs;
 

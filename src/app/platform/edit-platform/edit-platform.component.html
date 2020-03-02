@@ -43,6 +43,20 @@
           </mat-form-field>
 
 
+          <mat-form-field class="form__field--max-width" hintLabel="{{editPlatformForm.get('updateLocationWithSensor').value ? '' : 'start typing sensor ID'}}">
+            <input type="text" placeholder="Update location with sensor (optional)" matInput formControlName="updateLocationWithSensor" [matAutocomplete]="autoSen" id="update-location-with-sensor">
+            <mat-autocomplete #autoSen="matAutocomplete">
+              <mat-option *ngFor="let sensorChoice of sensorChoices" [value]="sensorChoice.id">
+                {{sensorChoice.id}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <uo-location-selector 
+            [geometryIn]="platform.location ? platform.location.geometry : {type: 'Point', coordinates: [-1.9, 52]}"
+            (onLocationSelection)="onLocationSelection($event)"
+          ></uo-location-selector>
+
           <div fxLayout="row" fxLayoutAlign="center">
             <button mat-raised-button color="accent" type="submit" [disabled]="editPlatformForm.invalid || updateState !== 'pending'">
               <!-- Pending -->

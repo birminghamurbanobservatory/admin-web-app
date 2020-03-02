@@ -7,6 +7,8 @@ import {UtilsService} from 'src/app/utils/utils.service';
 import {PlatformService} from '../platform.service';
 import {catchError} from 'rxjs/operators';
 import {throwError, timer} from 'rxjs';
+import {Sensor} from 'src/app/sensor/sensor';
+import {Platform} from '../platform';
 
 @Component({
   selector: 'uo-edit-platform',
@@ -23,6 +25,8 @@ export class EditPlatformComponent implements OnInit {
   updateState = 'pending';
   updateErrorMessage: string;
   selectedGeometry;
+  hostPlatformChoices: Platform[] = [];
+  sensorChoices: Sensor[] = [];
 
   constructor(
     private logger: UoLoggerService,
@@ -54,7 +58,7 @@ export class EditPlatformComponent implements OnInit {
         return throwError(error);
       })
     )
-    .subscribe((platform) => {
+    .subscribe((platform: Platform) => {
       this.logger.debug(platform);
 
       this.editPlatformForm = this.fb.group({
@@ -78,9 +82,30 @@ export class EditPlatformComponent implements OnInit {
 
       this.getState = 'got';
       this.platform = platform;
+
+      this.getSensorChoices();
+
     })
 
   }
+
+
+  getSensorChoices() {
+
+    const topPlatform = this.platform.hostedByPath && this.platform.hostedByPath.length > 0 ? this.platform.hostedByPath[0] : this.platform.id;
+
+    // Get all the sensors hosted on the common ancestor of this platform.
+
+    // TODO: One option for doing this is a 2-stage process:
+    // 1. Use a getPlatforms request with hostedByPath__containsItem to find any platforms with this common ancestor.
+    // 2. Use a getSensors with isHostedBy__in to get all the sensors hosted on these platforms.
+
+    // TODO: Another option: Add a isHostedByIncludingIndirect query parameter to the getSensors request that finds all the sensors hosted directly or indirectly on this platform. The api-gateway would need to ensure that it filtered out any sensors there were hosted on platforms that are in deployments that the user does not have access to. I.e. by first getting a list of deployments this user has access too, and then getting all the platforms from these deployments which have a common ancestor with the sensor's platform. And then getting all the sensors on these platforms.
+
+    // What makes this hard is that you need to make sure non-superusers can do this, whilst making sure they can access sensors on platforms that may have been shared with them, and excluding sensors that aren't on platforms that have been shared. 
+
+  }
+
 
 
   onLocationSelection(geometry) {
@@ -130,7 +155,7 @@ export class EditPlatformComponent implements OnInit {
           return throwError(error);
         })
       )
-      .subscribe((updatedPlatform) => {
+      .subscribe((updatedPlatform: Platform) => {
         this.updateState = 'updated';
         this.platform = updatedPlatform;
         this.logger.debug(updatedPlatform);

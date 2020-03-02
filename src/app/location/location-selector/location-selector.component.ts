@@ -17,6 +17,7 @@ export class LocationSelectorComponent implements OnInit {
   map: any;
   currentMapShape: any;
   currentMapShapeType: string;
+  googleMapsApi;
 
   // TODO: Could do with supporting a GeoJSON approach really.
 
@@ -29,22 +30,16 @@ export class LocationSelectorComponent implements OnInit {
     GoogleMapsLoader.load()
     .then((googleMapsApi) => {
       this.logger.debug('Google Maps Loaded');
+      this.googleMapsApi = googleMapsApi;
 
       this.map = new googleMapsApi.Map(document.getElementById(this.uniqueMapId), {
         zoom: 10,
         center: {lat: 52.45, lng: -1.9}
       });
 
-      if (this.geometryIn) {
-
-        this.logger.debug('Geometry Input:');
-        this.logger.debug(this.geometryIn);
-        // TODO: Add the existing geometry to the map
-        // The loadGeoJson function won't really help us as it doesn't look like we are able to create listeners on it. So we'll need to add the marker/polygon/polyline manually based on the geometry passed in, and set this as currentMapShape and set currentMapShapeType, and add the appropriate listeners.
-      }
-
       const drawingManager = new googleMapsApi.drawing.DrawingManager({
-        drawingMode: googleMapsApi.drawing.OverlayType.MARKER,
+        // set drawingMode to null to pre-select the hand icon when initial location is available
+        drawingMode: this.geometryIn ? null :googleMapsApi.drawing.OverlayType.MARKER,
         drawingControl: true,
         drawingControlOptions: {
           position: googleMapsApi.ControlPosition.TOP_CENTER,
@@ -65,7 +60,82 @@ export class LocationSelectorComponent implements OnInit {
 
       drawingManager.setMap(this.map);
 
-      // Add a listener for when a new shape/marker is added
+      if (this.geometryIn) {
+
+        this.logger.debug('Geometry Input:');
+        this.logger.debug(this.geometryIn);
+
+        // N.B. the loadGeoJson function didn't help us here as it doesn't look like we are able to create listeners on it.
+
+        // POINT
+        if (this.geometryIn.type === 'Point') {
+          this.currentMapShapeType = 'marker';
+          this.currentMapShape = new googleMapsApi.Marker({
+            position: {
+              lng: this.geometryIn.coordinates[0], 
+              lat: this.geometryIn.coordinates[1]
+            },
+            draggable: true,
+            map: this.map
+          });
+
+        // POLYGON
+        } else if (this.geometryIn.type === 'Polygon') {
+          this.currentMapShapeType = 'polygon';
+          // Polygons have an extra level of nesting than a polyline in order to support donut shapes.
+          const paths = this.geometryIn.coordinates.map((poly) => {
+            return poly.map((coords) => {
+              return {lng: coords[0], lat: coords[1]};
+            })
+          });
+          this.currentMapShape = new googleMapsApi.Polygon({
+            paths,
+            draggable: true,
+            editable: true,
+            map: this.map
+          });
+
+        // LINESTRING
+        } else if (this.geometryIn.type === 'LineString') {
+          this.currentMapShapeType = 'polyline';
+          const path = this.geometryIn.coordinates.map((coords) => {
+            return {lng: coords[0], lat: coords[1]};
+          })
+          this.currentMapShape = new googleMapsApi.Polyline({
+            path,
+            draggable: true,
+            editable: true,
+            map: this.map
+          });
+
+
+        } else {
+          this.logger.error(`Invalid geometry type: ${this.geometryIn.type}`)
+        }
+
+        // Listen for edit events to this initial marker/shape
+        if (this.currentMapShape) {
+
+          this.currentMapShape.addListener('dragend', () => {
+            this.logger.debug('Initial Shape has been dragged');
+            this.emitLocationSelected();
+          })
+
+          if (this.currentMapShapeType === 'polyline') {
+            this.addListenersToShapePath(this.currentMapShape.getPath());
+          }
+
+          if (this.currentMapShapeType === 'polygon') {
+            this.currentMapShape.getPaths().forEach((path) => {
+              this.addListenersToShapePath(path);
+            })
+          }
+
+        }
+
+      }
+
+      // Add a listener for when a NEW shape/marker is ADDED
       // Docs: https://developers.google.com/maps/documentation/javascript/drawinglayer
       googleMapsApi.event.addListener(drawingManager, 'overlaycomplete', (event) => {
         this.logger.debug(`A ${event.type} overlay has been added to the map`);
@@ -86,21 +156,13 @@ export class LocationSelectorComponent implements OnInit {
           this.emitLocationSelected();
         })
 
-        // Listen for edits
-        if (['polygon', 'polyline'].includes(event.type)){
-          this.logger.debug('Setting up edit listeners');
-          // Note if you ever start allowing the polygons to be donuts, i.e. comprised of more than one path, then you would need to use getPaths() and then applies these listeners to each path individually.
-          googleMapsApi.event.addListener(event.overlay.getPath(), 'insert_at', () => {
-            this.logger.debug('Shape has been edited (insert_at)');
-            this.emitLocationSelected();
-          })
-          googleMapsApi.event.addListener(event.overlay.getPath(), 'remove_at', () => {
-            this.logger.debug('Shape has been edited (remove_at)');
-            this.emitLocationSelected();
-          })
-          googleMapsApi.event.addListener(event.overlay.getPath(), 'set_at', () => {
-            this.logger.debug('Shape has been edited (set_at)');
-            this.emitLocationSelected();
+        if (this.currentMapShapeType === 'polyline') {
+          this.addListenersToShapePath(event.overlay.getPath());
+        }
+
+        if (this.currentMapShapeType === 'polygon') {
+          event.overlay.getPaths().forEach((path) => {
+            this.addListenersToShapePath(path);
           })
         }
 
@@ -108,6 +170,22 @@ export class LocationSelectorComponent implements OnInit {
 
     });
 
+  }
+
+
+  addListenersToShapePath(path) {
+    this.googleMapsApi.event.addListener(path, 'insert_at', () => {
+      this.logger.debug('Shape has been edited (insert_at)');
+      this.emitLocationSelected();
+    })
+    this.googleMapsApi.event.addListener(path, 'remove_at', () => {
+      this.logger.debug('Shape has been edited (remove_at)');
+      this.emitLocationSelected();
+    })
+    this.googleMapsApi.event.addListener(path, 'set_at', () => {
+      this.logger.debug('Shape has been edited (set_at)');
+      this.emitLocationSelected();
+    })
   }
 
 
@@ -130,15 +208,17 @@ export class LocationSelectorComponent implements OnInit {
 
     if (this.currentMapShapeType === 'polygon') {
       geoJsonGeometry.type = 'Polygon'
-      // A polygon has an level of array nesting than a polyline
+      // A polygon has an extra level of array nesting than a polyline
+      // If you want to allow donut shapes then you'd need to any secondary paths you allow to be drawn to be pushed into this array too.
       geoJsonGeometry.coordinates = [
         this.currentMapShape.getPath().getArray().map((point) => {
           return [point.lng(), point.lat()];
         })
       ];
-      // You also need to repeat the first coordinate at the end
-      // TODO: You'll need a loop here if you start having donut shaped polygons.
-      geoJsonGeometry.coordinates[0].push(geoJsonGeometry.coordinates[0][0]);
+      // You also need to repeat the first coordinate at the end for it to be valid a GeoJSON Polygon (using forEach means this can support donut shapes if we ever allow the map drawing itself to do so).
+      geoJsonGeometry.coordinates.forEach((path, idx) => {
+        geoJsonGeometry.coordinates[idx].push(geoJsonGeometry.coordinates[idx][0])
+      })
     }
 
     if (this.currentMapShapeType === 'polyline') {
