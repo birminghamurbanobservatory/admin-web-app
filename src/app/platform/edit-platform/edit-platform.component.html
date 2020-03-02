@@ -1,1 +1,81 @@
-<p>edit-platform works!</p>
+<div class="container container--padded-top container--padded-bottom">
+
+  <div fxLayout="row" fxLayoutAlign="center">
+
+    <mat-card class="card--max-width-600">
+
+      <div *ngIf="getState === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner></mat-spinner>
+        <p>Getting details for platform <em>{{platformId}}</em></p>
+      </div>
+
+      <div *ngIf="getState === 'got' && platform">
+
+        <h3>Editing {{platform.id}}</h3>
+        
+        <form class="form--max-width-600" [formGroup]="editPlatformForm" (ngSubmit)="onSubmit(editPlatformForm.value)" fxLayout="column" fxLayoutGap="15px">
+
+          <mat-form-field class="form__field--max-width" hintLabel="Max 40 characters">
+            <input matInput id="platform-name" type="text" formControlName="name" maxlength="40" placeholder="Name">
+            <mat-error *ngIf="editPlatformForm.get('name').errors && editPlatformForm.get('name').errors.required">
+              Name is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="form__field--max-width">
+            <textarea matInput id="description" formControlName="description" maxlength="1000" placeholder="Description (optional)" rows="3"></textarea>
+          </mat-form-field>
+
+          <mat-radio-group aria-label="Static or Mobile" formControlName="static">
+            <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="20px">
+              <mat-radio-button [value]="true">Static</mat-radio-button>
+              <mat-radio-button [value]="false">Mobile</mat-radio-button>
+            </div>
+          </mat-radio-group>
+
+          <mat-form-field class="form__field--max-width" hintLabel="{{editPlatformForm.get('isHostedBy').value ? '' : 'start typing platform ID'}}">
+            <input type="text" placeholder="Hosted on platform (optional)" matInput formControlName="isHostedBy" [matAutocomplete]="autoPlat" id="is-hosted-by">
+            <mat-autocomplete #autoPlat="matAutocomplete">
+              <mat-option *ngFor="let hostPlatformChoice of hostPlatformChoices" [value]="hostPlatformChoice.id">
+                {{hostPlatformChoice.id}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+
+          <div fxLayout="row" fxLayoutAlign="center">
+            <button mat-raised-button color="accent" type="submit" [disabled]="editPlatformForm.invalid || updateState !== 'pending'">
+              <!-- Pending -->
+              <span *ngIf="updateState === 'pending'">Apply</span>
+              <!-- Updating -->
+              <div *ngIf="updateState === 'updating'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+                <span>Updating</span>
+                <mat-spinner diameter="18"></mat-spinner>
+              </div>
+              <!-- Updated -->
+              <div *ngIf="updateState === 'updated'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+                <span>Updated</span>
+                <mat-icon aria-hidden="true">done</mat-icon>
+              </div>
+              <!-- Failed -->
+              <div *ngIf="updateState === 'failed'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+                <span>Failed</span>
+                <mat-icon aria-hidden="true">close</mat-icon>
+              </div>
+            </button>
+          </div>
+
+          <div *ngIf="updateErrorMessage" fxLayout="row" fxLayoutAlign="center">
+            <p class="text--warn">{{updateErrorMessage}}</p>
+          </div>
+
+        </form>  
+
+      </div>
+
+
+    </mat-card>
+
+  </div>
+
+</div>

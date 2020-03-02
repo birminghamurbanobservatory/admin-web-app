@@ -75,6 +75,7 @@ export class CreatePlatformComponent implements OnInit {
 
   }
 
+
   onLocationSelection(geometry) {
     this.logger.debug('create-platform component is aware of the location change');
     this.logger.debug(geometry);

@@ -1,19 +1,68 @@
 <div>
   
-  <p>ID: {{platform.id}}</p>
-  <p>Name: {{platform.name}}</p>
-  <p>Description: {{platform.description}}</p>
-  <p>Owner deployment: <a [routerLink]="['/deployments/view', platform.ownerDeployment]" >{{platform.ownerDeployment}}</a></p>
-  <p>In deployments: {{platform.inDeployments}}</p>
-  <p *ngIf="platform.hostedByPath">
-    Hosted by: {{platform.hostedByPath}}
-  </p>
-  <p>Static: {{platform.static}}</p>
-  <p *ngIf="platform.updateLocationWithSensor">
-    Location updated by sensor: {{platform.updateLocationWithSensor}}
-  </p>
-  <p>Created: {{platform.createdAt| date:'long'}}</p>
-  <p>Last Updated: {{platform.updatedAt | date:'long'}}</p>
+  <div class="detail">
+    <h4 class="detail__title">ID</h4>
+    <p class="detail__value">
+      <a [routerLink]="['/platforms/view', platform.id]">{{platform.id}}</a>
+    </p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Name</h4>
+    <p class="detail__value">{{platform.name}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Owner Deployment</h4>
+    <p class="detail__value">
+      <a [routerLink]="['/deployments/view', platform.ownerDeployment]">{{platform.ownerDeployment}}</a>
+    </p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Used by deployments</h4>
+    <p class="detail__value">
+      <span *ngFor="let deploymentId of platform.inDeployments">
+        <a [routerLink]="['/deployments/view', deploymentId]">{{deploymentId}}, </a>
+      </span>
+    </p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Hosted by</h4>
+    <p *ngIf="platform.isHostedBy" class="detail__value">
+      <span *ngFor="let hostPlatformId of platform.hostedByPath">
+        <a [routerLink]="['/platforms/view', hostPlatformId]">{{hostPlatformId}}, </a>
+      </span>
+    </p>
+    <p *ngIf="!platform.isHostedBy" class="detail__value">
+      Not hosted by any platforms
+    </p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Static/Mobile</h4>
+    <p class="detail__value">{{platform.static ? 'Static' : 'Mobile'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Created</h4>
+    <p class="detail__value">{{platform.createdAt| date:'long'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Last updated</h4>
+    <p class="detail__value">{{platform.updatedAt| date:'long'}}</p>
+  </div>
+
+  <div class="detail" *ngIf="platform.updateLocationWithSensor">
+    <h4 class="detail__title">Updating location with sensor</h4>
+    <p class="detail__value">{{platform.updateLocationWithSensor}}</p>
+  </div>
+
+
+  <!-- TODO: Show the user two options. 1) Show location as GeoJSON or 2) Show location on map -->
+  <!-- TODO: You could create a GeoJSON location viewer component that uses google maps to show the location. You can reuse this in the PlatformsComponent to show where all the platforms are (assuming we can find a way of having the info-windows contain a link to the platform being shown) -->
 
   <div *ngIf="platform.location">
     <p>GeoJSON</p>
@@ -22,6 +71,10 @@
 
 
   <div fxLayout="row" fxLayoutAlign="space-around">
+
+    <a [routerLink]="['/platforms/edit', platform.id]" mat-raised-button color="primary" class="btn--m-5">
+      <mat-icon aria-label="edit">edit</mat-icon> Edit
+    </a>
 
     <button mat-raised-button color="warn" (click)="deleteButtonClicked()">
       <span *ngIf="deleteState === 'pending'">
