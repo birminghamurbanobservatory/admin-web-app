@@ -1,2 +1,13 @@
-
+<!-- map -->
 <div id={{uniqueMapId}} class="location-map"></div>
+
+<!-- autocomplete geocoder -->
+<mat-form-field class="form__field--max-width">
+  <input type="text" placeholder="Find address" matInput [formControl]="address" [matAutocomplete]="autoAddress" id="platform-address">
+  <mat-autocomplete #autoAddress="matAutocomplete" (optionSelected)="onAddressSelected($event)">
+    <mat-option *ngFor="let foundAddress of foundAddresses" [value]="foundAddress">
+      {{foundAddress.formatted_address}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+

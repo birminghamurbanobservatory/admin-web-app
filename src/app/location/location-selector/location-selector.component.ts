@@ -1,6 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ApplicationRef, NgZone, ChangeDetectorRef } from '@angular/core';
 import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 import {GoogleMapsLoader} from '../google-maps/google-maps-loader';
+import {FormControl} from '@angular/forms';
+import {filter, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'uo-location-selector',
@@ -17,10 +21,16 @@ export class LocationSelectorComponent implements OnInit {
   map: any;
   currentMapShape: any;
   currentMapShapeType: string;
-  googleMapsApi;
+  private googleMapsApi;
+  private geocoder;
+  address = new FormControl('');
+  foundAddresses;
 
   constructor(
-    private logger: UoLoggerService
+    private logger: UoLoggerService,
+    private cdr: ChangeDetectorRef,
+    private appRef: ApplicationRef,
+    private ngZone: NgZone
   ) { }
 
   ngOnInit() {
@@ -29,6 +39,7 @@ export class LocationSelectorComponent implements OnInit {
     .then((googleMapsApi) => {
       this.logger.debug('Google Maps Loaded');
       this.googleMapsApi = googleMapsApi;
+      this.geocoder = new googleMapsApi.Geocoder();
 
       this.map = new googleMapsApi.Map(document.getElementById(this.uniqueMapId), {
         zoom: 10,
@@ -63,7 +74,7 @@ export class LocationSelectorComponent implements OnInit {
         this.logger.debug('Geometry Input:');
         this.logger.debug(this.geometryIn);
 
-        // N.B. the loadGeoJson function didn't help us here as it doesn't look like we are able to create listeners on it.
+        // N.B. the addGeoJson function didn't help us here as it doesn't look like we are able to create listeners on it.
 
         // POINT
         if (this.geometryIn.type === 'Point') {
@@ -167,6 +178,75 @@ export class LocationSelectorComponent implements OnInit {
       });
 
     });
+
+    this.listenForAddressChanges()
+
+  }
+
+  
+  listenForAddressChanges() {
+
+    this.address.valueChanges
+    .pipe(
+      filter((value: string) => value.length > 2),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((value: string): any => {
+        console.log(value);
+        return new Observable(observer => {
+          this.geocoder.geocode({address: value, region: 'GB'}, (results, status) => {
+            if (status === this.googleMapsApi.GeocoderStatus.OK) {
+              observer.next(results);
+            } else {
+              observer.next([]);
+            }
+            observer.complete();
+          });
+        })
+      })
+    )
+    .subscribe((foundAddresses: any[]) => {
+      this.logger.debug(`Found ${foundAddresses.length} addresses`);
+      this.ngZone.run(() => {
+        // If I don't have this inside a ngZone run then there is a lag between getting the address and the options actually being shown in the autocomplete dropdown.
+        this.foundAddresses = foundAddresses;
+      });
+    });
+
+  }
+
+  onAddressSelected() {
+
+    this.logger.debug('Address selected')
+    // For a brief period here the value of our address FormControl is one of the geocoder suggestions which is an object, we want to get this and then quickly set the address FormControl to be a string again. There's possibly a nicer way doing this?
+    const addressToCreateMarkerFrom = cloneDeep(this.address.value);
+    this.address.setValue(this.address.value.formatted_address);
+
+    const latLng = {
+      lng: addressToCreateMarkerFrom.geometry.location.lng(), 
+      lat: addressToCreateMarkerFrom.geometry.location.lat(), 
+    }
+
+    // Now let's create a marker at the suggested location
+    this.currentMapShapeType = 'marker';
+    this.currentMapShape = new this.googleMapsApi.Marker({
+      position: latLng,
+      draggable: true,
+      map: this.map
+    });
+
+    // Let the parent component know of this location
+    this.emitLocationSelected();
+
+    // Add a listener in case this marker is dragged
+    this.currentMapShape.addListener('dragend', () => {
+      this.logger.debug('Marker from geocoder has been dragged');
+      this.emitLocationSelected();
+    })
+
+    // Recenter on this location
+    this.map.setCenter(latLng);
+    this.map.setZoom(14);
 
   }
 
