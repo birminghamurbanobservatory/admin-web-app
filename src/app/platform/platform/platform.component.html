@@ -60,13 +60,23 @@
     <p class="detail__value">{{platform.updateLocationWithSensor}}</p>
   </div>
 
+  <div *ngIf="platform.location" class="detail">
+    <h4 class="detail__title">Current Location</h4>
+    
+    View as: 
+    <mat-button-toggle-group aria-label="Location View Type">
+      <mat-button-toggle [checked]="viewLocationType === 'map'" (change)="viewLocationType = 'map'">Map</mat-button-toggle>
+      <mat-button-toggle [checked]="viewLocationType === 'geojson'" (change)="viewLocationType = 'geojson'">GeoJSON</mat-button-toggle>
+    </mat-button-toggle-group>
 
-  <!-- TODO: Show the user two options. 1) Show location as GeoJSON or 2) Show location on map -->
-  <!-- TODO: You could create a GeoJSON location viewer component that uses google maps to show the location. You can reuse this in the PlatformsComponent to show where all the platforms are (assuming we can find a way of having the info-windows contain a link to the platform being shown) -->
+    <div *ngIf="viewLocationType === 'map'">
+      <uo-location-viewer [geometryIn]="platform.location.geometry"></uo-location-viewer>
+    </div>
 
-  <div *ngIf="platform.location">
-    <p>GeoJSON</p>
-    <pre>{{platform.location | json}}</pre>
+    <div *ngIf="viewLocationType === 'geojson'">
+      <pre>{{platform.location | json}}</pre>
+    </div>
+
   </div>
 
 

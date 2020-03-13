@@ -99,13 +99,13 @@ export class EditPlatformComponent implements OnInit {
 
     // Get all the sensors hosted on the common ancestor of this platform.
 
-    // TODO: One option for doing this is a 2-stage process:
-    // 1. Use a getPlatforms request with hostedByPath__containsItem to find any platforms with this common ancestor.
-    // 2. Use a getSensors with isHostedBy__in to get all the sensors hosted on these platforms.
-
-    // TODO: Another option: Add a isHostedByIncludingIndirect query parameter to the getSensors request that finds all the sensors hosted directly or indirectly on this platform. The api-gateway would need to ensure that it filtered out any sensors there were hosted on platforms that are in deployments that the user does not have access to. I.e. by first getting a list of deployments this user has access too, and then getting all the platforms from these deployments which have a common ancestor with the sensor's platform. And then getting all the sensors on these platforms.
-
-    // What makes this hard is that you need to make sure non-superusers can do this, whilst making sure they can access sensors on platforms that may have been shared with them, and excluding sensors that aren't on platforms that have been shared. 
+    // I think a lot of the logic will need to be handled by the api-gateway, e.g. have an endpoint such as:
+    // .com/sensors?canUpdateLocationOfPlatform=mobius-1
+    // This can either be called by a superuser or a basic user. 
+    // Firstly if the platform is static, then we shouldn't return any sensors.
+    // The api-gateway will ask the sensor-deployment-manager for all the live sensor contexts which have the top level ancestor of this platform in the path.
+    // From this list of contexts we'll extract all the deploymentIDs listed, then the api-gateway can call the sensor-deployment-manager to find out what rights the user has to each of these deployments. For those that they don't have rights we can exclude those sensors from the returned list.
+    // We'll then need to get the details of all these sensors, i.e. sensor documents not context documents.
 
   }
 

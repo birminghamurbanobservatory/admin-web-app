@@ -15,7 +15,11 @@ export class UoLoggerService {
     customLogger: CustomNGXLoggerService
   ) { 
     const environmentLogLevel = environment.logLevel || 'debug';
-    this.logger = customLogger.create({level: NgxLoggerLevel[environmentLogLevel.toUpperCase()]})
+    this.logger = customLogger.create({
+      level: NgxLoggerLevel[environmentLogLevel.toUpperCase()], 
+      timestampFormat: 'shortTime', 
+      enableSourceMaps: false // decided not to bother because it references this file anyway
+    });
   }
 
   debug(...arg) {

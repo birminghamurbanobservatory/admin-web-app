@@ -13,7 +13,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 @NgModule({
   declarations: [
     AppComponent,
-    CallbackComponent
+    CallbackComponent,
   ],
   imports: [
     BrowserModule,
@@ -21,9 +21,8 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
     BrowserAnimationsModule,
     HttpClientModule,
     SharedModule,
-    // TODO: change the level depending on the environment, i.e. production vs development
-    // Options: TRACE|DEBUG|INFO|LOG|WARN|ERROR|FATAL|OFF
-    LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG, timestampFormat: 'shortTime', enableSourceMaps: true})
+    // Although I set these config options here, the uo-logger.service creates a new instance anyway.
+    LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG, timestampFormat: 'shortTime'})
   ],
   providers: [],
   bootstrap: [AppComponent]

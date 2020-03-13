@@ -19,8 +19,6 @@ export class LocationSelectorComponent implements OnInit {
   currentMapShapeType: string;
   googleMapsApi;
 
-  // TODO: Could do with supporting a GeoJSON approach really.
-
   constructor(
     private logger: UoLoggerService
   ) { }

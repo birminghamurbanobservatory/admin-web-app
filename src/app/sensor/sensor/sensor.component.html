@@ -42,14 +42,43 @@
 
 
   <div class="detail" *ngIf="sensor.initialConfig">
-    <h4 class="detail__title">Initial Config</h4>
-    <div *ngFor="let config of sensor.initialConfig">
-      <p class="detail__value">When observedProperty: {{config.observedProperty}} <span *ngIf="config.hasPriority">(default)</span></p>
-      <div style="padding-left: 10px;">
-        <p class="detail__value" *ngIf="config.hasFeatureOfInterest">hasFeatureOfInterest: {{config.hasFeatureOfInterest}}</p>
-        <p class="detail__value" *ngIf="config.usedProcedure">usedProcedure's are {{config.usedProcedure}}</p>
-        <p class="detail__value" *ngIf="config.discipline">discipline's are {{config.discipline}}</p>
+    <h4 class="detail__title">
+      Initial Config
+      <mat-icon aria-label="info" matTooltip="Reverts back to these settings when registered to a new deployment." [matTooltipPosition]="'after'" class="icon--14">info</mat-icon>
+    </h4>
+    <div *ngIf="sensor.initialConfig.length > 0">
+      <div *ngFor="let iConfig of sensor.initialConfig">
+        <p class="detail__value">When observedProperty: {{iConfig.observedProperty}} <span *ngIf="iConfig.hasPriority">(default)</span></p>
+        <div style="padding-left: 10px;">
+          <p class="detail__value" *ngIf="iConfig.hasFeatureOfInterest">hasFeatureOfInterest: {{iConfig.hasFeatureOfInterest}}</p>
+          <p class="detail__value" *ngIf="iConfig.usedProcedure">usedProcedure's are {{iConfig.usedProcedure}}</p>
+          <p class="detail__value" *ngIf="iConfig.discipline">discipline's are {{iConfig.discipline}}</p>
+        </div>
       </div>
+    </div>
+    <div *ngIf="sensor.initialConfig.length === 0">
+      <p class="detail__value">
+        Not set.
+      </p>
+    </div>
+  </div>
+
+  <div class="detail" *ngIf="sensor.currentConfig">
+    <h4 class="detail__title">Current Config</h4>
+    <div *ngIf="sensor.currentConfig.length > 0">
+      <div *ngFor="let cConfig of sensor.currentConfig">
+        <p class="detail__value">When observedProperty: {{cConfig.observedProperty}} <span *ngIf="cConfig.hasPriority">(default)</span></p>
+        <div style="padding-left: 10px;">
+          <p class="detail__value" *ngIf="cConfig.hasFeatureOfInterest">hasFeatureOfInterest: {{cConfig.hasFeatureOfInterest}}</p>
+          <p class="detail__value" *ngIf="cConfig.usedProcedure">usedProcedure's are {{cConfig.usedProcedure}}</p>
+          <p class="detail__value" *ngIf="cConfig.discipline">discipline's are {{cConfig.discipline}}</p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="sensor.currentConfig.length === 0">
+      <p class="detail__value">
+        Not set.
+      </p>
     </div>
   </div>
 

@@ -9,6 +9,7 @@ import { PlatformComponent, DeletePlatformDialog } from './platform/platform.com
 import { ViewPlatformComponent } from './view-platform/view-platform.component';
 import { EditPlatformComponent } from './edit-platform/edit-platform.component';
 import {LocationSelectorComponent} from '../location/location-selector/location-selector.component';
+import {LocationViewerComponent} from '../location/location-viewer/location-viewer.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import {LocationSelectorComponent} from '../location/location-selector/location-
     ViewPlatformComponent,
     DeletePlatformDialog,
     EditPlatformComponent,
-    LocationSelectorComponent
+    LocationSelectorComponent,
+    LocationViewerComponent
   ],
   imports: [
     CommonModule,

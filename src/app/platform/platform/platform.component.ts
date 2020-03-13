@@ -17,6 +17,7 @@ export class PlatformComponent implements OnInit {
   @Input() platform: Platform;
   @Output() deleted = new EventEmitter<string>();
   deleteState = 'pending';
+  public viewLocationType: string;
 
   constructor(
     private logger: UoLoggerService,
@@ -29,11 +30,11 @@ export class PlatformComponent implements OnInit {
 
   }
 
+
   deleteButtonClicked() {
     this.logger.debug('clicked delete');
     this.openDeleteDialog();
   }
-
 
   deletePlatform() {
 
