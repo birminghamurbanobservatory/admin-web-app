@@ -217,7 +217,7 @@ export class LocationSelectorComponent implements OnInit {
 
   onAddressSelected() {
 
-    this.logger.debug('Address selected')
+    this.logger.debug('Address selected');
     // For a brief period here the value of our address FormControl is one of the geocoder suggestions which is an object, we want to get this and then quickly set the address FormControl to be a string again. There's possibly a nicer way doing this?
     const addressToCreateMarkerFrom = cloneDeep(this.address.value);
     this.address.setValue(this.address.value.formatted_address);
