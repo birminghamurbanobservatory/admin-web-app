@@ -227,6 +227,11 @@ export class LocationSelectorComponent implements OnInit {
       lat: addressToCreateMarkerFrom.geometry.location.lat(), 
     }
 
+    // Remove the existing shape if there is one
+    if (this.currentMapShape) {
+      this.currentMapShape.setMap(null);
+    }
+
     // Now let's create a marker at the suggested location
     this.currentMapShapeType = 'marker';
     this.currentMapShape = new this.googleMapsApi.Marker({
