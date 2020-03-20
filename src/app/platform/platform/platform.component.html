@@ -66,7 +66,7 @@
     View as: 
     <mat-button-toggle-group aria-label="Location View Type">
       <mat-button-toggle [checked]="viewLocationType === 'map'" (change)="viewLocationType = 'map'">Map</mat-button-toggle>
-      <mat-button-toggle [checked]="viewLocationType === 'geojson'" (change)="viewLocationType = 'geojson'">GeoJSON</mat-button-toggle>
+      <mat-button-toggle [checked]="viewLocationType === 'geojson'" (change)="viewLocationType = 'geojson'">JSON</mat-button-toggle>
     </mat-button-toggle-group>
 
     <div *ngIf="viewLocationType === 'map'">

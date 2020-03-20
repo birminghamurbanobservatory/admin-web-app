@@ -40,7 +40,7 @@ export class PlatformComponent implements OnInit {
 
     this.logger.debug(`Deleting platform '${this.platform.id}'`)
     this.deleteState = 'deleting';
-    this.platformService.deletePlatform(this.platform.ownerDeployment, this.platform.id)
+    this.platformService.deletePlatform(this.platform.id)
     .pipe(
       catchError((error) => {
         this.logger.error(`Failed to delete platform ${this.platform.id}`);

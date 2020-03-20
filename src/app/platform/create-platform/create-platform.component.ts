@@ -90,14 +90,11 @@ export class CreatePlatformComponent implements OnInit {
 
     const cleanedPlatform = this.utilsService.stripEmptyStrings(platformToCreate);
 
-    const ownerDeploymentId = cleanedPlatform.ownerDeployment;
-    delete cleanedPlatform.ownerDeployment;
-
     if (this.selectedGeometry) {
       cleanedPlatform.location = {geometry: this.selectedGeometry}
     }
 
-    this.platformService.createPlatform(cleanedPlatform, ownerDeploymentId)
+    this.platformService.createPlatform(cleanedPlatform)
     .pipe(
       catchError((error) => {
         this.state = 'failed';

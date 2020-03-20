@@ -4,6 +4,8 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from './../../environments/environment';
 import {Observable} from 'rxjs';
 import {UtilsService} from '../utils/utils.service';
+import {map} from 'rxjs/operators';
+import {cloneDeep} from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -17,23 +19,54 @@ export class DeploymentService {
 
   getDeployments(where?: {id: any}): Observable<Deployment[]> {
     const qs = this.utilsService.whereToQueryString(where);
-    return this.http.get<Deployment[]>(`${environment.apiUrl}/deployments${qs}`);
+    return this.http.get(`${environment.apiUrl}/deployments${qs}`)
+    .pipe(
+      map((deploymentCollection: any) => {
+        return deploymentCollection.member;
+      }),
+      map((deploymentsJsonLd: any) => {
+        return deploymentsJsonLd.map(this.formatDeploymentForApp);
+      })
+    )
   }
 
   getDeployment(deploymentId: string): Observable<Deployment> {
-    return this.http.get<Deployment>(`${environment.apiUrl}/deployments/${deploymentId}`);
+    return this.http.get(`${environment.apiUrl}/deployments/${deploymentId}`)
+    .pipe(
+      map((jsonLd) => {
+        return this.formatDeploymentForApp(jsonLd);
+      })
+    )
   }
 
   createDeployment(deployment: Deployment): Observable<Deployment> {
-    return this.http.post<Deployment>(`${environment.apiUrl}/deployments`, deployment);
+    return this.http.post(`${environment.apiUrl}/deployments`, deployment)
+    .pipe(
+      map((jsonLd) => {
+        return this.formatDeploymentForApp(jsonLd);
+      })
+    )
   }
 
   updateDeployment(deploymentId: string, updates: any): Observable<Deployment> {
-    return this.http.patch<Deployment>(`${environment.apiUrl}/deployments/${deploymentId}`, updates);
+    return this.http.patch(`${environment.apiUrl}/deployments/${deploymentId}`, updates)
+    .pipe(
+      map((jsonLd) => {
+        return this.formatDeploymentForApp(jsonLd);
+      })
+    )
   }
 
   deleteDeployment(deploymentId: string): Observable<void> {
     return this.http.delete<void>(`${environment.apiUrl}/deployments/${deploymentId}`)
+  }
+
+  
+  formatDeploymentForApp(asJsonLd): Deployment {
+    const forApp = cloneDeep(asJsonLd);
+    delete forApp['@context'];
+    forApp.id = forApp['@id'];
+    return forApp;
   }
 
 }

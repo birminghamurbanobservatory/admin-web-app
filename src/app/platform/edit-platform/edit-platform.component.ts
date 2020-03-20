@@ -149,7 +149,7 @@ export class EditPlatformComponent implements OnInit {
       this.updateState = 'pending';
       
     } else {
-      this.platformService.updatePlatform(this.platformId, this.platform.ownerDeployment, cleanedUpdates)
+      this.platformService.updatePlatform(this.platformId, cleanedUpdates)
       .pipe(
         catchError((error) => {
           this.updateState = 'failed';
