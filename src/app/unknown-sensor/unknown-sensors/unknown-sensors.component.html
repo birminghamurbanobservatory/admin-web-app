@@ -14,7 +14,7 @@
   <div *ngIf="state === 'got'">
 
     <div *ngIf="unknownSensors.length > 0">
-      <p>List of {{unknownSensors.length}} unknown sensors:</p>
+      <p>Showing {{unknownSensors.length}} of {{meta.total}} unknown sensors:</p>
       <mat-accordion>
         <mat-expansion-panel *ngFor="let unknownSensor of unknownSensors">
           <mat-expansion-panel-header>

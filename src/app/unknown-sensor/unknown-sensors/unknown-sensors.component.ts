@@ -5,6 +5,7 @@ import {catchError} from 'rxjs/operators';
 import {UnknownSensorService} from '../unknown-sensor.service';
 import {NGXLogger} from 'ngx-logger';
 import {UoLoggerService} from 'src/app/utils/uo-logger.service';
+import {CollectionMeta} from 'src/app/shared/collection-meta';
 
 @Component({
   selector: 'uo-unknown-sensors',
@@ -14,6 +15,7 @@ import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 export class UnknownSensorsComponent implements OnInit {
 
   unknownSensors: UnknownSensor[];
+  meta: CollectionMeta;
   getErrorMessage: string;
   state = 'getting';
 
@@ -38,9 +40,10 @@ export class UnknownSensorsComponent implements OnInit {
         return throwError(err);
       })
     )
-    .subscribe((unknownSensors: UnknownSensor[]) => {
-      this.logger.debug(`Got ${unknownSensors.length} unknown sensors`);
+    .subscribe(({data: unknownSensors, meta}) => {
+      this.logger.debug(`Got ${unknownSensors.length} unknown sensors`); 
       this.unknownSensors = unknownSensors;
+      this.meta = meta;
       this.state = 'got';
     })
   }
