@@ -5,7 +5,7 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
 import {FormBuilder, Validators} from '@angular/forms';
 import {UtilsService} from 'src/app/utils/utils.service';
 import {PlatformService} from '../platform.service';
-import {catchError} from 'rxjs/operators';
+import {catchError, filter, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {throwError, timer} from 'rxjs';
 import {Sensor} from 'src/app/sensor/sensor';
 import {Platform} from '../platform';
@@ -84,18 +84,36 @@ export class EditPlatformComponent implements OnInit {
       this.platform = platform;
 
       this.getSensorChoices();
+
+      this.onChanges();
  
     })
 
   }
 
+  onChanges() {
 
-  // TODO: I need to listen for changes to the isHostedBy field and offer autocomplete suggestions.
+    // autocomplete for isHostedBy
+    this.editPlatformForm.get('isHostedBy').valueChanges
+    .pipe(
+      filter((value: string) => value.length > 2),
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap((value: string) => this.platformService.getPlatforms({id: {begins: value}}))
+    )
+    .subscribe(platforms => {
+      this.hostPlatformChoices = platforms;
+      this.logger.debug(platforms);
+    });
+
+  }
 
 
   getSensorChoices() {
 
-    const topPlatform = this.platform.hostedByPath && this.platform.hostedByPath.length > 0 ? this.platform.hostedByPath[0] : this.platform.id;
+    const topPlatform = this.platform.ancestorPlatform && this.platform.ancestorPlatform.length > 0 ? this.platform.ancestorPlatform[0] : this.platform.id;
+
+    // TODO
 
     // Get all the sensors hosted on the common ancestor of this platform.
 
@@ -123,7 +141,10 @@ export class EditPlatformComponent implements OnInit {
     this.updateState = 'updating';
     this.updateErrorMessage = '';
 
-    // TODO: I need to add the location to the updates if it has been set/updated.
+    // Add the location to the updates if it has been set/updated.
+    if (this.selectedGeometry) {
+      updates.location = {geometry: this.selectedGeometry}
+    }
 
     // If some of the properties haven't even changed then don't bother sending them to the server.
     const cleanedUpdates = this.utilsService.removeUnchangedUpdates(updates, this.platform);
