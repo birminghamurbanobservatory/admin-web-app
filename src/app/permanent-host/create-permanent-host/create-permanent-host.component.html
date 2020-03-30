@@ -6,17 +6,17 @@
 
       <form class="form--max-width-600" [formGroup]="createPermanentHostForm" (ngSubmit)="onSubmit(createPermanentHostForm.value)" fxLayout="column" fxLayoutGap="15px">
 
-        <mat-form-field class="form__field--max-width" hintLabel="Max 40 characters">
-          <input matInput id="permanent-host-name" type="text" formControlName="name" maxlength="40" placeholder="Name">
-          <mat-error *ngIf="createPermanentHostForm.get('name').errors && createPermanentHostForm.get('name').errors.required">
-            Name is required
-          </mat-error>
-        </mat-form-field>
-
         <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
           <input matInput id="permanent-host-id" type="text" formControlName="id" maxlength="44" placeholder="ID (optional)">
           <mat-error *ngIf="createPermanentHostForm.get('id').errors && createPermanentHostForm.get('id').errors.pattern">
             invalid format
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form__field--max-width" hintLabel="Max 40 characters">
+          <input matInput id="permanent-host-name" type="text" formControlName="name" maxlength="40" placeholder="Name">
+          <mat-error *ngIf="createPermanentHostForm.get('name').errors && createPermanentHostForm.get('name').errors.required">
+            Name is required
           </mat-error>
         </mat-form-field>
 
