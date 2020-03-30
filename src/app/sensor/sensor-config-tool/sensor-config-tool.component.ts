@@ -35,6 +35,7 @@ export class SensorConfigToolComponent implements OnInit {
         {
           hasPriority: true,
           observedProperty: 'AirTemperature',
+          unit: 'DegreeCelsius',
           discipline: ["Meteorology"],
           hasFeatureOfInterest: "EarthAtmosphere",
           usedProcedure: ["PointSample"]

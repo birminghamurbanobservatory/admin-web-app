@@ -51,8 +51,9 @@
         <p class="detail__value">When observedProperty: {{iConfig.observedProperty}} <span *ngIf="iConfig.hasPriority">(default)</span></p>
         <div style="padding-left: 10px;">
           <p class="detail__value" *ngIf="iConfig.hasFeatureOfInterest">hasFeatureOfInterest: {{iConfig.hasFeatureOfInterest}}</p>
-          <p class="detail__value" *ngIf="iConfig.usedProcedure">usedProcedure's are {{iConfig.usedProcedure}}</p>
-          <p class="detail__value" *ngIf="iConfig.discipline">discipline's are {{iConfig.discipline}}</p>
+          <p class="detail__value" *ngIf="iConfig.unit">unit: {{iConfig.unit}}</p>
+          <p class="detail__value" *ngIf="iConfig.usedProcedure">usedProcedures are {{iConfig.usedProcedure}}</p>
+          <p class="detail__value" *ngIf="iConfig.discipline">disciplines are {{iConfig.discipline}}</p>
         </div>
       </div>
     </div>
@@ -70,6 +71,7 @@
         <p class="detail__value">When observedProperty: {{cConfig.observedProperty}} <span *ngIf="cConfig.hasPriority">(default)</span></p>
         <div style="padding-left: 10px;">
           <p class="detail__value" *ngIf="cConfig.hasFeatureOfInterest">hasFeatureOfInterest: {{cConfig.hasFeatureOfInterest}}</p>
+          <p class="detail__value" *ngIf="iConfig.unit">unit: {{iConfig.unit}}</p>
           <p class="detail__value" *ngIf="cConfig.usedProcedure">usedProcedure's are {{cConfig.usedProcedure}}</p>
           <p class="detail__value" *ngIf="cConfig.discipline">discipline's are {{cConfig.discipline}}</p>
         </div>
