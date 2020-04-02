@@ -17,6 +17,6 @@ export class Config {
   observedProperty?: string;
   unit?: string;
   hasFeatureOfInterest?: string;
-  discipline?: string[];
-  usedProcedure?: string[];
+  disciplines?: string[];
+  usedProcedures?: string[];
 }
