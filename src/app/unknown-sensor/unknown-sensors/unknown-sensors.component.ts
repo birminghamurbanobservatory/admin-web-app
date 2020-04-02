@@ -14,10 +14,13 @@ import {CollectionMeta} from 'src/app/shared/collection-meta';
 })
 export class UnknownSensorsComponent implements OnInit {
 
-  unknownSensors: UnknownSensor[];
+  unknownSensors: UnknownSensor[] = [];
   meta: CollectionMeta;
   getErrorMessage: string;
   state = 'getting';
+  limit = 50;
+  limitOptions = [10, 50, 100];
+  offset = 0;
 
   constructor(
     private unknownSensorService: UnknownSensorService,
@@ -31,7 +34,8 @@ export class UnknownSensorsComponent implements OnInit {
   getUnknownSensors() {
     this.logger.debug('Getting unknown sensors');
     this.state = 'getting';
-    this.unknownSensorService.getUnknownSensors()
+    this.logger.debug(`Getting unknown sensors (offset: ${this.offset}, limit: ${this.limit})`)
+    this.unknownSensorService.getUnknownSensors({limit: this.limit, offset: this.offset})
     .pipe(
       catchError((err) => {
         this.getErrorMessage = err.message;
@@ -46,6 +50,18 @@ export class UnknownSensorsComponent implements OnInit {
       this.meta = meta;
       this.state = 'got';
     })
+  }
+
+
+  pageEvent(info) {
+
+    console.log(info);
+
+    this.limit = info.pageSize;
+    this.offset = info.pageIndex * this.limit;
+
+    this.getUnknownSensors();
+
   }
 
 }

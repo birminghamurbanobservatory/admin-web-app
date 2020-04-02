@@ -7,6 +7,7 @@ import {map} from 'rxjs/operators';
 import {cloneDeep} from 'lodash';
 import {CollectionMeta} from '../shared/collection-meta';
 import {Collection} from '../shared/collection';
+import {UtilsService} from '../utils/utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,13 @@ import {Collection} from '../shared/collection';
 export class UnknownSensorService {
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private utilsService: UtilsService
   ) { }
 
-  getUnknownSensors(): Observable<{data: UnknownSensor[], meta: CollectionMeta}> {
-    return this.http.get(`${environment.apiUrl}/unknown-sensors`)
+  getUnknownSensors(options?: {limit?: number; offset?: number}): Observable<{data: UnknownSensor[], meta: CollectionMeta}> {
+    const qs = this.utilsService.whereToQueryString(options);
+    return this.http.get(`${environment.apiUrl}/unknown-sensors${qs}`)
     .pipe(
       map((unknownSensorCollection: Collection) => {
         return {

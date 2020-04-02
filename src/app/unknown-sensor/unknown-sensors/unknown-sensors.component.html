@@ -2,7 +2,22 @@
 
   <br><br>
 
+  <h2>Unknown sensors</h2>
+
+  <div *ngIf="unknownSensors.length > 0">
+    <mat-paginator 
+      [length]="meta.total"
+      [pageSize]="limit"
+      [pageSizeOptions]="limitOptions"
+      [showFirstLastButtons]="true"
+      (page)="pageEvent($event)"
+    >
+    </mat-paginator>
+  </div>
+
+
   <div *ngIf="state === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+    <br><br>
     <mat-spinner></mat-spinner>
     <p>Getting Unknown Sensors</p>
   </div>
@@ -11,10 +26,11 @@
     <p class="text--warn">{{getErrorMessage}}</p>
   </div>  
 
+
   <div *ngIf="state === 'got'">
 
     <div *ngIf="unknownSensors.length > 0">
-      <p>Showing {{unknownSensors.length}} of {{meta.total}} unknown sensors:</p>
+
       <mat-accordion>
         <mat-expansion-panel *ngFor="let unknownSensor of unknownSensors">
           <mat-expansion-panel-header>
@@ -36,6 +52,5 @@
   </div>
 
 
-  
 </div>
 
