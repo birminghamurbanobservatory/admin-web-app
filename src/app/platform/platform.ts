@@ -6,7 +6,7 @@ export class Platform {
   ownerDeployment?: string;
   inDeployments?: string[];
   isHostedBy?: string;
-  ancestorPlatform?: string[];
+  ancestorPlatforms?: string[];
   static?: boolean;
   location?: Location;
   updateLocationWithSensor?: string;

@@ -111,7 +111,7 @@ export class EditPlatformComponent implements OnInit {
 
   getSensorChoices() {
 
-    const topPlatform = this.platform.ancestorPlatform && this.platform.ancestorPlatform.length > 0 ? this.platform.ancestorPlatform[0] : this.platform.id;
+    const topPlatform = this.platform.ancestorPlatforms && this.platform.ancestorPlatforms.length > 0 ? this.platform.ancestorPlatforms[0] : this.platform.id;
 
     // TODO
 
