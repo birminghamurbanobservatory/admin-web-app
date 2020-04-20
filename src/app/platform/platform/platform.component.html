@@ -31,7 +31,7 @@
   <div class="detail">
     <h4 class="detail__title">Hosted by</h4>
     <p *ngIf="platform.isHostedBy" class="detail__value">
-      <span *ngFor="let ancestorPlatformId of platform.ancestorPlatform">
+      <span *ngFor="let ancestorPlatformId of platform.ancestorPlatforms">
         <a [routerLink]="['/platforms/view', ancestorPlatformId]">{{ancestorPlatformId}}, </a>
       </span>
     </p>
