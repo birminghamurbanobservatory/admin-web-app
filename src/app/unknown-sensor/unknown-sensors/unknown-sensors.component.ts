@@ -55,7 +55,7 @@ export class UnknownSensorsComponent implements OnInit {
 
   pageEvent(info) {
 
-    console.log(info);
+    this.logger.debug(info);
 
     this.limit = info.pageSize;
     this.offset = info.pageIndex * this.limit;

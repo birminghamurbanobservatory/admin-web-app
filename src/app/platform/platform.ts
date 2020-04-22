@@ -10,6 +10,7 @@ export class Platform {
   static?: boolean;
   location?: Location;
   updateLocationWithSensor?: string;
+  hosts?: any[];
   createdAt?: string;
   updatedAt?: string;
 }

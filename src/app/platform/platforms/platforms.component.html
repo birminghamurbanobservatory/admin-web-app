@@ -6,8 +6,22 @@
 
   <br><br><br>
 
-  <div>
-    <button (click)="toggleNest()">Toggle Nest</button>
+  <h2>Platforms</h2>
+
+  <form [formGroup]="optionsForm">
+    <mat-slide-toggle formControlName="nest">Nest</mat-slide-toggle>
+  </form>
+
+  <div *ngIf="platforms.length > 0">
+    <mat-paginator 
+      [length]="meta.total"
+      [pageSize]="limit"
+      [pageIndex]="calculatePageIndex()"
+      [pageSizeOptions]="limitOptions"
+      [showFirstLastButtons]="true"
+      (page)="pageEvent($event)"
+    >
+    </mat-paginator>
   </div>
 
   <div *ngIf="state === 'getting'" fxLayout="column" fxLayoutAlign="center center">
@@ -23,13 +37,15 @@
 
     <div *ngIf="platforms.length > 0">
       <!-- TODO: Could provide various different view options here, e.g. the standard list view, or a map view, or a tree view.  -->
-      <p>List of platforms:</p>
 
       <mat-accordion>
         <mat-expansion-panel *ngFor="let platform of platforms">
-          <mat-expansion-panel-header>
+          <mat-expansion-panel-header [ngStyle]="setExpansionPanelHeaderStyle(platform.depth)">
             <mat-panel-title>
-              <strong>{{platform.name}}</strong>
+              <strong>
+                <span>{{'-'.repeat(platform.depth)}}</span>
+                {{platform.name}}
+              </strong>
             </mat-panel-title>
           </mat-expansion-panel-header>
 
