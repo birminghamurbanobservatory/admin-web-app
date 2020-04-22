@@ -6,6 +6,10 @@
 
   <br><br><br>
 
+  <div>
+    <button (click)="toggleNest()">Toggle Nest</button>
+  </div>
+
   <div *ngIf="state === 'getting'" fxLayout="column" fxLayoutAlign="center center">
     <mat-spinner></mat-spinner>
     <p>Getting Platforms</p>

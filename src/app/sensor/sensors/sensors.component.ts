@@ -26,6 +26,7 @@ export class SensorsComponent implements OnInit {
 
   ngOnInit() {
 
+    // TODO: Might be worth using queryParams here instead of matrix params
     this.route.paramMap.subscribe((params: ParamMap) => {
 
       this.selectedPermanentHostId = params.get('permanentHost');

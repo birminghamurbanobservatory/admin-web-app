@@ -4,6 +4,7 @@ import {Platform} from '../platform';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
 import {UoLoggerService} from 'src/app/utils/uo-logger.service';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 
 @Component({
   selector: 'uo-platforms',
@@ -15,15 +16,30 @@ export class PlatformsComponent implements OnInit {
   platforms: Platform[];
   state = 'pending';
   getErrorMessage: string;
+  nest = true; // default to this
 
   constructor(
     private platformService: PlatformService,
-    private logger: UoLoggerService
+    private logger: UoLoggerService,
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
+
+    this.route.queryParams.subscribe(params => {
+      this.logger.debug(params);
+      const nestValue = params.nest;
+      this.logger.debug(`nest value from query parameter: ${nestValue}`)
+      if (nestValue === 'true') this.nest = true;
+      if (nestValue === 'false') this.nest = false;
+      this.logger.debug(`nest set to: ${this.nest}`);
+    });
+
     this.getPlatforms();
+
   }
+
 
   getPlatforms() {
     this.logger.debug('Getting platforms');
@@ -40,6 +56,23 @@ export class PlatformsComponent implements OnInit {
       this.state = 'got';
       this.platforms = platforms;
     })
+  }
+
+
+  toggleNest() {
+
+    const newValue = !this.nest;
+    this.logger.debug(`Toggling nest from ${this.nest} to ${newValue}`);
+
+    this.router.navigate(
+      [],
+      {
+        queryParams: {nest: newValue},
+        queryParamsHandling: 'merge',
+        relativeTo: this.route
+      }
+    );
+
   }
 
 
