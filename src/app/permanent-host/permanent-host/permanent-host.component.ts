@@ -50,7 +50,7 @@ export class PermanentHostComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((value: string) => this.deploymentService.getDeployments({id: {begins: value}}))
     )
-    .subscribe(deployments => {
+    .subscribe(({data: deployments}) => {
       this.deploymentChoices = deployments;
       this.logger.debug(deployments);
     });

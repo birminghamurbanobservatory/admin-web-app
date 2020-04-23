@@ -192,7 +192,6 @@ export class LocationSelectorComponent implements OnInit {
       debounceTime(300),
       distinctUntilChanged(),
       switchMap((value: string): any => {
-        console.log(value);
         return new Observable(observer => {
           this.geocoder.geocode({address: value, region: 'GB'}, (results, status) => {
             if (status === this.googleMapsApi.GeocoderStatus.OK) {

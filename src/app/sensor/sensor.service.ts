@@ -6,6 +6,8 @@ import {Sensor} from './sensor';
 import {UtilsService} from '../utils/utils.service';
 import {cloneDeep} from 'lodash';
 import {map} from 'rxjs/operators';
+import {CollectionMeta} from '../shared/collection-meta';
+import {Collection} from '../shared/collection';
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +20,18 @@ export class SensorService {
   ) { }
 
 
-  getSensors(where: {permanentHost: string}): Observable<Sensor[]> {
-    const qs = this.utilsService.whereToQueryString(where);
+  getSensors(
+    where: {id?: any; permanentHost?: string; inDeployment?: any; isHostedBy?: any} = {}, 
+    options: {limit?: number; offset?: number} = {}
+  ): Observable<{data: Sensor[], meta: CollectionMeta}> {
+    const qs = this.utilsService.whereToQueryString(Object.assign({}, where, options));
     return this.http.get(`${environment.apiUrl}/sensors${qs}`)
     .pipe(
-      map((sensorCollection: any) => {
-        return sensorCollection.member;
-      }),
-      map((sensorsJsonLd: any) => {
-        return sensorsJsonLd.map(this.formatSensorForApp);
+      map((sensorCollection: Collection) => {
+        return {
+          data: sensorCollection.member.map(this.formatSensorForApp),
+          meta: sensorCollection.meta
+        }
       })
     )
   }

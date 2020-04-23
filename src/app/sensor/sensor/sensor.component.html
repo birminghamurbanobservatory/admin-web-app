@@ -15,9 +15,12 @@
     <p class="detail__value">{{sensor.description || 'none'}}</p>
   </div>
 
-  <div class="detail" *ngIf="sensor.inDeployment">
+  <div class="detail">
     <h4 class="detail__title">In Deployment</h4>
-    <p class="detail__value"><a [routerLink]="['/deployments/view', sensor.inDeployment]">{{sensor.inDeployment}}</a></p>
+    <p class="detail__value">
+      <a *ngIf="sensor.inDeployment" [routerLink]="['/deployments/view', sensor.inDeployment]">{{sensor.inDeployment}}</a>
+      <span *ngIf="!sensor.inDeployment">Currently unassigned</span>
+    </p>
   </div>
 
   <div class="detail" *ngIf="sensor.isHostedBy">

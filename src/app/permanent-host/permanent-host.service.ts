@@ -7,6 +7,8 @@ import {UtilsService} from '../utils/utils.service';
 import {Platform} from '../platform/platform';
 import {map} from 'rxjs/operators';
 import {cloneDeep} from 'lodash';
+import {CollectionMeta} from '../shared/collection-meta';
+import {Collection} from '../shared/collection';
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +20,18 @@ export class PermanentHostService {
     private utilsService: UtilsService
   ) { }
 
-  getPermanentHosts(where?: {id: any}): Observable<PermanentHost[]> {
-    const qs = this.utilsService.whereToQueryString(where);
+  getPermanentHosts(
+    where: {id?: any} = {}, 
+    options: {limit?: number; offset?: number;} = {}
+  ): Observable<{data: PermanentHost[], meta: CollectionMeta}> {
+    const qs = this.utilsService.whereToQueryString(Object.assign({}, where, options));
     return this.http.get(`${environment.apiUrl}/permanent-hosts${qs}`)
     .pipe(
-      map((permanentHostCollection: any) => {
-        return permanentHostCollection.member;
-      }),
-      map((permanentHostsJsonLd: any) => {
-        return permanentHostsJsonLd.map(this.formatPermanentHostForApp);
+      map((permanentHostCollection: Collection) => {
+        return {
+          data: permanentHostCollection.member.map(this.formatPermanentHostForApp),
+          meta: permanentHostCollection.meta
+        }
       })
     )
   }

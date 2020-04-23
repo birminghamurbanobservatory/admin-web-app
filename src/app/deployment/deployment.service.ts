@@ -6,6 +6,8 @@ import {Observable} from 'rxjs';
 import {UtilsService} from '../utils/utils.service';
 import {map} from 'rxjs/operators';
 import {cloneDeep} from 'lodash';
+import {Collection} from '../shared/collection';
+import {CollectionMeta} from '../shared/collection-meta';
 
 @Injectable({
   providedIn: 'root'
@@ -17,15 +19,18 @@ export class DeploymentService {
     private utilsService: UtilsService
   ) { }
 
-  getDeployments(where?: {id: any}): Observable<Deployment[]> {
-    const qs = this.utilsService.whereToQueryString(where);
+  getDeployments(
+    where: {id?: any; public?: boolean} = {}, 
+    options: {mineOnly?: boolean; limit?: number; offset?: number} = {}
+  ): Observable<{data: Deployment[]; meta: CollectionMeta}> {
+    const qs = this.utilsService.whereToQueryString(Object.assign({}, where, options));
     return this.http.get(`${environment.apiUrl}/deployments${qs}`)
     .pipe(
-      map((deploymentCollection: any) => {
-        return deploymentCollection.member;
-      }),
-      map((deploymentsJsonLd: any) => {
-        return deploymentsJsonLd.map(this.formatDeploymentForApp);
+      map((deploymentCollection: Collection) => {
+        return {
+          data: deploymentCollection.member.map(this.formatDeploymentForApp),
+          meta: deploymentCollection.meta
+        }
       })
     )
   }

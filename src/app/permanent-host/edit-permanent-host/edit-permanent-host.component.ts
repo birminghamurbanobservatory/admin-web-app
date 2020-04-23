@@ -62,7 +62,7 @@ export class EditPermanentHostComponent implements OnInit {
         return throwError(error);
       })
     )
-    .subscribe((sensors: Sensor[]) => {
+    .subscribe(({data: sensors}) => {
       this.logger.debug(sensors);
       this.hostedSensors = sensors;
 

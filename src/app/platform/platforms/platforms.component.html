@@ -9,7 +9,26 @@
   <h2>Platforms</h2>
 
   <form [formGroup]="optionsForm">
-    <mat-slide-toggle formControlName="nest">Nest</mat-slide-toggle>
+    <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="30px">
+
+      <mat-form-field class="form__field--y-spaced" hintLabel="top tip: enter whole words">
+        <input matInput id="platform-search" type="search" formControlName="search" placeholder="search">
+        <span matPrefix><mat-icon>search</mat-icon>&nbsp; &nbsp;</span>
+      </mat-form-field>
+
+      <mat-slide-toggle formControlName="nest" class="form__field--y-spaced">Nest</mat-slide-toggle>
+
+      <mat-form-field *ngIf="deployments.length > 0" class="form__field--y-spaced">
+        <mat-label>Filter by deployment</mat-label>
+        <mat-select formControlName="inDeployment">
+          <mat-option [value]="">- All Deployments -</mat-option>
+          <mat-option *ngFor="let deployment of deployments" [value]="deployment.id">
+            {{deployment.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
   </form>
 
   <div *ngIf="platforms.length > 0">
@@ -56,7 +75,7 @@
     </div>
 
     <div *ngIf="platforms.length === 0" fxLayout="row" fxLayoutAlign="center">
-      <p>You don't appear to have any platforms yet</p>
+      <p>No platforms found</p>
     </div>
 
   </div>

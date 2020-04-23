@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {PlatformService} from '../platform.service';
 import {Platform} from '../platform';
-import {catchError} from 'rxjs/operators';
+import {catchError, debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {throwError} from 'rxjs';
 import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
@@ -9,6 +9,8 @@ import {FormBuilder} from '@angular/forms';
 import {cloneDeep, concat} from 'lodash';
 import {CollectionMeta} from 'src/app/shared/collection-meta';
 import * as check from 'check-types';
+import {DeploymentService} from 'src/app/deployment/deployment.service';
+import {Deployment} from 'src/app/deployment/deployment';
 
 @Component({
   selector: 'uo-platforms',
@@ -18,6 +20,7 @@ import * as check from 'check-types';
 export class PlatformsComponent implements OnInit {
 
   platforms: Platform[] = [];
+  deployments: Deployment[] = [];
   meta: CollectionMeta;
   limit = 10;
   limitOptions = [1, 10, 50];
@@ -28,6 +31,7 @@ export class PlatformsComponent implements OnInit {
 
   constructor(
     private platformService: PlatformService,
+    private deploymentService: DeploymentService,
     private logger: UoLoggerService,
     private route: ActivatedRoute,
     private router: Router,
@@ -38,7 +42,13 @@ export class PlatformsComponent implements OnInit {
 
     // Set some defaults, and any validators.
     this.optionsForm = this.fb.group({
-      nest: true
+      nest: true,
+      search: '',
+      inDeployment: ''
+    });
+
+    this.deploymentService.getDeployments().subscribe(({data: deployments}) => {
+      this.deployments = deployments;
     });
 
     this.route.queryParams.subscribe(params => {
@@ -47,6 +57,8 @@ export class PlatformsComponent implements OnInit {
       // Update form values using these query parameters
       if (nestValue === 'true') this.optionsForm.controls['nest'].setValue(true, {emitEvent: false});
       if (nestValue === 'false') this.optionsForm.controls['nest'].setValue(false, {emitEvent: false});
+      if (check.nonEmptyString(params.search)) this.optionsForm.controls['search'].setValue(params.search, {emitEvent: false});
+      if (check.nonEmptyString(params.inDeployment)) this.optionsForm.controls['inDeployment'].setValue(params.inDeployment, {emitEvent: false});
       if (check.assigned(params.limit)) this.limit = params.limit;
       if (check.assigned(params.offset)) this.offset = params.offset;
 
@@ -59,14 +71,40 @@ export class PlatformsComponent implements OnInit {
 
 
   listenForOptionChanges() {
+    // Although it's possible to watch for any changes to the form as a whole, It's worth watching each form input individually, because some form inputs, such as search boxes, are worth having debounce/switchmap/etc applied.
 
-    // Although it's possible to watch for any changes to the form as a whole, I've decided it's worth watching each form input individually, because some form inputs, such as search boxes, are worth having debounce/switchmap/etc applied.
-
-    this.optionsForm.get('nest').valueChanges.subscribe((newNestValue) => {
-      this.logger.debug(`New nest value from form: ${newNestValue}`);
+    this.optionsForm.get('search').valueChanges
+    .pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+    )
+    .subscribe((searchText) => {
+      this.logger.debug(`New search value from form: ${searchText}`);
+      const valueForRouter = check.nonEmptyString(searchText) ? searchText : undefined;
       // Update the url query parameters
       this.router.navigate([], {
-        queryParams: {nest:  newNestValue},
+        queryParams: {search:  valueForRouter},
+        queryParamsHandling: 'merge', // keeps any existing query parameters
+        relativeTo: this.route
+      });
+    })
+
+    this.optionsForm.get('nest').valueChanges.subscribe((newValue) => {
+      this.logger.debug(`New nest value from form: ${newValue}`);
+      // Update the url query parameters
+      this.router.navigate([], {
+        queryParams: {nest:  newValue},
+        queryParamsHandling: 'merge', // keeps any existing query parameters
+        relativeTo: this.route
+      });
+    })
+
+    this.optionsForm.get('inDeployment').valueChanges.subscribe((newValue) => {
+      this.logger.debug(`New inDeployment value from form: ${newValue}`);
+      const valueForRouter = check.nonEmptyString(newValue) ? newValue : undefined;
+      // Update the url query parameters
+      this.router.navigate([], {
+        queryParams: {inDeployment:  valueForRouter},
         queryParamsHandling: 'merge', // keeps any existing query parameters
         relativeTo: this.route
       });
@@ -76,15 +114,27 @@ export class PlatformsComponent implements OnInit {
 
 
   getPlatforms() {
+
     this.logger.debug('Getting platforms');
     this.state = 'getting';
+
+    const where: any = {};
+    const searchText = this.optionsForm.get('search').value;
+    if (check.nonEmptyString(searchText)) {
+      where.search = searchText;
+    }
+    const inDeployment = this.optionsForm.get('inDeployment').value;
+    if (check.nonEmptyString(inDeployment)) {
+      where.inDeployments = {includes: inDeployment};
+    }
+
     const nestValue = this.optionsForm.get('nest').value;
-    const where = {};
     const options = {
       nest: nestValue,
       limit: this.limit,
       offset: this.offset
     };
+
     this.platformService.getPlatforms(where, options)
     .pipe(
       catchError((err) => {
@@ -94,8 +144,6 @@ export class PlatformsComponent implements OnInit {
       })
     )
     .subscribe(({data: platforms, meta}) => {
-      console.log(platforms);
-      console.log(meta);
       if (nestValue === true) {
         this.platforms = this.flattenNestedPlatforms(platforms); 
       } else {
@@ -147,6 +195,7 @@ export class PlatformsComponent implements OnInit {
 
   }
 
+
   pageEvent(info) {
 
     this.logger.debug(info);
@@ -165,6 +214,7 @@ export class PlatformsComponent implements OnInit {
 
   }
 
+
   calculatePageIndex() {
     return this.offset === 0 ? 0 : Math.ceil(this.offset / this.limit);
   }
@@ -182,7 +232,6 @@ export class PlatformsComponent implements OnInit {
       return {};
     }
   }
-
 
 
   onDeleted(platformId: string) {

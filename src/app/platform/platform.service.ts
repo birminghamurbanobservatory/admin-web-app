@@ -19,9 +19,11 @@ export class PlatformService {
     private utilsService: UtilsService
   ) { }
 
-  getPlatforms(where: {id?: any} = {}, options: {limit?: number; offset?: number; nest?: boolean} = {}): Observable<{data: Platform[]; meta: CollectionMeta}> {
+  getPlatforms(
+    where: {id?: any} = {}, 
+    options: {limit?: number; offset?: number; nest?: boolean} = {}
+  ): Observable<{data: Platform[]; meta: CollectionMeta}> {
     const qs = this.utilsService.whereToQueryString(Object.assign({}, where, options));
-    console.log(qs);
     return this.http.get(`${environment.apiUrl}/platforms${qs}`)
     .pipe(
       map((platformCollection: Collection) => {

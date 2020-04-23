@@ -6,6 +6,42 @@
 
   <br><br><br>
 
+  <h2>Deployments</h2>
+
+  <form [formGroup]="optionsForm">
+    <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="40px">
+
+      <mat-form-field class="form__field--y-spaced" hintLabel="top tip: enter whole words">
+        <input matInput id="deployment-search" type="search" formControlName="search" placeholder="search">
+        <span matPrefix><mat-icon>search</mat-icon>&nbsp; &nbsp;</span>
+      </mat-form-field>
+
+      <mat-form-field class="form__field--y-spaced">
+        <mat-label>Public or Private</mat-label>
+        <mat-select formControlName="publicOrPrivate">
+          <mat-option value="both">Both</mat-option>
+          <mat-option value="public">Public only</mat-option>
+          <mat-option value="private">Private only</mat-option>          
+        </mat-select>
+      </mat-form-field>
+
+      <mat-slide-toggle formControlName="mineOnly" class="form__field--y-spaced">Show mine only</mat-slide-toggle>
+
+    </div>
+  </form>
+
+  <div *ngIf="deployments.length > 0">
+    <mat-paginator 
+      [length]="meta.total"
+      [pageSize]="limit"
+      [pageIndex]="calculatePageIndex()"
+      [pageSizeOptions]="limitOptions"
+      [showFirstLastButtons]="true"
+      (page)="pageEvent($event)"
+    >
+    </mat-paginator>
+  </div>
+
   <div *ngIf="state === 'getting'" fxLayout="column" fxLayoutAlign="center center">
     <mat-spinner></mat-spinner>
     <p>Getting Deployments</p>
@@ -18,7 +54,6 @@
   <div *ngIf="state === 'got'">
 
     <div *ngIf="deployments.length > 0">
-      <p>List of deployments:</p>
 
       <mat-accordion>
         <mat-expansion-panel *ngFor="let deployment of deployments">
@@ -35,7 +70,7 @@
     </div>
 
     <div *ngIf="deployments.length === 0" fxLayout="row" fxLayoutAlign="center">
-      <p>You don't appear to have any deployments yet</p>
+      <p>No deployments found</p>
     </div>
 
   </div>

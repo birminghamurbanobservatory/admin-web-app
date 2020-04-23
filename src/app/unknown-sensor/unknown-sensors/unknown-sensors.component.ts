@@ -38,7 +38,7 @@ export class UnknownSensorsComponent implements OnInit {
 
     // Set some defaults, and any validators.
     this.optionsForm = this.fb.group({
-      search: ""
+      search: ''
     });
 
     this.route.queryParams.subscribe(params => {
@@ -78,12 +78,19 @@ export class UnknownSensorsComponent implements OnInit {
     this.logger.debug('Getting unknown sensors');
     this.state = 'getting';
     this.logger.debug(`Getting unknown sensors (offset: ${this.offset}, limit: ${this.limit})`)
+
     const where: any = {};
     const searchText = this.optionsForm.get('search').value;
     if (check.nonEmptyString(searchText)) {
       where.search = searchText;
     }
-    this.unknownSensorService.getUnknownSensors(where, {limit: this.limit, offset: this.offset})
+
+    const options = {
+      limit: this.limit,
+      offset: this.offset
+    };
+
+    this.unknownSensorService.getUnknownSensors(where, options)
     .pipe(
       catchError((err) => {
         this.getErrorMessage = err.message;

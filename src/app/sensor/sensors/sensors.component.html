@@ -9,7 +9,52 @@
     </div>
   </div>
 
-  <br><br>
+  <br><br><br>
+
+  <h2>Sensors</h2>
+
+  <div *ngIf="selectedPermanentHostId" fxLayout="row wrap" fxLayoutAlign="start center">
+    <p class="para--equal-y-spacing">
+      on permanent host: {{selectedPermanentHostId}}
+    </p>
+    <button mat-icon-button color="accent" type="button" (click)="clearPermanentHost()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="optionsForm">
+    <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="30px">
+
+      <mat-form-field class="form__field--y-spaced" hintLabel="top tip: enter whole words">
+        <input matInput id="sensor-search" type="search" formControlName="search" placeholder="search">
+        <span matPrefix><mat-icon>search</mat-icon>&nbsp; &nbsp;</span>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="deployments.length > 0" class="form__field--y-spaced">
+        <mat-label>Filter by deployment</mat-label>
+        <mat-select formControlName="inDeployment">
+          <mat-option value="--all--">- All Deployments -</mat-option>
+          <mat-option value="--none--">- Unassigned -</mat-option>
+          <mat-option *ngFor="let deployment of deployments" [value]="deployment.id">
+            {{deployment.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+  </form>
+
+  <div *ngIf="sensors.length > 0">
+    <mat-paginator 
+      [length]="meta.total"
+      [pageSize]="limit"
+      [pageIndex]="calculatePageIndex()"
+      [pageSizeOptions]="limitOptions"
+      [showFirstLastButtons]="true"
+      (page)="pageEvent($event)"
+    >
+    </mat-paginator>
+  </div>
 
   <div *ngIf="state === 'getting'" fxLayout="column" fxLayoutAlign="center center">
     <mat-spinner></mat-spinner>
@@ -25,7 +70,6 @@
   <div *ngIf="state === 'got'">
 
     <div *ngIf="sensors.length > 0">
-      <p>List of sensors:</p>
       <mat-accordion>
         <mat-expansion-panel *ngFor="let sensor of sensors">
           <mat-expansion-panel-header>
@@ -41,7 +85,7 @@
     </div>
 
     <div *ngIf="sensors.length === 0" fxLayout="row" fxLayoutAlign="center">
-      <p>You don't appear to have any sensors yet</p>
+      <p>No sensors were found</p>
     </div>  
 
   </div>
