@@ -4,6 +4,18 @@
 
   <h2>Unknown sensors</h2>
 
+  <!-- Options form -->
+  <form [formGroup]="optionsForm">
+    <mat-form-field class="form__field--max-width" hintLabel="top tip: enter whole words">
+      <input matInput id="unknown-sensor-search" type="search" formControlName="search" placeholder="search">
+      <span matPrefix><mat-icon>search</mat-icon>&nbsp; &nbsp;</span>
+    </mat-form-field>
+  </form>  
+
+  <br>
+
+
+  <!-- Paginator -->
   <div *ngIf="unknownSensors.length > 0">
     <mat-paginator 
       [length]="meta.total" 
@@ -46,7 +58,7 @@
     </div>
 
     <div *ngIf="unknownSensors.length === 0" fxLayout="row" fxLayoutAlign="center">
-      <p>There's currently no unknown sensors</p>
+      <p>No unknown sensors found</p>
     </div>  
 
   </div>

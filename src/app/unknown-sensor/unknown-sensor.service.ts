@@ -19,8 +19,8 @@ export class UnknownSensorService {
     private utilsService: UtilsService
   ) { }
 
-  getUnknownSensors(options?: {limit?: number; offset?: number}): Observable<{data: UnknownSensor[], meta: CollectionMeta}> {
-    const qs = this.utilsService.whereToQueryString(options);
+  getUnknownSensors(where: {search?: string} = {}, options: {limit?: number; offset?: number} = {}): Observable<{data: UnknownSensor[], meta: CollectionMeta}> {
+    const qs = this.utilsService.whereToQueryString(Object.assign({}, where, options));
     return this.http.get(`${environment.apiUrl}/unknown-sensors${qs}`)
     .pipe(
       map((unknownSensorCollection: Collection) => {
