@@ -58,7 +58,7 @@ export class CreateSensorComponent implements OnInit {
 
   onChanges() {
 
-    // autocomplete for the permanentHost
+    // autocomplete for the permanentHosts
     this.createSensorForm.get('permanentHost').valueChanges
     .pipe(
       filter((value: string) => value.length > 2),
@@ -66,7 +66,7 @@ export class CreateSensorComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((value: string) => this.permanentHostService.getPermanentHosts({id: {begins: value}}))
     )
-    .subscribe(permanentHosts => {
+    .subscribe(({data: permanentHosts}) => {
       this.permanentHostChoices = permanentHosts;
       this.logger.debug(permanentHosts);
     });
