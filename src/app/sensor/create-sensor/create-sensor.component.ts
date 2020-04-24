@@ -42,12 +42,12 @@ export class CreateSensorComponent implements OnInit {
       description: '',
       // N.B. this snapshot approach is fine as long as you never reuse the component, i.e. you always naviagate to another component before coming back to this one, e.g. with a different permanentHost.
       permanentHost: [this.route.snapshot.paramMap.get('permanentHost') || ''],
-      inDeployment: [this.route.snapshot.paramMap.get('inDeployment') || ''],
+      hasDeployment: [this.route.snapshot.paramMap.get('hasDeployment') || ''],
     });
 
     if (this.route.snapshot.paramMap.get('permanentHost')) {
       this.selectHostOverDep();
-    } else if (this.route.snapshot.paramMap.get('inDeployment')) {
+    } else if (this.route.snapshot.paramMap.get('hasDeployment')) {
       this.selectDepOverHost();
     }
 
@@ -71,8 +71,8 @@ export class CreateSensorComponent implements OnInit {
       this.logger.debug(permanentHosts);
     });
 
-    // autoComplete for inDeployment
-    this.createSensorForm.get('inDeployment').valueChanges
+    // autoComplete for hasDeployment
+    this.createSensorForm.get('hasDeployment').valueChanges
     .pipe(
       filter((value: string) => value.length > 2),
       debounceTime(400),
@@ -84,13 +84,13 @@ export class CreateSensorComponent implements OnInit {
       this.logger.debug(deployments);
     });
 
-    // Toggle permanentHost vs inDeployment in response to permanentHost changes
+    // Toggle permanentHost vs hasDeployment in response to permanentHost changes
     this.createSensorForm.get('permanentHost').valueChanges
     .pipe(
       distinctUntilChanged()
     )
     .subscribe(value => {
-      if (value.length === 0 && !this.createSensorForm.get('inDeployment').value) {
+      if (value.length === 0 && !this.createSensorForm.get('hasDeployment').value) {
         this.selectNeitherHostOrDep();
       }
       if (value.length > 0) {
@@ -98,8 +98,8 @@ export class CreateSensorComponent implements OnInit {
       }
     });
 
-    // Toggle permanentHost vs inDeployment in response to inDeployment changes
-    this.createSensorForm.get('inDeployment').valueChanges
+    // Toggle permanentHost vs hasDeployment in response to hasDeployment changes
+    this.createSensorForm.get('hasDeployment').valueChanges
     .pipe(
       distinctUntilChanged()
     )
@@ -116,8 +116,8 @@ export class CreateSensorComponent implements OnInit {
 
   selectHostOverDep() {
     this.hostOrDep = 'host';
-    this.createSensorForm.controls['inDeployment'].disable();
-    this.createSensorForm.controls['inDeployment'].setValue('');
+    this.createSensorForm.controls['hasDeployment'].disable();
+    this.createSensorForm.controls['hasDeployment'].setValue('');
   }
 
   selectDepOverHost() {
@@ -127,10 +127,10 @@ export class CreateSensorComponent implements OnInit {
   }
 
   selectNeitherHostOrDep() {
-    this.logger.debug('Selecting neither permanentHost or inDeployment');
+    this.logger.debug('Selecting neither permanentHost or hasDeployment');
     this.hostOrDep = 'neither';
     this.createSensorForm.controls['permanentHost'].enable();
-    this.createSensorForm.controls['inDeployment'].enable();
+    this.createSensorForm.controls['hasDeployment'].enable();
   }
 
 

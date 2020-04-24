@@ -2,7 +2,7 @@ export class Sensor {
   id?: string;
   name?: string;
   description?: string;
-  inDeployment?: string;
+  hasDeployment?: string;
   isHostedBy?: string;
   permanentHost?: string;
   initialConfig?: Config[];

@@ -22,7 +22,7 @@
           <textarea matInput id="description" formControlName="description" maxlength="1000" placeholder="Description" rows="3"></textarea>
         </mat-form-field>
 
-        <mat-form-field class="form__field--max-width" hintLabel="{{hostOrDep === 'dep' ? 'cannot be set when In Deployment is set' : 'begin typing its id'}}">
+        <mat-form-field class="form__field--max-width" hintLabel="{{hostOrDep === 'dep' ? 'cannot be set when Has Deployment is set' : 'begin typing its id'}}">
           <input type="text" placeholder="Permanent Host" matInput formControlName="permanentHost" [matAutocomplete]="autoPermHost">
           <mat-autocomplete #autoPermHost="matAutocomplete">
             <mat-option *ngFor="let permanentHostChoice of permanentHostChoices" [value]="permanentHostChoice.id">
@@ -32,7 +32,7 @@
         </mat-form-field> 
 
         <mat-form-field class="form__field--max-width" hintLabel="{{hostOrDep === 'host' ? 'cannot be set when Permanent Host is set' : 'begin typing its id'}}">
-          <input type="text" placeholder="In Deployment" matInput formControlName="inDeployment" [matAutocomplete]="autoDep">
+          <input type="text" placeholder="Has Deployment" matInput formControlName="hasDeployment" [matAutocomplete]="autoDep">
           <mat-autocomplete #autoDep="matAutocomplete">
             <mat-option *ngFor="let deploymentChoice of deploymentChoices" [value]="deploymentChoice.id">
               {{deploymentChoice.id}}

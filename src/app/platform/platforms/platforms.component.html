@@ -56,10 +56,9 @@
 
     <div *ngIf="platforms.length > 0">
       <!-- TODO: Could provide various different view options here, e.g. the standard list view, or a map view, or a tree view.  -->
-
       <mat-accordion>
-        <mat-expansion-panel *ngFor="let platform of platforms">
-          <mat-expansion-panel-header [ngStyle]="setExpansionPanelHeaderStyle(platform.depth)">
+        <mat-expansion-panel *ngFor="let platform of platforms" [ngStyle]="setExpansionPanelStyle(platform)">
+          <mat-expansion-panel-header>
             <mat-panel-title>
               <strong>
                 <span>{{'-'.repeat(platform.depth)}}</span>

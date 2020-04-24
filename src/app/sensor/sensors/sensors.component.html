@@ -32,7 +32,7 @@
 
       <mat-form-field *ngIf="deployments.length > 0" class="form__field--y-spaced">
         <mat-label>Filter by deployment</mat-label>
-        <mat-select formControlName="inDeployment">
+        <mat-select formControlName="hasDeployment">
           <mat-option value="--all--">- All Deployments -</mat-option>
           <mat-option value="--none--">- Unassigned -</mat-option>
           <mat-option *ngFor="let deployment of deployments" [value]="deployment.id">
@@ -65,7 +65,7 @@
     <p class="text--warn">{{getErrorMessage}}</p>
   </div>  
 
-  <!-- TODO: I need to add some form elements to allow me to filter the sensors, e.g. filter by permanentHost or inDeployment, etc, many of the filter parameters should be able to be passed in via the paramMap, i.e. URL parameters. -->
+  <!-- TODO: I need to add some form elements to allow me to filter the sensors, e.g. filter by permanentHost or hasDeployment, etc, many of the filter parameters should be able to be passed in via the paramMap, i.e. URL parameters. -->
 
   <div *ngIf="state === 'got'">
 

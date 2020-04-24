@@ -43,7 +43,7 @@ export class SensorsComponent implements OnInit {
     // Set some defaults, and any validators.
     this.optionsForm = this.fb.group({
       search: '',
-      inDeployment: '--all--'
+      hasDeployment: '--all--'
     });
 
     this.deploymentService.getDeployments().subscribe(({data: deployments}) => {
@@ -54,7 +54,7 @@ export class SensorsComponent implements OnInit {
       this.logger.debug('Query string parameters', params)
       // Update form values using these query parameters
       if (check.nonEmptyString(params.search)) this.optionsForm.controls['search'].setValue(params.search, {emitEvent: false});
-      if (check.nonEmptyString(params.inDeployment)) this.optionsForm.controls['inDeployment'].setValue(params.inDeployment, {emitEvent: false});
+      if (check.nonEmptyString(params.hasDeployment)) this.optionsForm.controls['hasDeployment'].setValue(params.hasDeployment, {emitEvent: false});
       if (check.nonEmptyString(params.permanentHost)) this.selectedPermanentHostId = params.permanentHost;
       if (check.assigned(params.limit)) this.limit = params.limit;
       if (check.assigned(params.offset)) this.offset = params.offset;
@@ -86,12 +86,12 @@ export class SensorsComponent implements OnInit {
       });
     })
 
-    this.optionsForm.get('inDeployment').valueChanges.subscribe((newValue) => {
-      this.logger.debug(`New inDeployment value from form: ${newValue}`);
+    this.optionsForm.get('hasDeployment').valueChanges.subscribe((newValue) => {
+      this.logger.debug(`New hasDeployment value from form: ${newValue}`);
       const valueForRouter = check.nonEmptyString(newValue) ? newValue : undefined;
       // Update the url query parameters
       this.router.navigate([], {
-        queryParams: {inDeployment:  valueForRouter},
+        queryParams: {hasDeployment:  valueForRouter},
         queryParamsHandling: 'merge', // keeps any existing query parameters
         relativeTo: this.route
       });
@@ -108,13 +108,13 @@ export class SensorsComponent implements OnInit {
     if (check.nonEmptyString(searchText)) {
       where.search = searchText;
     }
-    const inDeployment = this.optionsForm.get('inDeployment').value;
-    if (inDeployment === '--all--') {
+    const hasDeployment = this.optionsForm.get('hasDeployment').value;
+    if (hasDeployment === '--all--') {
       // do nothing
-    } else if (inDeployment === '--none--') {
-      where.inDeployment = {exists: false};
-    } else if (check.nonEmptyString(inDeployment)) {
-      where.inDeployment = inDeployment
+    } else if (hasDeployment === '--none--') {
+      where.hasDeployment = {exists: false};
+    } else if (check.nonEmptyString(hasDeployment)) {
+      where.hasDeployment = hasDeployment
     }
 
     if (check.nonEmptyString(this.selectedPermanentHostId)) {

@@ -172,13 +172,13 @@ export class PlatformsComponent implements OnInit {
       let itsPlatforms = [];
       if (thisPlatform.hosts) {
         itsPlatforms = thisPlatform.hosts.filter((hostee) => {
-          return hostee['@type'] === 'Platform';
+          return hostee.type === 'Platform';
         })
         if (itsPlatforms.length > 0) {
           itsPlatforms = this.recursiveNestedPlatformProcessing(itsPlatforms, depth + 1);
         }
         // So that we don't end up with loads of duplicate data, let's remove any platforms from the hosts array of this platform, leaving just the sensors.
-        thisPlatform.hosts = thisPlatform.hosts.filter((hostee) => hostee['@type'] === 'Sensor');
+        thisPlatform.hosts = thisPlatform.hosts.filter((hostee) => hostee.type === 'Sensor');
       } else {
         // For the sake of consistency, if the server hasn't already done this, let's make sure they all have a hosts array.
         thisPlatform.hosts = [];
@@ -217,6 +217,20 @@ export class PlatformsComponent implements OnInit {
 
   calculatePageIndex() {
     return this.offset === 0 ? 0 : Math.ceil(this.offset / this.limit);
+  }
+
+
+  setExpansionPanelStyle(platform) {
+    const nestValue = this.optionsForm.get('nest').value;
+    if (nestValue) {
+      if (platform.isHostedBy) {
+        return {};
+      } else {
+        return {'margin-top': '20px'};
+      }
+    } else {
+      return {};
+    }
   }
 
 

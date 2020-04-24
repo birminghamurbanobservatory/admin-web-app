@@ -8,6 +8,8 @@ import {cloneDeep} from 'lodash';
 import {map} from 'rxjs/operators';
 import {CollectionMeta} from '../shared/collection-meta';
 import {Collection} from '../shared/collection';
+import {UoLoggerService} from '../utils/uo-logger.service';
+import {SensorService} from '../sensor/sensor.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,8 @@ export class PlatformService {
 
   constructor(
     private http: HttpClient,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private logger: UoLoggerService
   ) { }
 
   getPlatforms(
@@ -62,16 +65,58 @@ export class PlatformService {
     )
   }
 
+
   deletePlatform(platformId: string): Observable<void> {
     return this.http.delete<void>(`${environment.apiUrl}/platforms/${platformId}`);
   }
 
+
   formatPlatformForApp(asJsonLd): Platform {
-    const forApp = cloneDeep(asJsonLd);
-    delete forApp['@context'];
-    forApp.id = forApp['@id'];
-    return forApp;
+    // For some reason when this function is called within the .pipe() of the http response observable, "this." is no longer this service, and thus if you try to reach any other functions defined in this service it won't work, thus I've had to explicity define all the functions I need in here. 
+    
+    return formatIt(asJsonLd);
+
+    function formatIt(platformIn): any {
+      const forApp = cloneDeep(platformIn);
+      delete forApp['@context'];
+      forApp.id = forApp['@id'];
+      if (forApp['@type']) {
+        forApp.type = forApp['@type'];
+      }
+      if (forApp.hosts) {
+        forApp.hosts = formatHosts(forApp.hosts);
+      }
+      return forApp;
+    }
+
+    function formatHosts(hosts: any[]): any[] {
+      // I.e. recursively run through the hosts array, and format it depending on whether it's a platform or a sensor
+      const formatted = hosts.map((hostee) => {
+        const type = hostee['@type'];
+        if (type === 'Platform') {
+          return formatIt(hostee); 
+        } else if (type === 'Sensor') {
+          return formatHosteeSensor(hostee);
+        } else {
+          throw new Error(`Unexpected hostee type: '${type}'`);
+        }
+      })
+      return formatted;
+    }
+
+    function formatHosteeSensor(asJsonLd) {
+      const forApp = cloneDeep(asJsonLd);
+      delete forApp['@context'];
+      forApp.id = forApp['@id'];
+      if (forApp['@type']) forApp.type = forApp['@type'];
+      return forApp;
+    }
+
   }
+
+
+
+  
 
 }
 

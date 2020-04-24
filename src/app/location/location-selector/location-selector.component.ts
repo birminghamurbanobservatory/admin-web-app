@@ -5,6 +5,7 @@ import {FormControl} from '@angular/forms';
 import {filter, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import {cloneDeep} from 'lodash';
+import booleanClockwise from '@turf/boolean-clockwise';
 
 @Component({
   selector: 'uo-location-selector',
@@ -291,16 +292,21 @@ export class LocationSelectorComponent implements OnInit {
     if (this.currentMapShapeType === 'polygon') {
       geoJsonGeometry.type = 'Polygon'
       // A polygon has an extra level of array nesting than a polyline
-      // If you want to allow donut shapes then you'd need to any secondary paths you allow to be drawn to be pushed into this array too.
+      // If you want to allow donut shapes then you'd need any secondary paths you allow to be drawn to be pushed into this array too.
       geoJsonGeometry.coordinates = [
         this.currentMapShape.getPath().getArray().map((point) => {
           return [point.lng(), point.lat()];
         })
-      ];
+      ]; 
       // You also need to repeat the first coordinate at the end for it to be valid a GeoJSON Polygon (using forEach means this can support donut shapes if we ever allow the map drawing itself to do so).
       geoJsonGeometry.coordinates.forEach((path, idx) => {
         geoJsonGeometry.coordinates[idx].push(geoJsonGeometry.coordinates[idx][0])
       })
+      // If the polygon was drawn in a clockwise direction then we'll need to reverse the order to make sure it conforms to the GeoJSON right-hand rule.
+      if (booleanClockwise(geoJsonGeometry.coordinates[0])) {
+        this.logger.debug('Reversing coordinates');
+        geoJsonGeometry.coordinates[0].reverse();
+      }
     }
 
     if (this.currentMapShapeType === 'polyline') {

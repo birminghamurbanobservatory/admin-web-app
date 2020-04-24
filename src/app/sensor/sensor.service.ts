@@ -21,7 +21,7 @@ export class SensorService {
 
 
   getSensors(
-    where: {id?: any; permanentHost?: string; inDeployment?: any; isHostedBy?: any} = {}, 
+    where: {id?: any; permanentHost?: string; hasDeployment?: any; isHostedBy?: any} = {}, 
     options: {limit?: number; offset?: number} = {}
   ): Observable<{data: Sensor[], meta: CollectionMeta}> {
     const qs = this.utilsService.whereToQueryString(Object.assign({}, where, options));
@@ -71,6 +71,7 @@ export class SensorService {
     const forApp = cloneDeep(asJsonLd);
     delete forApp['@context'];
     forApp.id = forApp['@id'];
+    if (forApp['@type']) forApp.type = forApp['@type'];
     return forApp;
   }
 

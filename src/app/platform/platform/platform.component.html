@@ -80,6 +80,21 @@
   </div>
 
 
+  <div *ngIf="platform.hosts && platform.hosts.length > 0">
+    <h4 class="detail__title">Hosts</h4>
+    <ul>
+      <li *ngFor="let hostee of platform.hosts">
+        <span *ngIf="hostee.type === 'Sensor'">
+          Sensor: <a [routerLink]="['/sensors/view', hostee.id]">{{hostee.name || hostee.id}}</a>
+        </span>
+        <span *ngIf="hostee.type === 'Platform'">
+          Platform: <a [routerLink]="['/platforms/view', hostee.id]">{{hostee.name || hostee.id}}</a>
+        </span>
+      </li>
+    </ul>
+  </div>
+
+
   <div fxLayout="row" fxLayoutAlign="space-around">
 
     <a [routerLink]="['/platforms/edit', platform.id]" mat-raised-button color="primary" class="btn--m-5">

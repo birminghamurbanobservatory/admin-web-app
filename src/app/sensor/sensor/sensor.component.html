@@ -16,10 +16,10 @@
   </div>
 
   <div class="detail">
-    <h4 class="detail__title">In Deployment</h4>
+    <h4 class="detail__title">Has Deployment</h4>
     <p class="detail__value">
-      <a *ngIf="sensor.inDeployment" [routerLink]="['/deployments/view', sensor.inDeployment]">{{sensor.inDeployment}}</a>
-      <span *ngIf="!sensor.inDeployment">Currently unassigned</span>
+      <a *ngIf="sensor.hasDeployment" [routerLink]="['/deployments/view', sensor.hasDeployment]">{{sensor.hasDeployment}}</a>
+      <span *ngIf="!sensor.hasDeployment">Currently unassigned</span>
     </p>
   </div>
 

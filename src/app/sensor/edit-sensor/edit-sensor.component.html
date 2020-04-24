@@ -24,7 +24,7 @@
           </mat-form-field>
 
           <mat-form-field class="form__field--max-width">
-            <input type="text" placeholder="In Deployment" matInput formControlName="inDeployment" [matAutocomplete]="autoDep">
+            <input type="text" placeholder="Has Deployment" matInput formControlName="hasDeployment" [matAutocomplete]="autoDep">
             <mat-autocomplete #autoDep="matAutocomplete">
               <mat-option *ngFor="let deploymentChoice of deploymentChoices" [value]="deploymentChoice.id">
                 {{deploymentChoice.id}}

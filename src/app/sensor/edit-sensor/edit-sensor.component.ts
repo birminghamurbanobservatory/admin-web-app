@@ -73,8 +73,8 @@ export class EditSensorComponent implements OnInit {
         description: [
           sensor.description || ''
         ],
-        inDeployment: [
-          sensor.inDeployment || ''
+        hasDeployment: [
+          sensor.hasDeployment || ''
         ],
         permanentHost: [
           sensor.permanentHost || ''
@@ -89,8 +89,8 @@ export class EditSensorComponent implements OnInit {
 
   onChanges() {
 
-    // autocomplete for the inDeployment
-    this.editSensorForm.get('inDeployment').valueChanges
+    // autocomplete for the hasDeployment
+    this.editSensorForm.get('hasDeployment').valueChanges
     .pipe(
       filter((value: string) => value.length > 2),
       debounceTime(400),
@@ -154,7 +154,7 @@ export class EditSensorComponent implements OnInit {
       cleanedUpdates.currentConfig = cleanedUpdates.currentConfig.map(this.stripIdFromObject);
     }
 
-    const keysToNullOrRemove = ['name', 'permanentHost', 'inDeployment'];
+    const keysToNullOrRemove = ['name', 'permanentHost', 'hasDeployment'];
     keysToNullOrRemove.forEach((key) => {  
       if (cleanedUpdates[key] === '') {
         if (this.sensor[key]) {
