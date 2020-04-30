@@ -39,7 +39,7 @@ export class CreatePlatformComponent implements OnInit {
       description: '',
       static: true,
       // N.B. this snapshot approach is fine as long as you never reuse the component, i.e. you always naviagate to another component before coming back to this one, e.g. with a different permanentHost.
-      ownerDeployment: [this.route.snapshot.paramMap.get('ownerDeployment') || '', Validators.required],
+      inDeployment: [this.route.snapshot.paramMap.get('inDeployment') || '', Validators.required],
       isHostedBy: [this.route.snapshot.paramMap.get('isHostedBy') || '']
     });
 
@@ -49,7 +49,7 @@ export class CreatePlatformComponent implements OnInit {
 
   listenForImportantChanges() {
 
-    this.createPlatformForm.get('ownerDeployment').valueChanges
+    this.createPlatformForm.get('inDeployment').valueChanges
     .pipe(
       filter((value: string) => value.length > 1),
       debounceTime(400),
@@ -68,7 +68,7 @@ export class CreatePlatformComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((value: string) => this.platformService.getPlatforms({id: {begins: value}}))
     )
-    .subscribe(platforms => {
+    .subscribe(({data: platforms}) => {
       this.hostPlatformChoices = platforms;
       this.logger.debug(platforms);
     });

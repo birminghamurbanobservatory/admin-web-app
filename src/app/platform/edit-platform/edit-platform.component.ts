@@ -101,7 +101,7 @@ export class EditPlatformComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((value: string) => this.platformService.getPlatforms({id: {begins: value}}))
     )
-    .subscribe(platforms => {
+    .subscribe(({data: platforms}) => {
       this.hostPlatformChoices = platforms;
       this.logger.debug(platforms);
     });
@@ -126,7 +126,6 @@ export class EditPlatformComponent implements OnInit {
     // We'll then need to get the details of all these sensors, i.e. sensor documents not context documents.
 
   }
-
 
 
   onLocationSelection(geometry) {

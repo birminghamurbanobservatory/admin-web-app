@@ -110,7 +110,7 @@ export class EditSensorComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((value: string) => this.permanentHostService.getPermanentHosts({id: {begins: value}}))
     )
-    .subscribe(permanentHosts => {
+    .subscribe(({data: permanentHosts}) => {
       this.permanentHostChoices = permanentHosts;
       this.logger.debug(permanentHosts);
     });

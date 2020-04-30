@@ -13,18 +13,9 @@
   </div>
 
   <div class="detail">
-    <h4 class="detail__title">Owner Deployment</h4>
+    <h4 class="detail__title">In Deployment</h4>
     <p class="detail__value">
-      <a [routerLink]="['/deployments/view', platform.ownerDeployment]">{{platform.ownerDeployment}}</a>
-    </p>
-  </div>
-
-  <div class="detail">
-    <h4 class="detail__title">Used by deployments</h4>
-    <p class="detail__value">
-      <span *ngFor="let deploymentId of platform.inDeployments">
-        <a [routerLink]="['/deployments/view', deploymentId]">{{deploymentId}}, </a>
-      </span>
+      <a [routerLink]="['/deployments/view', platform.inDeployment]">{{platform.inDeployment}}</a>
     </p>
   </div>
 

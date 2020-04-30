@@ -125,7 +125,7 @@ export class PlatformsComponent implements OnInit {
     }
     const inDeployment = this.optionsForm.get('inDeployment').value;
     if (check.nonEmptyString(inDeployment)) {
-      where.inDeployments = {includes: inDeployment};
+      where.inDeployment = inDeployment;
     }
 
     const nestValue = this.optionsForm.get('nest').value;

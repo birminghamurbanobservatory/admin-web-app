@@ -3,8 +3,7 @@ export class Platform {
   id?: string;
   name: string;
   description?: string;
-  ownerDeployment?: string;
-  inDeployments?: string[];
+  inDeployment?: string;
   isHostedBy?: string;
   ancestorPlatforms?: string[];
   static?: boolean;
