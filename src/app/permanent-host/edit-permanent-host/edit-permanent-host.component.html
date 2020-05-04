@@ -15,8 +15,8 @@
         
         <form class="form--max-width-600" [formGroup]="editPermanentHostForm" (ngSubmit)="onSubmit(editPermanentHostForm.value)" fxLayout="column" fxLayoutGap="15px">
           
-          <mat-form-field class="form__field--max-width" hintLabel="Max 40 characters">
-            <input matInput id="permanent-host-name" type="text" formControlName="name" maxlength="40" placeholder="Name">
+          <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
+            <input matInput id="permanent-host-name" type="text" formControlName="name" maxlength="44" placeholder="Name">
             <mat-error *ngIf="editPermanentHostForm.get('name').errors && editPermanentHostForm.get('name').errors.required">
               Name is required
             </mat-error>

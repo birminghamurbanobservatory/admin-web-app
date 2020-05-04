@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {timer, Observable, throwError} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import {timer, Observable, throwError, Subject} from 'rxjs';
+import {catchError, takeUntil} from 'rxjs/operators';
 import {FormBuilder, Validators} from '@angular/forms';
 import {PermanentHostService} from '../permanent-host.service';
 import {UtilsService} from 'src/app/utils/utils.service';
@@ -12,12 +12,13 @@ import {UoLoggerService} from 'src/app/utils/uo-logger.service';
   templateUrl: './create-permanent-host.component.html',
   styleUrls: ['./create-permanent-host.component.css']
 })
-export class CreatePermanentHostComponent implements OnInit {
+export class CreatePermanentHostComponent implements OnInit, OnDestroy {
 
   createPermanentHostForm;
   createErrorMessage = '';
   state = 'pending';
   createdPermanentHost: PermanentHost;
+  private unsubscribe$ = new Subject();
 
   constructor(
     private permanentHostService: PermanentHostService,
@@ -29,12 +30,32 @@ export class CreatePermanentHostComponent implements OnInit {
   ngOnInit() {
 
     this.createPermanentHostForm = this.fb.group({
-      name: ['', Validators.required],
       id: ['', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
+      name: '',
       description: '',
       static: false
     });
 
+    // Begin by setting the form as invalid, because neither the id or name has been specified yet.
+    // We need to use setTimeout here to wait till the next 'tick' otherwise the form validation won't have had a chance to run.
+    setTimeout(() => {
+      this.createPermanentHostForm.setErrors({invalid: true});
+    })
+
+    this.listenForFormChanges();
+
+  }
+
+
+  listenForFormChanges() {
+    this.createPermanentHostForm.valueChanges
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((values) => {
+      if (values.id === '' && values.name === '') {
+        this.logger.debug('Form is currently invalid because neither an id or name is given');
+        this.createPermanentHostForm.setErrors({invalid: true});
+      }
+    });
   }
 
 
@@ -73,6 +94,12 @@ export class CreatePermanentHostComponent implements OnInit {
 
   briefDelay(): Observable<number> {
     return timer(1400);
+  }
+
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
 
