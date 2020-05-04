@@ -22,14 +22,14 @@
           <textarea matInput id="description" formControlName="description" maxlength="1000" placeholder="Description" rows="3"></textarea>
         </mat-form-field>
 
-        <mat-form-field class="form__field--max-width" hintLabel="{{hostOrDep === 'dep' ? 'cannot be set when Has Deployment is set' : 'begin typing its id'}}">
+        <mat-form-field class="form__field--max-width" hintLabel="{{hostOrDep === 'dep' ? 'cannot be set when Has Deployment is set' : 'enter an id to select an existing host, or create a new one.'}}">
           <input type="text" placeholder="Permanent Host" matInput formControlName="permanentHost" [matAutocomplete]="autoPermHost">
           <mat-autocomplete #autoPermHost="matAutocomplete">
             <mat-option *ngFor="let permanentHostChoice of permanentHostChoices" [value]="permanentHostChoice.id">
               {{permanentHostChoice.id}}
             </mat-option>
           </mat-autocomplete>
-        </mat-form-field> 
+        </mat-form-field>
 
         <mat-form-field class="form__field--max-width" hintLabel="{{hostOrDep === 'host' ? 'cannot be set when Permanent Host is set' : 'begin typing its id'}}">
           <input type="text" placeholder="Has Deployment" matInput formControlName="hasDeployment" [matAutocomplete]="autoDep">
@@ -67,11 +67,19 @@
           </button>
         </div>
 
-        <div *ngIf="createErrorMessage" fxLayout="row" fxLayoutAlign="center">
-          <p class="text--warn">{{createErrorMessage}}</p>
-        </div>
-
       </form>  
+
+      <div *ngIf="createErrorMessage" fxLayout="row" fxLayoutAlign="center">
+        <p class="text--warn">{{createErrorMessage}}</p>
+      </div>
+
+      <div *ngIf="createdSensor">
+        <p>View sensor <a [routerLink]="['/sensors/view', createdSensor.id]">{{createdSensor.name}}</a></p>
+      </div>
+
+      <div *ngIf="createdPermanentHost">
+        <p>View permanent host <a [routerLink]="['/permanent-hosts/view', createdPermanentHost.id]">{{createdPermanentHost.name}}</a></p>
+      </div>
 
     </mat-card>  
 
