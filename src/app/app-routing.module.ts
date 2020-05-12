@@ -39,6 +39,11 @@ const routes: Routes = [
     canActivate: [AuthGuard] // canLoad is probably better here, but I'm struggling to implement it
   },  
   {
+    path: 'procedures',
+    loadChildren: () => import('./procedure/procedure.module').then(m => m.ProcedureModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'account',
     loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
     canActivate: [AuthGuard]

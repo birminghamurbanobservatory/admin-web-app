@@ -1,0 +1,85 @@
+<div class="container container--padded-top container--padded-bottom">
+
+  <div fxLayout="row" fxLayoutAlign="center">
+
+    <mat-card class="card--max-width-600">
+
+      <div *ngIf="getState === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner></mat-spinner>
+        <p>Getting details for procedure <em>{{procedureId}}</em></p>
+      </div>
+
+      <div *ngIf="getState === 'got' && procedure">
+
+        <h3>Editing {{procedure.id}}</h3>
+        
+        <form class="form--max-width-600" [formGroup]="editProcedureForm" (ngSubmit)="onSubmit(editProcedureForm.value)" fxLayout="column" fxLayoutGap="15px">
+
+          <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
+            <input matInput id="procedure-label" type="text" formControlName="label" maxlength="44" placeholder="Label">
+            <mat-error *ngIf="editProcedureForm.get('label').errors && editProcedureForm.get('label').errors.required">
+              Label is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="form__field--max-width">
+            <textarea matInput id="comment" formControlName="comment" maxlength="1000" placeholder="Comment (optional)" rows="3"></textarea>
+          </mat-form-field>
+
+          <mat-radio-group aria-label="Listed or Unlisted" formControlName="listed">
+            <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="20px">
+              <mat-radio-button [value]="true">Listed</mat-radio-button>
+              <mat-radio-button [value]="false">Unlisted</mat-radio-button>
+            </div>
+          </mat-radio-group>
+
+          <mat-slide-toggle formControlName="inCommonVocab" class="form__field--y-spaced">In Common Vocabulary</mat-slide-toggle>
+
+          <mat-form-field class="form__field--max-width" hintLabel="{{editProcedureForm.get('belongsToDeployment').value ? '' : 'start typing deployment ID'}}">
+            <input type="text" placeholder="Belongs to Deployment (optional)" matInput formControlName="belongsToDeployment" [matAutocomplete]="autoDep" id="in-deployment">
+            <mat-autocomplete #autoDep="matAutocomplete">
+              <mat-option *ngFor="let deploymentChoice of deploymentChoices" [value]="deploymentChoice.id">
+                {{deploymentChoice.id}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="editProcedureForm.get('belongsToDeployment').errors && editProcedureForm.get('belongsToDeployment').errors.required">
+              A deployment is required
+            </mat-error>
+          </mat-form-field>
+
+          <div fxLayout="row" fxLayoutAlign="center">
+            <button mat-raised-button color="accent" type="submit" [disabled]="editProcedureForm.invalid || updateState !== 'pending'">
+              <!-- Pending -->
+              <span *ngIf="updateState === 'pending'">Apply</span>
+              <!-- Updating -->
+              <div *ngIf="updateState === 'updating'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+                <span>Updating</span>
+                <mat-spinner diameter="18"></mat-spinner>
+              </div>
+              <!-- Updated -->
+              <div *ngIf="updateState === 'updated'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+                <span>Updated</span>
+                <mat-icon aria-hidden="true">done</mat-icon>
+              </div>
+              <!-- Failed -->
+              <div *ngIf="updateState === 'failed'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+                <span>Failed</span>
+                <mat-icon aria-hidden="true">close</mat-icon>
+              </div>
+            </button>
+          </div>
+
+          <div *ngIf="updateErrorMessage" fxLayout="row" fxLayoutAlign="center">
+            <p class="text--warn">{{updateErrorMessage}}</p>
+          </div>
+
+        </form>  
+
+      </div>
+
+
+    </mat-card>
+
+  </div>
+
+</div>

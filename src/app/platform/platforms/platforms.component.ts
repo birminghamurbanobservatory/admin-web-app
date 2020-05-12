@@ -22,8 +22,8 @@ export class PlatformsComponent implements OnInit {
   platforms: Platform[] = [];
   deployments: Deployment[] = [];
   meta: CollectionMeta;
-  limit = 10;
-  limitOptions = [1, 10, 50];
+  limit = 20;
+  limitOptions = [1, 20, 50];
   offset = 0;
   state = 'pending';
   getErrorMessage: string;

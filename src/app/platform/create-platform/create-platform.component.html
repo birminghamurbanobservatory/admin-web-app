@@ -21,14 +21,14 @@
         </mat-form-field>
 
         <mat-form-field class="form__field--max-width" hintLabel="{{createPlatformForm.get('inDeployment').value ? '' : 'start typing deployment ID'}}">
-          <input type="text" placeholder="Owned by deployment" matInput formControlName="inDeployment" [matAutocomplete]="autoDep" id="owner-deployment">
+          <input type="text" placeholder="In deployment" matInput formControlName="inDeployment" [matAutocomplete]="autoDep" id="in-deployment">
           <mat-autocomplete #autoDep="matAutocomplete">
             <mat-option *ngFor="let deploymentChoice of deploymentChoices" [value]="deploymentChoice.id">
               {{deploymentChoice.id}}
             </mat-option>
           </mat-autocomplete>
           <mat-error *ngIf="createPlatformForm.get('inDeployment').errors && createPlatformForm.get('inDeployment').errors.required">
-            An owner deployment is required
+            A deployment is required
           </mat-error>
         </mat-form-field>
 

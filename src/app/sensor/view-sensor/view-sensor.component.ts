@@ -13,7 +13,6 @@ import {Sensor} from '../sensor';
 })
 export class ViewSensorComponent implements OnInit {
 
-
   sensor: Sensor;
   sensorId: string;
   getState = 'getting';

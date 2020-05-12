@@ -1,17 +1,12 @@
 <div class="container container--padded-top container--padded-bottom">
 
-  <div fxLayout="row wrap">
-    <div fxFlex='100' fxFlex.gt-md="34" fxFlexOffset.gt-md="33" fxLayout="row" fxLayoutAlign="center">
-      <a [routerLink]="['./create']" mat-raised-button color="accent" class="btn--my-5">Create new sensor</a>
-    </div>
-    <div fxFlex='100' fxFlex.gt-md="33" fxLayout="row" fxLayoutAlign="center" fxLayoutAlign.gt-md="end">
-      <a [routerLink]="['/unknown-sensors']" mat-stroked-button color="primary" class="btn--my-5">View unknown sensors</a>
-    </div>
+  <div fxLayout="row" fxLayoutAlign="center">
+    <a [routerLink]="['./create']" mat-raised-button color="accent">Create new procedure</a>
   </div>
 
   <br><br><br>
 
-  <h2>Sensors</h2>
+  <h2>Procedures</h2>
 
   <div *ngIf="selectedPermanentHostId" fxLayout="row wrap" fxLayoutAlign="start center">
     <p class="para--equal-y-spacing">
@@ -26,13 +21,13 @@
     <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="30px">
 
       <mat-form-field class="form__field--y-spaced" hintLabel="top tip: enter whole words">
-        <input matInput id="sensor-search" type="search" formControlName="search" placeholder="search">
+        <input matInput id="procedure-search" type="search" formControlName="search" placeholder="search">
         <span matPrefix><mat-icon>search</mat-icon>&nbsp; &nbsp;</span>
       </mat-form-field>
 
       <mat-form-field *ngIf="deployments.length > 0" class="form__field--y-spaced">
         <mat-label>Filter by deployment</mat-label>
-        <mat-select formControlName="hasDeployment">
+        <mat-select formControlName="belongsToDeployment">
           <mat-option value="--all--">- All Deployments -</mat-option>
           <mat-option value="--none--">- Unassigned -</mat-option>
           <mat-option *ngFor="let deployment of deployments" [value]="deployment.id">
@@ -44,7 +39,7 @@
     </div>
   </form>
 
-  <div *ngIf="sensors.length > 0">
+  <div *ngIf="procedures.length > 0">
     <mat-paginator 
       [length]="meta.total"
       [pageSize]="limit"
@@ -58,33 +53,32 @@
 
   <div *ngIf="state === 'getting'" fxLayout="column" fxLayoutAlign="center center">
     <mat-spinner></mat-spinner>
-    <p>Getting Sensors</p>
+    <p>Getting Procedures</p>
   </div>
 
   <div *ngIf="state === 'failed'">
     <p class="text--warn">{{getErrorMessage}}</p>
   </div>  
 
-
   <div *ngIf="state === 'got'">
 
-    <div *ngIf="sensors.length > 0">
+    <div *ngIf="procedures.length > 0">
       <mat-accordion>
-        <mat-expansion-panel *ngFor="let sensor of sensors">
+        <mat-expansion-panel *ngFor="let procedure of procedures">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <strong>{{sensor.id}}</strong>
+              <strong>{{procedure.label}}</strong>
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <uo-sensor [sensor]="sensor" (deleted)="onDeleted($event)"></uo-sensor>
+          <uo-procedure [procedure]="procedure" (deleted)="onDeleted($event)"></uo-procedure>
           
         </mat-expansion-panel>
       </mat-accordion>
     </div>
 
-    <div *ngIf="sensors.length === 0" fxLayout="row" fxLayoutAlign="center">
-      <p>No sensors were found</p>
+    <div *ngIf="procedures.length === 0" fxLayout="row" fxLayoutAlign="center">
+      <p>No procedures were found</p>
     </div>  
 
   </div>

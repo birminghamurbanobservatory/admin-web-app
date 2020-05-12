@@ -1,0 +1,83 @@
+<div class="container container--padded-top">
+
+  <div fxLayout="row" fxLayoutAlign="center">
+
+    <mat-card class="card--max-width-600">
+
+      <form class="form--max-width-600" [formGroup]="createProcedureForm" (ngSubmit)="onSubmit(createProcedureForm.value)" fxLayout="column" fxLayoutGap="15px">
+
+        <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
+          <input matInput id="procedure-label" type="text" formControlName="label" maxlength="44" placeholder="Label">
+          <mat-error *ngIf="createProcedureForm.get('label').errors && createProcedureForm.get('label').errors.required">
+            Label is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form__field--max-width" hintLabel="Max 48 characters">
+          <input matInput id="procedure-id" type="text" formControlName="id" maxlength="48" placeholder="ID (optional)">
+          <mat-error *ngIf="createProcedureForm.get('id').errors && createProcedureForm.get('id').errors.pattern">
+            invalid format
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form__field--max-width">
+          <textarea matInput id="comment" formControlName="comment" maxlength="1000" placeholder="Comment (optional)" rows="3"></textarea>
+        </mat-form-field>
+
+        <mat-radio-group aria-label="Listed or Unlisted" formControlName="listed">
+          <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="20px">
+            <mat-radio-button [value]="true">Listed</mat-radio-button>
+            <mat-radio-button [value]="false">Unlisted</mat-radio-button>
+          </div>
+        </mat-radio-group>
+
+        <mat-form-field class="form__field--max-width" hintLabel="{{createProcedureForm.get('belongsToDeployment').value ? '' : 'start typing deployment ID'}}">
+          <input type="text" placeholder="Belongs to Deployment (optional)" matInput formControlName="belongsToDeployment" [matAutocomplete]="autoDep" id="in-deployment">
+          <mat-autocomplete #autoDep="matAutocomplete">
+            <mat-option *ngFor="let deploymentChoice of deploymentChoices" [value]="deploymentChoice.id">
+              {{deploymentChoice.id}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="createProcedureForm.get('belongsToDeployment').errors && createProcedureForm.get('belongsToDeployment').errors.required">
+            A deployment is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-slide-toggle formControlName="inCommonVocab" class="form__field--y-spaced">In Common Vocabulary</mat-slide-toggle>
+
+        <div fxLayout="row" fxLayoutAlign="center">
+          <button mat-raised-button color="accent" type="submit" [disabled]="createProcedureForm.invalid || state !== 'pending'">
+            <!-- Pending -->
+            <span *ngIf="state === 'pending'">Create</span>
+            <!-- Creating -->
+            <div *ngIf="state === 'creating'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+              <span>Creating</span>
+              <mat-spinner diameter="18"></mat-spinner>
+            </div>
+            <!-- Created -->
+            <div *ngIf="state === 'created'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+              <span>Created</span>
+              <mat-icon aria-hidden="true">done</mat-icon>
+            </div>
+            <!-- Failed -->
+            <div *ngIf="state === 'failed'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+              <span>Failed</span>
+              <mat-icon aria-hidden="true">close</mat-icon>
+            </div>
+          </button>
+        </div>
+
+        <div *ngIf="createErrorMessage" fxLayout="row" fxLayoutAlign="center">
+          <p class="text--warn">{{createErrorMessage}}</p>
+        </div>
+
+      </form>  
+
+    </mat-card>  
+
+  </div>
+
+</div>
+
+
+<br><br><br>

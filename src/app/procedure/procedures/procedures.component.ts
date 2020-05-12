@@ -1,26 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import {SensorService} from '../sensor.service';
-import {Sensor} from '../sensor';
-import {catchError, switchMap, debounceTime, distinctUntilChanged} from 'rxjs/operators';
-import {throwError} from 'rxjs';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {UoLoggerService} from 'src/app/utils/uo-logger.service';
-import {FormBuilder} from '@angular/forms';
-import {CollectionMeta} from 'src/app/shared/collection-meta';
+import {Procedure} from '../procedure';
 import {Deployment} from 'src/app/deployment/deployment';
-import * as check from 'check-types';
+import {CollectionMeta} from 'src/app/shared/collection-meta';
+import {ProcedureService} from '../procedure.service';
 import {DeploymentService} from 'src/app/deployment/deployment.service';
+import {UoLoggerService} from 'src/app/utils/uo-logger.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder} from '@angular/forms';
+import * as check from 'check-types';
+import {debounceTime, distinctUntilChanged, catchError} from 'rxjs/operators';
+import {throwError} from 'rxjs';
 
 @Component({
-  selector: 'uo-sensors',
-  templateUrl: './sensors.component.html',
-  styleUrls: ['./sensors.component.css']
+  selector: 'uo-procedures',
+  templateUrl: './procedures.component.html',
+  styleUrls: ['./procedures.component.css']
 })
-export class SensorsComponent implements OnInit {
+export class ProceduresComponent implements OnInit {
 
-  sensors: Sensor[] = [];
+  procedures: Procedure[] = [];
   deployments: Deployment[] = [];
-  selectedPermanentHostId: string;
   getErrorMessage: string;
   state = 'getting';
   meta: CollectionMeta;
@@ -30,7 +29,7 @@ export class SensorsComponent implements OnInit {
   optionsForm;
 
   constructor(
-    private sensorService: SensorService,
+    private procedureService: ProcedureService,
     private deploymentService: DeploymentService,
     private logger: UoLoggerService,
     private route: ActivatedRoute,
@@ -43,7 +42,7 @@ export class SensorsComponent implements OnInit {
     // Set some defaults, and any validators.
     this.optionsForm = this.fb.group({
       search: '',
-      hasDeployment: '--all--'
+      belongsToDeployment: '--all--'
     });
 
     this.deploymentService.getDeployments().subscribe(({data: deployments}) => {
@@ -54,8 +53,7 @@ export class SensorsComponent implements OnInit {
       this.logger.debug('Query string parameters', params)
       // Update form values using these query parameters
       if (check.nonEmptyString(params.search)) this.optionsForm.controls['search'].setValue(params.search, {emitEvent: false});
-      if (check.nonEmptyString(params.hasDeployment)) this.optionsForm.controls['hasDeployment'].setValue(params.hasDeployment, {emitEvent: false});
-      if (check.nonEmptyString(params.permanentHost)) this.selectedPermanentHostId = params.permanentHost;
+      if (check.nonEmptyString(params.belongsToDeployment)) this.optionsForm.controls['belongsToDeployment'].setValue(params.belongsToDeployment, {emitEvent: false});
       if (check.assigned(params.limit)) this.limit = params.limit;
       if (check.assigned(params.offset)) this.offset = params.offset;
 
@@ -86,12 +84,12 @@ export class SensorsComponent implements OnInit {
       });
     })
 
-    this.optionsForm.get('hasDeployment').valueChanges.subscribe((newValue) => {
-      this.logger.debug(`New hasDeployment value from form: ${newValue}`);
+    this.optionsForm.get('belongsToDeployment').valueChanges.subscribe((newValue) => {
+      this.logger.debug(`New belongsToDeployment value from form: ${newValue}`);
       const valueForRouter = check.nonEmptyString(newValue) ? newValue : undefined;
       // Update the url query parameters
       this.router.navigate([], {
-        queryParams: {hasDeployment:  valueForRouter},
+        queryParams: {belongsToDeployment:  valueForRouter},
         queryParamsHandling: 'merge', // keeps any existing query parameters
         relativeTo: this.route
       });
@@ -108,17 +106,13 @@ export class SensorsComponent implements OnInit {
     if (check.nonEmptyString(searchText)) {
       where.search = searchText;
     }
-    const hasDeployment = this.optionsForm.get('hasDeployment').value;
-    if (hasDeployment === '--all--') {
+    const belongsToDeployment = this.optionsForm.get('belongsToDeployment').value;
+    if (belongsToDeployment === '--all--') {
       // do nothing
-    } else if (hasDeployment === '--none--') {
-      where.hasDeployment = {exists: false};
-    } else if (check.nonEmptyString(hasDeployment)) {
-      where.hasDeployment = hasDeployment
-    }
-
-    if (check.nonEmptyString(this.selectedPermanentHostId)) {
-      where.permanentHost = this.selectedPermanentHostId;
+    } else if (belongsToDeployment === '--none--') {
+      where.belongsToDeployment = {exists: false};
+    } else if (check.nonEmptyString(belongsToDeployment)) {
+      where.belongsToDeployment = belongsToDeployment
     }
 
     const options = {
@@ -126,7 +120,7 @@ export class SensorsComponent implements OnInit {
       offset: this.offset
     };
 
-    this.sensorService.getSensors(where, options)
+    this.procedureService.getProcedures(where, options)
     .pipe(
       catchError((err) => {
         this.getErrorMessage = err.message;
@@ -134,22 +128,11 @@ export class SensorsComponent implements OnInit {
         return throwError(err);
       })
     )
-    .subscribe(({data: sensors, meta}) => {
-      this.sensors = sensors;
+    .subscribe(({data: procedures, meta}) => {
+      this.procedures = procedures;
       this.meta = meta;
       this.state = 'got';
     })
-  }
-
-
-  clearPermanentHost() {
-    this.logger.debug('Clearing permanent host');
-    this.selectedPermanentHostId = undefined;
-    this.router.navigate([], {
-      queryParams: {permanentHost:  undefined},
-      queryParamsHandling: 'merge', // keeps any existing query parameters
-      relativeTo: this.route
-    });
   }
 
 
@@ -176,9 +159,9 @@ export class SensorsComponent implements OnInit {
   }
 
 
-  onDeleted(sensorId: string) {
-    this.logger.debug(`The SensorsComponent is aware that the sensor ${sensorId} has been deleted.`)
-    this.sensors = this.sensors.filter((sensor) => sensor.id !== sensorId);
+  onDeleted(procedureId: string) {
+    this.logger.debug(`${this.constructor.name} is aware that ${procedureId} has been deleted.`)
+    this.procedures = this.procedures.filter((procedure) => procedure.id !== procedureId);
   }
 
 
