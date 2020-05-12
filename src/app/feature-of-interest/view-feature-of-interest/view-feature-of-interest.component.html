@@ -1,0 +1,27 @@
+<div class="container container--padded-top container--padded-bottom">
+
+  <mat-card>
+
+    <div *ngIf="deleteState === 'pending'">
+      <div *ngIf="getState === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner></mat-spinner>
+        <p>Getting Feature of Interest {{featureOfInterestId}}</p>
+      </div>
+
+      <div *ngIf="getState === 'failed' && getErrorMessage" fxLayout="row" fxLayoutAlign="center">
+        <p class="text--warn">{{getErrorMessage}}</p>
+      </div>
+
+      <div *ngIf="getState === 'got' && featureOfInterest">
+        <uo-featureOfInterest [featureOfInterest]="featureOfInterest" (deleted)="onDeleted($event)"></uo-featureOfInterest>
+      </div>
+    </div>
+
+    <div *ngIf="deleteState === 'deleted'" fxLayout="column" fxLayoutAlign="center center">
+      <p>FeatureOfInterest <em>{{featureOfInterest.id}}</em> has been deleted.</p>
+      <a mat-stroked-button color="primary" [routerLink]="['/features-of-interest']">Return to all featuresOfInterest</a>
+    </div>
+
+  </mat-card>
+
+</div>

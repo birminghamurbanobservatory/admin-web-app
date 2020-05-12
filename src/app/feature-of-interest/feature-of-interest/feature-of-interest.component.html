@@ -1,0 +1,61 @@
+<div>
+  
+  <div class="detail">
+    <h4 class="detail__title">ID</h4>
+    <p class="detail__value"><a [routerLink]="['/features-of-interest/view', featureOfInterest.id]">{{featureOfInterest.id}}</a></p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Label</h4>
+    <p class="detail__value">{{featureOfInterest.label}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Listed/Unlisted</h4>
+    <p class="detail__value">{{featureOfInterest.listed ? 'Listed' : 'Unlisted'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">In Common Vocabulary</h4>
+    <p class="detail__value">{{featureOfInterest.inCommonVocab ? 'Yes' : 'No'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Belongs to Deployment</h4>
+    <p class="detail__value">{{featureOfInterest.belongsToDeployment ? featureOfInterest.belongsToDeployment : 'None'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Comments</h4>
+    <p class="detail__value">{{featureOfInterest.comment || 'none'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Created</h4>
+    <p class="detail__value">{{featureOfInterest.createdAt| date:'long'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Last updated</h4>
+    <p class="detail__value">{{featureOfInterest.updatedAt| date:'long'}}</p>
+  </div>
+
+
+  <div fxLayout="row wrap" fxLayoutAlign="space-around">
+
+    <a [routerLink]="['/features-of-interest/edit', featureOfInterest.id]" mat-raised-button color="primary" class="btn--m-5">
+      <mat-icon aria-label="edit">edit</mat-icon> Edit
+    </a>
+
+    <button mat-raised-button color="warn" (click)="deleteButtonClicked()" class="btn--m-5">
+      <span *ngIf="state === 'pending'">
+        Delete
+      </span>
+      <div *ngIf="state === 'deleting'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+        <span>Deleting</span>
+        <mat-spinner diameter="18"></mat-spinner>
+      </div>
+    </button>
+  </div>
+
+</div>

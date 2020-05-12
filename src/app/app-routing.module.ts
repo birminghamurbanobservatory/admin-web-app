@@ -44,6 +44,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'features-of-interest',
+    loadChildren: () => import('./feature-of-interest/feature-of-interest.module').then(m => m.FeatureOfInterestModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'account',
     loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
     canActivate: [AuthGuard]
