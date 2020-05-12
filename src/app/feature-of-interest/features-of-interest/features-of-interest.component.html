@@ -8,15 +8,6 @@
 
   <h2>Features of Interest</h2>
 
-  <div *ngIf="selectedPermanentHostId" fxLayout="row wrap" fxLayoutAlign="start center">
-    <p class="para--equal-y-spacing">
-      on permanent host: {{selectedPermanentHostId}}
-    </p>
-    <button mat-icon-button color="accent" type="button" (click)="clearPermanentHost()">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-
   <form [formGroup]="optionsForm">
     <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="30px">
 
