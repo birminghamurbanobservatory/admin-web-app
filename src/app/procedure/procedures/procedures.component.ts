@@ -42,7 +42,9 @@ export class ProceduresComponent implements OnInit {
     // Set some defaults, and any validators.
     this.optionsForm = this.fb.group({
       search: '',
-      belongsToDeployment: '--all--'
+      belongsToDeployment: '--all--',
+      listed: 'all',
+      inCommonVocab: 'all'
     });
 
     this.deploymentService.getDeployments().subscribe(({data: deployments}) => {
@@ -54,10 +56,16 @@ export class ProceduresComponent implements OnInit {
       // Update form values using these query parameters
       if (check.nonEmptyString(params.search)) this.optionsForm.controls['search'].setValue(params.search, {emitEvent: false});
       if (check.nonEmptyString(params.belongsToDeployment)) this.optionsForm.controls['belongsToDeployment'].setValue(params.belongsToDeployment, {emitEvent: false});
+      const listedValue = params.listed;
+      if (listedValue === 'true') this.optionsForm.controls['listed'].setValue('listed', {emitEvent: false});
+      if (listedValue === 'false') this.optionsForm.controls['listed'].setValue('unlisted', {emitEvent: false});
+      const inCommonVocabValue = params.inCommonVocab;
+      if (inCommonVocabValue === 'true') this.optionsForm.controls['inCommonVocab'].setValue('in', {emitEvent: false});
+      if (inCommonVocabValue === 'false') this.optionsForm.controls['inCommonVocab'].setValue('not-in', {emitEvent: false});
       if (check.assigned(params.limit)) this.limit = params.limit;
       if (check.assigned(params.offset)) this.offset = params.offset;
 
-      this.getSensors();
+      this.getProcedures();
     });
 
     this.listenForOptionChanges()
@@ -95,10 +103,40 @@ export class ProceduresComponent implements OnInit {
       });
     })
 
+    this.optionsForm.get('listed').valueChanges.subscribe((newValue) => {
+      this.logger.debug(`New listed value from form: ${newValue}`);
+      const mappings = {
+        'all': undefined,
+        'listed': true,
+        'unlisted': false
+      };
+      // Update the url query parameters
+      this.router.navigate([], {
+        queryParams: {listed:  mappings[newValue]},
+        queryParamsHandling: 'merge', // keeps any existing query parameters
+        relativeTo: this.route
+      });
+    })
+
+    this.optionsForm.get('inCommonVocab').valueChanges.subscribe((newValue) => {
+      this.logger.debug(`New listed value from form: ${newValue}`);
+      const mappings = {
+        'all': undefined,
+        'in': true,
+        'not-in': false
+      };
+      // Update the url query parameters
+      this.router.navigate([], {
+        queryParams: {inCommonVocab:  mappings[newValue]},
+        queryParamsHandling: 'merge', // keeps any existing query parameters
+        relativeTo: this.route
+      });
+    })
+
   }
 
 
-  getSensors() {
+  getProcedures() {
     this.state = 'getting';
 
     const where: any = {};
@@ -114,6 +152,14 @@ export class ProceduresComponent implements OnInit {
     } else if (check.nonEmptyString(belongsToDeployment)) {
       where.belongsToDeployment = belongsToDeployment
     }
+
+    const listed = this.optionsForm.get('listed').value;
+    if (listed === 'listed') where.listed = true;
+    if (listed === 'unlisted') where.listed = false;
+
+    const inCommonVocab = this.optionsForm.get('inCommonVocab').value;
+    if (inCommonVocab === 'in') where.inCommonVocab = true;
+    if (inCommonVocab === 'not-in') where.inCommonVocab = false;
 
     const options = {
       limit: this.limit,

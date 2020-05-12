@@ -20,7 +20,7 @@
   <form [formGroup]="optionsForm">
     <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="30px">
 
-      <mat-form-field class="form__field--y-spaced" hintLabel="top tip: enter whole words">
+      <mat-form-field class="form__field--y-spaced" hintLabel="tip: enter whole words">
         <input matInput id="procedure-search" type="search" formControlName="search" placeholder="search">
         <span matPrefix><mat-icon>search</mat-icon>&nbsp; &nbsp;</span>
       </mat-form-field>
@@ -33,6 +33,22 @@
           <mat-option *ngFor="let deployment of deployments" [value]="deployment.id">
             {{deployment.name}}
           </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="form__field--y-spaced">
+        <mat-select formControlName="listed">
+          <mat-option value="all">Listed and Unlisted</mat-option>
+          <mat-option value="listed">Listed Only</mat-option>
+          <mat-option value="unlisted">Unlisted Only</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="form__field--y-spaced">
+        <mat-select formControlName="inCommonVocab">
+          <mat-option value="all">All Vocabularies</mat-option>
+          <mat-option value="in">In Common Vocabulary</mat-option>
+          <mat-option value="not-in">Not In Common Vocabulary</mat-option>
         </mat-select>
       </mat-form-field>
 
