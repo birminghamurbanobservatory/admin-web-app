@@ -9,6 +9,7 @@ import { FeaturesOfInterestComponent } from './features-of-interest/features-of-
 import { CreateFeatureOfInterestComponent } from './create-feature-of-interest/create-feature-of-interest.component';
 import { ViewFeatureOfInterestComponent } from './view-feature-of-interest/view-feature-of-interest.component';
 import {EditFeatureOfInterestComponent} from './edit-feature-of-interest/edit-feature-of-interest.component';
+import {LocationSelectorComponent} from '../location/location-selector/location-selector.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {EditFeatureOfInterestComponent} from './edit-feature-of-interest/edit-fe
     EditFeatureOfInterestComponent, 
     CreateFeatureOfInterestComponent, 
     ViewFeatureOfInterestComponent,
-    DeleteFeatureOfInterestDialog
+    DeleteFeatureOfInterestDialog,
+    LocationSelectorComponent
   ],
   imports: [
     CommonModule,
