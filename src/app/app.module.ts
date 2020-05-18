@@ -13,7 +13,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 @NgModule({
   declarations: [
     AppComponent,
-    CallbackComponent,
+    CallbackComponent
   ],
   imports: [
     BrowserModule,

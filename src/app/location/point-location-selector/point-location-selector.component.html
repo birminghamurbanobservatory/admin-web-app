@@ -1,0 +1,31 @@
+<!-- map -->
+<div id={{uniqueMapId}} class="point-location-map"></div>
+
+<!-- autocomplete geocoder -->
+<mat-form-field class="form__field--max-width">
+  <input type="text" placeholder="Find address" matInput [formControl]="address" [matAutocomplete]="autoAddress" id="platform-address">
+  <mat-autocomplete #autoAddress="matAutocomplete" (optionSelected)="onAddressSelected()">
+    <mat-option *ngFor="let foundAddress of foundAddresses" [value]="foundAddress">
+      {{foundAddress.formatted_address}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+
+<form class="form--max-width-600" [formGroup]="coordinatesForm" fxLayout="row" fxLayout.sm="column" fxLayoutGap="15px">
+
+  <mat-form-field class="form__field--max-width">
+    <input matInput id="longitude" type="number" formControlName="lng" placeholder="Longitude">
+    <mat-error *ngIf="coordinatesForm.get('lng').errors && (coordinatesForm.get('lng').errors.min || coordinatesForm.get('lng').errors.max)">
+      Must be within the range -180° to 180°
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form__field--max-width">
+    <input matInput id="latitude" type="number" formControlName="lat" placeholder="Latitude">
+    <mat-error *ngIf="coordinatesForm.get('lat').errors && (coordinatesForm.get('lat').errors.min || coordinatesForm.get('lat').errors.max)">
+      Must be within the range -90° to 90°
+    </mat-error>
+  </mat-form-field>
+
+</form>

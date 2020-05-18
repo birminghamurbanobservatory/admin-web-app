@@ -1,0 +1,25 @@
+.point-location-map {
+   /* The default */
+  height: 400px;
+}
+
+/* Adjust the map size based on the screen height */
+@media (min-height: 0px) {
+	#point-location-map { height: 200px; }
+}
+
+@media (min-height: 500px) {
+	#point-location-map { height: 300px; }
+}
+
+@media (min-height: 600px) {
+	#point-location-map { height: 400px; }
+}
+
+@media (min-height: 700px) {
+	#point-location-map { height: 500px; }
+}
+
+@media (min-height: 800px) {
+	#point-location-map { height: 600px; }
+}

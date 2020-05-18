@@ -52,9 +52,13 @@
           </mat-autocomplete>
         </mat-form-field>
 
-        <uo-location-selector 
-          (onLocationSelection)="onLocationSelection($event)"
-        ></uo-location-selector>
+        <uo-point-location-selector 
+          (onPointLocationSelection)="onPointLocationSelection($event)"
+        ></uo-point-location-selector>
+
+        <mat-form-field class="form__field--max-width" hintLabel="in metres above ground">
+          <input matInput id="platform-height" type="number" formControlName="height" placeholder="Height (optional)">
+        </mat-form-field>
 
         <div fxLayout="row" fxLayoutAlign="center">
           <button mat-raised-button color="accent" type="submit" [disabled]="createPlatformForm.invalid || state !== 'pending'">

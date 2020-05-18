@@ -9,6 +9,9 @@ import {catchError, filter, debounceTime, distinctUntilChanged, switchMap} from 
 import {throwError, timer} from 'rxjs';
 import {Sensor} from 'src/app/sensor/sensor';
 import {Platform} from '../platform';
+import {PointLocation} from 'src/app/location/point-location-selector/point-location.interface';
+import * as check from 'check-types';
+import {isEqual} from 'lodash';
 
 @Component({
   selector: 'uo-edit-platform',
@@ -27,6 +30,7 @@ export class EditPlatformComponent implements OnInit {
   selectedGeometry;
   hostPlatformChoices: Platform[] = [];
   sensorChoices: Sensor[] = [];
+  pointLocation: PointLocation;
 
   constructor(
     private logger: UoLoggerService,
@@ -61,6 +65,15 @@ export class EditPlatformComponent implements OnInit {
     .subscribe((platform: Platform) => {
       this.logger.debug(platform);
 
+      let height;
+      if (platform.location) {
+        this.pointLocation = {
+          lng: platform.location.geometry.coordinates[0],
+          lat: platform.location.geometry.coordinates[1]
+        };
+        height = platform.location.geometry.coordinates[2]
+      }
+
       this.editPlatformForm = this.fb.group({
         name: [
           platform.name || '',
@@ -77,7 +90,11 @@ export class EditPlatformComponent implements OnInit {
         ],
         updateLocationWithSensor: [
           platform.updateLocationWithSensor || ''
-        ]
+        ],
+        height: {
+          value: check.number(height) ? height : null,
+          disabled: this.pointLocation ? false : true
+        }
       });
 
       this.getState = 'got';
@@ -128,10 +145,12 @@ export class EditPlatformComponent implements OnInit {
   }
 
 
-  onLocationSelection(geometry) {
+  onPointLocationSelection(location: PointLocation) {
     this.logger.debug('edit-platform component is aware of the location change');
-    this.logger.debug(geometry);
-    this.selectedGeometry = geometry;
+    this.logger.debug(location);
+    this.pointLocation = location;
+    // Can also enabled the height input if it wasn't already
+    this.editPlatformForm.controls['height'].enable();
   }
 
 
@@ -140,13 +159,29 @@ export class EditPlatformComponent implements OnInit {
     this.updateState = 'updating';
     this.updateErrorMessage = '';
 
-    // Add the location to the updates if it has been set/updated.
-    if (this.selectedGeometry) {
-      updates.location = {geometry: this.selectedGeometry}
-    }
-
     // If some of the properties haven't even changed then don't bother sending them to the server.
     const cleanedUpdates = this.utilsService.removeUnchangedUpdates(updates, this.platform);
+
+    // Add in the location and the height
+    if (this.pointLocation) {
+      const newCoordinates = [this.pointLocation.lng, this.pointLocation.lat];
+      // N.B. we can't include the height unless there's a location.
+      if (check.number(updates.height)) {
+        newCoordinates.push(updates.height);
+      }
+      // If this differs from the old coordinates then add the new location to our updates.
+      console.log(newCoordinates);
+      console.log(this.platform.location.geometry.coordinates);
+      if (!this.platform.location || !isEqual(newCoordinates, this.platform.location.geometry.coordinates)) {
+        cleanedUpdates.location = {
+          geometry: {
+            type: 'Point',
+            coordinates: newCoordinates
+          }
+        }
+      }
+    }
+    delete cleanedUpdates.height;
 
     const keysToNullOrRemove = ['isHostedBy', 'updateLocationWithSensor'];
     keysToNullOrRemove.forEach((key) => {  

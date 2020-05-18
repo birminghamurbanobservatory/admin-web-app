@@ -7,6 +7,8 @@ import {UtilsService} from 'src/app/utils/utils.service';
 import {catchError, filter, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {timer, throwError} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
+import {PointLocation} from 'src/app/location/point-location-selector/point-location.interface';
+import * as check from 'check-types';
 
 @Component({
   selector: 'uo-create-platform',
@@ -20,7 +22,7 @@ export class CreatePlatformComponent implements OnInit {
   state = 'pending';
   deploymentChoices = [];
   hostPlatformChoices = [];
-  selectedGeometry: any;
+  pointLocation: PointLocation;
 
   constructor(
     private platformService: PlatformService,
@@ -40,7 +42,8 @@ export class CreatePlatformComponent implements OnInit {
       static: true,
       // N.B. this snapshot approach is fine as long as you never reuse the component, i.e. you always naviagate to another component before coming back to this one, e.g. with a different permanentHost.
       inDeployment: [this.route.snapshot.paramMap.get('inDeployment') || '', Validators.required],
-      isHostedBy: [this.route.snapshot.paramMap.get('isHostedBy') || '']
+      isHostedBy: [this.route.snapshot.paramMap.get('isHostedBy') || ''],
+      height: [{value: null, disabled: true}] // should be disabled until a location is available
     });
 
     this.listenForImportantChanges();
@@ -76,10 +79,12 @@ export class CreatePlatformComponent implements OnInit {
   }
 
 
-  onLocationSelection(geometry) {
-    this.logger.debug('create-platform component is aware of the location change');
-    this.logger.debug(geometry);
-    this.selectedGeometry = geometry;
+  onPointLocationSelection(newLocation) {
+    this.logger.debug('create-platform component is aware of the point location change');
+    this.logger.debug(newLocation);
+    this.pointLocation = newLocation;
+    // We can also enable the height input now
+    this.createPlatformForm.controls['height'].enable();
   }
 
 
@@ -90,9 +95,22 @@ export class CreatePlatformComponent implements OnInit {
 
     const cleanedPlatform = this.utilsService.stripEmptyStrings(platformToCreate);
 
-    if (this.selectedGeometry) {
-      cleanedPlatform.location = {geometry: this.selectedGeometry}
+    // Add in the location and the height
+    if (this.pointLocation) {
+      cleanedPlatform.location = {
+        geometry: {
+          type: 'Point',
+          coordinates: [this.pointLocation.lng, this.pointLocation.lat]
+        }
+      }
+      // N.B. we can't include the height unless there's a location.
+      if (check.number(cleanedPlatform.height)) {
+        cleanedPlatform.location.geometry.coordinates.push(cleanedPlatform.height);
+      }
     }
+    delete cleanedPlatform.height;
+
+    this.logger.debug(cleanedPlatform);
 
     this.platformService.createPlatform(cleanedPlatform)
     .pipe(
@@ -107,6 +125,7 @@ export class CreatePlatformComponent implements OnInit {
     )
     .subscribe((createdPlatform) => {
       this.state = 'created';
+      this.logger.debug('Created Platform:')
       this.logger.debug(createdPlatform);
 
       timer(1400).subscribe(() => {
