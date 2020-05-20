@@ -10,6 +10,7 @@ import {DeploymentService} from 'src/app/deployment/deployment.service';
 import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 import {Sensor} from '../sensor';
 import {PermanentHost} from 'src/app/permanent-host/permanent-host';
+import {PlatformService} from 'src/app/platform/platform.service';
 
 @Component({
   selector: 'uo-create-sensor',
@@ -23,6 +24,7 @@ export class CreateSensorComponent implements OnInit, OnDestroy {
   state = 'pending';
   permanentHostChoices = [];
   deploymentChoices = [];
+  platformChoices = [];
   hostOrDep = 'neither';
   sensorInitialConfig = [];
   createdSensor: Sensor;
@@ -36,7 +38,8 @@ export class CreateSensorComponent implements OnInit, OnDestroy {
     private utilsService: UtilsService,
     private route: ActivatedRoute,
     private permanentHostService: PermanentHostService,  
-    private deploymentService: DeploymentService
+    private deploymentService: DeploymentService,
+    private platformService: PlatformService
   ) {}
 
   ngOnInit() {
@@ -48,11 +51,12 @@ export class CreateSensorComponent implements OnInit, OnDestroy {
       // N.B. this snapshot approach is fine as long as you never reuse the component, i.e. you always naviagate to another component before coming back to this one, e.g. with a different permanentHost.
       permanentHost: [this.route.snapshot.paramMap.get('permanentHost') || ''],
       hasDeployment: [this.route.snapshot.paramMap.get('hasDeployment') || ''],
+      isHostedBy: [this.route.snapshot.paramMap.get('isHostedBy') || ''],
     });
 
     if (this.route.snapshot.paramMap.get('permanentHost')) {
       this.selectHostOverDep();
-    } else if (this.route.snapshot.paramMap.get('hasDeployment')) {
+    } else if (this.route.snapshot.paramMap.get('hasDeployment') || this.route.snapshot.paramMap.get('isHostedBy')) {
       this.selectDepOverHost();
     }
 
@@ -91,6 +95,20 @@ export class CreateSensorComponent implements OnInit, OnDestroy {
       this.logger.debug(deployments);
     });
 
+    // autoComplete for isHostedBy
+    this.createSensorForm.get('isHostedBy').valueChanges
+    .pipe(
+      takeUntil(this.unsubscribe$),
+      filter((value: string) => value.length > 0),
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap((value: string) => this.platformService.getPlatforms({id: {begins: value}}))
+    )
+    .subscribe(({data: platforms}) => {
+      this.platformChoices = platforms;
+      this.logger.debug(platforms);
+    });
+
     // Toggle permanentHost vs hasDeployment in response to permanentHost changes
     this.createSensorForm.get('permanentHost').valueChanges
     .pipe(
@@ -121,12 +139,29 @@ export class CreateSensorComponent implements OnInit, OnDestroy {
       }
     });
 
+    // Toggle permanentHost vs hasDeployment in response to isHostedBy changes
+    this.createSensorForm.get('isHostedBy').valueChanges
+    .pipe(
+      takeUntil(this.unsubscribe$),
+      distinctUntilChanged()
+    )
+    .subscribe(value => {
+      if (value.length === 0 && !this.createSensorForm.get('permanentHost').value) {
+        this.selectNeitherHostOrDep();
+      }
+      if (value.length > 0) {
+        this.selectDepOverHost();
+      }
+    });
+
   }
 
   selectHostOverDep() {
     this.hostOrDep = 'host';
     this.createSensorForm.controls['hasDeployment'].disable();
     this.createSensorForm.controls['hasDeployment'].setValue('');
+    this.createSensorForm.controls['isHostedBy'].disable();
+    this.createSensorForm.controls['isHostedBy'].setValue('');
   }
 
   selectDepOverHost() {
@@ -140,6 +175,7 @@ export class CreateSensorComponent implements OnInit, OnDestroy {
     this.hostOrDep = 'neither';
     this.createSensorForm.controls['permanentHost'].enable();
     this.createSensorForm.controls['hasDeployment'].enable();
+    this.createSensorForm.controls['isHostedBy'].enable();
   }
 
 

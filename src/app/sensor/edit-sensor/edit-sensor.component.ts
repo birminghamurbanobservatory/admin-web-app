@@ -12,6 +12,8 @@ import {UtilsService} from 'src/app/utils/utils.service';
 import {cloneDeep} from 'lodash';
 import {Deployment} from 'src/app/deployment/deployment';
 import {PermanentHost} from 'src/app/permanent-host/permanent-host';
+import {PlatformService} from 'src/app/platform/platform.service';
+import {Platform} from '@angular/cdk/platform';
 
 @Component({
   selector: 'uo-edit-sensor',
@@ -28,6 +30,7 @@ export class EditSensorComponent implements OnInit {
   updateState = 'pending';
   updateErrorMessage: string;
   deploymentChoices: Deployment[] = [];
+  platformChoices: Platform[] = [];
   permanentHostChoices: PermanentHost[] = [];
   editedInitialConfigs;
   editedCurrentConfigs;
@@ -39,6 +42,7 @@ export class EditSensorComponent implements OnInit {
     private fb: FormBuilder,
     private permanentHostService: PermanentHostService, 
     private deploymentService: DeploymentService, 
+    private platformService: PlatformService, 
     private utilsService: UtilsService
   ) { }
 
@@ -78,6 +82,9 @@ export class EditSensorComponent implements OnInit {
         ],
         permanentHost: [
           sensor.permanentHost || ''
+        ],
+        isHostedBy: [
+          sensor.isHostedBy || ''
         ]
       });
 
@@ -100,6 +107,19 @@ export class EditSensorComponent implements OnInit {
     .subscribe(({data: deployments}) => {
       this.deploymentChoices = deployments;
       this.logger.debug(deployments);
+    });
+
+    // autocomplete for the isHostedBy
+    this.editSensorForm.get('isHostedBy').valueChanges
+    .pipe(
+      filter((value: string) => value.length > 2),
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap((value: string) => this.platformService.getPlatforms({id: {begins: value}}))
+    )
+    .subscribe(({data: platforms}) => {
+      this.platformChoices = platforms;
+      this.logger.debug(platforms);
     });
 
     // autocomplete for the permanentHost
@@ -154,7 +174,7 @@ export class EditSensorComponent implements OnInit {
       cleanedUpdates.currentConfig = cleanedUpdates.currentConfig.map(this.stripIdFromObject);
     }
 
-    const keysToNullOrRemove = ['name', 'permanentHost', 'hasDeployment'];
+    const keysToNullOrRemove = ['name', 'permanentHost', 'hasDeployment', 'isHostedBy'];
     keysToNullOrRemove.forEach((key) => {  
       if (cleanedUpdates[key] === '') {
         if (this.sensor[key]) {

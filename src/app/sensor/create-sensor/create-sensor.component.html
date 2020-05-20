@@ -7,6 +7,10 @@
       <!-- TODO how to I make the width of this form responsive -->
       <form class="form--max-width-600" [formGroup]="createSensorForm" (ngSubmit)="onSubmit(createSensorForm.value)" fxLayout="column" fxLayoutGap="15px">
 
+        <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
+          <input matInput id="sensor-name" type="text" formControlName="name" maxlength="44" placeholder="Name">
+        </mat-form-field>
+
         <mat-form-field class="form__field--max-width" hintLabel="Max 48 characters">
           <input matInput id="sensor-id" type="text" formControlName="id" maxlength="48" placeholder="ID">
           <mat-error *ngIf="createSensorForm.get('id').errors && createSensorForm.get('id').errors.pattern">
@@ -14,12 +18,26 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
-          <input matInput id="sensor-name" type="text" formControlName="name" maxlength="44" placeholder="Name">
-        </mat-form-field>
-
         <mat-form-field class="form__field--max-width">
           <textarea matInput id="description" formControlName="description" maxlength="1000" placeholder="Description" rows="3"></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="form__field--max-width" hintLabel="{{hostOrDep === 'host' ? 'cannot be set when Permanent Host is set' : 'begin typing deployment id'}}">
+          <input type="text" placeholder="Has Deployment" matInput formControlName="hasDeployment" [matAutocomplete]="autoDep">
+          <mat-autocomplete #autoDep="matAutocomplete">
+            <mat-option *ngFor="let deploymentChoice of deploymentChoices" [value]="deploymentChoice.id">
+              {{deploymentChoice.id}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field class="form__field--max-width" hintLabel="{{hostOrDep === 'host' ? 'cannot be set when Permanent Host is set' : 'begin typing platform id'}}">
+          <input type="text" placeholder="Is Hosted By" matInput formControlName="isHostedBy" [matAutocomplete]="autoPlat">
+          <mat-autocomplete #autoPlat="matAutocomplete">
+            <mat-option *ngFor="let platformChoice of platformChoices" [value]="platformChoice.id">
+              {{platformChoice.id}}
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
 
         <mat-form-field class="form__field--max-width" hintLabel="{{hostOrDep === 'dep' ? 'cannot be set when Has Deployment is set' : 'enter an id to select an existing host, or create a new one.'}}">
@@ -27,15 +45,6 @@
           <mat-autocomplete #autoPermHost="matAutocomplete">
             <mat-option *ngFor="let permanentHostChoice of permanentHostChoices" [value]="permanentHostChoice.id">
               {{permanentHostChoice.id}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-
-        <mat-form-field class="form__field--max-width" hintLabel="{{hostOrDep === 'host' ? 'cannot be set when Permanent Host is set' : 'begin typing its id'}}">
-          <input type="text" placeholder="Has Deployment" matInput formControlName="hasDeployment" [matAutocomplete]="autoDep">
-          <mat-autocomplete #autoDep="matAutocomplete">
-            <mat-option *ngFor="let deploymentChoice of deploymentChoices" [value]="deploymentChoice.id">
-              {{deploymentChoice.id}}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>

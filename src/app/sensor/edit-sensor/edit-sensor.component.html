@@ -33,6 +33,15 @@
           </mat-form-field>
 
           <mat-form-field class="form__field--max-width">
+            <input type="text" placeholder="Is Hosted By" matInput formControlName="isHostedBy" [matAutocomplete]="autoPlat">
+            <mat-autocomplete #autoPlat="matAutocomplete">
+              <mat-option *ngFor="let platformChoice of platformChoices" [value]="platformChoice.id">
+                {{platformChoice.id}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field class="form__field--max-width">
             <input type="text" placeholder="Permanent Host" matInput formControlName="permanentHost" [matAutocomplete]="autoPermHost">
             <mat-autocomplete #autoPermHost="matAutocomplete">
               <mat-option *ngFor="let permanentHostChoice of permanentHostChoices" [value]="permanentHostChoice.id">
