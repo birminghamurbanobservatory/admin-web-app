@@ -20,7 +20,7 @@ import {LocationSelectorComponent} from '../location/location-selector/location-
     CreateFeatureOfInterestComponent, 
     ViewFeatureOfInterestComponent,
     DeleteFeatureOfInterestDialog,
-    LocationSelectorComponent
+    LocationSelectorComponent,
   ],
   imports: [
     CommonModule,

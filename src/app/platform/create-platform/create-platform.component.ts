@@ -105,7 +105,9 @@ export class CreatePlatformComponent implements OnInit {
       }
       // N.B. we can't include the height unless there's a location.
       if (check.number(cleanedPlatform.height)) {
-        cleanedPlatform.location.geometry.coordinates.push(cleanedPlatform.height);
+        cleanedPlatform.location.properties = {
+          height: cleanedPlatform.height
+        }
       }
     }
     delete cleanedPlatform.height;

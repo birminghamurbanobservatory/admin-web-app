@@ -3,6 +3,9 @@ import { CommonModule }  from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
+// Custom stuff
+import {LocationViewerComponent} from '../location/location-viewer/location-viewer.component';
+
 // Angular Material
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatSidenavModule} from '@angular/material/sidenav';
@@ -31,11 +34,14 @@ import {MatPaginatorModule} from '@angular/material/paginator';
   ],
   declarations: [
     // Declare any custom components, pipes, etc, you create in here so that they can be easily used by all your feature modules.
+    LocationViewerComponent
   ],
   providers: [],
   exports: [
     CommonModule,
     ReactiveFormsModule,
+    // Custom
+    LocationViewerComponent,
     // Angular Material (add any material components you need to use in here first)
     MatToolbarModule,
     MatSidenavModule,

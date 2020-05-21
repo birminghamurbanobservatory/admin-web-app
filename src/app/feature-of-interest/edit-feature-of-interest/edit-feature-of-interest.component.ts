@@ -9,6 +9,8 @@ import {DeploymentService} from 'src/app/deployment/deployment.service';
 import {catchError, filter, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {throwError, timer} from 'rxjs';
 import {Deployment} from 'src/app/deployment/deployment';
+import * as check from 'check-types';
+import {cloneDeep, isEqual} from 'lodash';
 
 @Component({
   selector: 'uo-edit-featureOfInterest',
@@ -25,6 +27,7 @@ export class EditFeatureOfInterestComponent implements OnInit {
   updateState = 'pending';
   updateErrorMessage: string;
   deploymentChoices: Deployment[] = [];
+  geometry: {type: any, coordinates: any[]};
 
   constructor(
     private logger: UoLoggerService,
@@ -59,6 +62,12 @@ export class EditFeatureOfInterestComponent implements OnInit {
     .subscribe((featureOfInterest: FeatureOfInterest) => {
       this.logger.debug(featureOfInterest);
 
+      let height;
+      if (featureOfInterest.location) {
+        this.geometry = cloneDeep(featureOfInterest.location.geometry);
+        height = featureOfInterest.location.properties.height;
+      }
+
       this.editFeatureOfInterestForm = this.fb.group({
         label: [featureOfInterest.label, Validators.required],
         comment: [featureOfInterest.comment],
@@ -67,6 +76,10 @@ export class EditFeatureOfInterestComponent implements OnInit {
         belongsToDeployment: [
           featureOfInterest.belongsToDeployment || ''
         ],
+        height: {
+          value: check.number(height) ? height : null,
+          disabled: this.geometry ? false : true
+        }
       });
 
       this.getState = 'got';
@@ -95,6 +108,13 @@ export class EditFeatureOfInterestComponent implements OnInit {
 
   }
 
+  onGeometrySelection(newGeometry) {
+    this.logger.debug(`edit-feature-of-interest component is aware of the location change`);
+    this.logger.debug(newGeometry);
+    this.geometry = newGeometry;
+    // We can also enable the height input now
+    this.editFeatureOfInterestForm.controls['height'].enable();
+  }
 
   onSubmit(updates) {
 
@@ -116,6 +136,37 @@ export class EditFeatureOfInterestComponent implements OnInit {
         }
       }
     })
+
+    // Add in the location and the height
+    if (this.geometry) {
+
+      const hadNoLocationBefore = check.not.assigned(this.featureOfInterest.location);
+
+      let geometryHasChanged = false;
+      if (hadNoLocationBefore) {
+        geometryHasChanged = true;
+      } else {
+        geometryHasChanged = !isEqual(this.featureOfInterest.location.geometry, this.geometry);
+      }
+
+      const heightBefore = hadNoLocationBefore ? undefined : this.featureOfInterest.location.properties.height;
+      const heightNow = check.number(updates.height) ? updates.height : undefined;
+      const heightHasChanged = heightBefore !== heightNow;
+
+      const locationHasChanged = geometryHasChanged || heightHasChanged;
+
+      if (locationHasChanged) {
+        const newLocation: any = {
+          geometry: this.geometry
+        }
+        if (check.number(updates.height)) {
+          newLocation.properties = {height: updates.height}
+        }
+        this.logger.debug('Location has changed');
+        cleanedUpdates.location = newLocation;
+      }
+    }
+    delete cleanedUpdates.height;
 
     this.logger.debug('Updates after tidying:')
     this.logger.debug(cleanedUpdates);

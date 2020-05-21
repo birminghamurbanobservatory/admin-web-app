@@ -40,11 +40,13 @@
               {{deploymentChoice.id}}
             </mat-option>
           </mat-autocomplete>
-          <mat-error *ngIf="createFeatureOfInterestForm.get('belongsToDeployment').errors && createFeatureOfInterestForm.get('belongsToDeployment').errors.required">
-            A deployment is required
-          </mat-error>
         </mat-form-field>
 
+        <uo-location-selector (onLocationSelection)="onGeometrySelection($event)"></uo-location-selector>
+
+        <mat-form-field class="form__field--max-width" hintLabel="in metres above ground">
+          <input matInput id="feature-height" type="number" formControlName="height" placeholder="Height (optional)">
+        </mat-form-field>
 
         <div fxLayout="row" fxLayoutAlign="center">
           <button mat-raised-button color="accent" type="submit" [disabled]="createFeatureOfInterestForm.invalid || state !== 'pending'">

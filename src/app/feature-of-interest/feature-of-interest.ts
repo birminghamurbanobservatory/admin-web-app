@@ -6,6 +6,25 @@ export interface FeatureOfInterest {
   listed?: boolean;
   inCommonVocab?: boolean;
   belongsToDeployment?: string;
+  location?: Location;
+  centroid?: Location;
   createdAt?: string;
   updatedAt?: string; 
+}
+
+interface Location {
+  id?: string;
+  geometry?: Geometry;
+  validAt?: string;
+  properties?: Properties;
+}
+
+interface Geometry {
+ type?: string;
+ coordinates?: any;
+}
+
+interface Properties {
+  validAt?: number;
+  height?: number;
 }

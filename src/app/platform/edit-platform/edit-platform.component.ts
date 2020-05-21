@@ -71,7 +71,7 @@ export class EditPlatformComponent implements OnInit {
           lng: platform.location.geometry.coordinates[0],
           lat: platform.location.geometry.coordinates[1]
         };
-        height = platform.location.geometry.coordinates[2]
+        height = platform.location.properties.height
       }
 
       this.editPlatformForm = this.fb.group({
@@ -164,21 +164,35 @@ export class EditPlatformComponent implements OnInit {
 
     // Add in the location and the height
     if (this.pointLocation) {
+
+      const hadNoLocationBefore = check.not.assigned(this.platform.location);
+
       const newCoordinates = [this.pointLocation.lng, this.pointLocation.lat];
-      // N.B. we can't include the height unless there's a location.
-      if (check.number(updates.height)) {
-        newCoordinates.push(updates.height);
+      let coordinatesHaveChanged = false;
+      if (hadNoLocationBefore) {
+        coordinatesHaveChanged = true;
+      } else {
+        coordinatesHaveChanged = !isEqual(this.platform.location.geometry.coordinates, newCoordinates)
       }
-      // If this differs from the old coordinates then add the new location to our updates.
-      console.log(newCoordinates);
-      console.log(this.platform.location.geometry.coordinates);
-      if (!this.platform.location || !isEqual(newCoordinates, this.platform.location.geometry.coordinates)) {
-        cleanedUpdates.location = {
+
+      const heightBefore = hadNoLocationBefore ? undefined : this.platform.location.properties.height;
+      const heightNow = check.number(updates.height) ? updates.height : undefined;
+      const heightHasChanged = heightBefore !== heightNow;
+
+      const locationHasChanged = coordinatesHaveChanged || heightHasChanged;
+
+      if (locationHasChanged) {
+        const newLocation: any = {
           geometry: {
             type: 'Point',
             coordinates: newCoordinates
           }
         }
+        if (check.number(updates.height)) {
+          newLocation.properties = {height: updates.height}
+        }
+        this.logger.debug('Location has changed');
+        cleanedUpdates.location = newLocation;
       }
     }
     delete cleanedUpdates.height;

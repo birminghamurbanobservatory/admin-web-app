@@ -1,5 +1,5 @@
 // This is the format that clients and other microservices see.
-export class Platform {
+export interface Platform {
   id?: string;
   name?: string;
   description?: string;
@@ -15,13 +15,19 @@ export class Platform {
 }
 
 
-class Location {
+interface Location {
   id?: string;
   geometry?: Geometry;
   validAt?: string;
+  properties?: Properties;
 }
 
-class Geometry {
+interface Geometry {
  type?: string;
  coordinates?: any;
+}
+
+interface Properties {
+  validAt?: number;
+  height?: number;
 }
