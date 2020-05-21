@@ -17,6 +17,7 @@ export class FeatureOfInterestComponent implements OnInit {
   @Input() featureOfInterest: FeatureOfInterest;
   @Output() deleted = new EventEmitter<string>();
   state = 'pending';
+  public viewLocationType: string;
 
   constructor(
     private logger: UoLoggerService,
