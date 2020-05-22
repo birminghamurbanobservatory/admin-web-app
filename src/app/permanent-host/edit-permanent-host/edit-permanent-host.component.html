@@ -13,7 +13,7 @@
 
         <h3>Editing {{permanentHost.id}}</h3>
         
-        <form class="form--max-width-600" [formGroup]="editPermanentHostForm" (ngSubmit)="onSubmit(editPermanentHostForm.value)" fxLayout="column" fxLayoutGap="15px">
+        <form class="form--max-width-600" [formGroup]="editPermanentHostForm" (ngSubmit)="onSubmit(editPermanentHostForm.value)" (keydown.enter)="$event.preventDefault()" fxLayout="column" fxLayoutGap="15px">
           
           <mat-form-field class="form__field--max-width" hintLabel="Max 44 characters">
             <input matInput id="permanent-host-name" type="text" formControlName="name" maxlength="44" placeholder="Name">

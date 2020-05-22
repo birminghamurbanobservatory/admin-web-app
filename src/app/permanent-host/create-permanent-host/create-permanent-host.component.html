@@ -4,7 +4,7 @@
 
     <mat-card class="card--max-width-600">
 
-      <form class="form--max-width-600" [formGroup]="createPermanentHostForm" (ngSubmit)="onSubmit(createPermanentHostForm.value)" fxLayout="column" fxLayoutGap="15px">
+      <form class="form--max-width-600" [formGroup]="createPermanentHostForm" (ngSubmit)="onSubmit(createPermanentHostForm.value)" (keydown.enter)="$event.preventDefault()" fxLayout="column" fxLayoutGap="15px">
 
         <mat-form-field class="form__field--max-width" hintLabel="Max 48 characters">
           <input matInput id="permanent-host-id" type="text" formControlName="id" maxlength="48" placeholder="ID">
