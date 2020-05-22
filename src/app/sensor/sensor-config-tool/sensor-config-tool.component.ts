@@ -34,11 +34,9 @@ export class SensorConfigToolComponent implements OnInit {
       this.jsonDataForTool = [
         {
           hasPriority: true,
-          observedProperty: 'AirTemperature',
-          unit: 'DegreeCelsius',
-          disciplines: ["Meteorology"],
-          hasFeatureOfInterest: "earth-atmosphere",
-          usedProcedures: ["PointSample"]
+          observedProperty: 'air-temperature',
+          disciplines: ["meteorology"],
+          hasFeatureOfInterest: "earth-atmosphere"
         }
       ];
     }
