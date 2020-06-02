@@ -36,7 +36,7 @@
           <mat-option value="--all--">- All Deployments -</mat-option>
           <mat-option value="--none--">- Unassigned -</mat-option>
           <mat-option *ngFor="let deployment of deployments" [value]="deployment.id">
-            {{deployment.name}}
+            {{deployment.label}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -73,7 +73,7 @@
         <mat-expansion-panel *ngFor="let sensor of sensors">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <strong>{{sensor.name}}</strong>
+              <strong>{{sensor.label}}</strong>
             </mat-panel-title>
           </mat-expansion-panel-header>
 

@@ -1,6 +1,6 @@
 export class Deployment {
   id: string;
-  name: string;
+  label: string;
   description: string;
   public: boolean;
   createdAt: string;

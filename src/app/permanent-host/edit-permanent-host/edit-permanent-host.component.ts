@@ -84,8 +84,8 @@ export class EditPermanentHostComponent implements OnInit {
         hostedSensorIdx = hostedSensorIdx >= 0 ? hostedSensorIdx : 0;
 
         this.editPermanentHostForm = this.fb.group({
-          name: [
-            permanentHost.name || '',
+          label: [
+            permanentHost.label || '',
             Validators.required
           ],
           description: [

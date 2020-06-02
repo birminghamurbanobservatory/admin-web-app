@@ -1,6 +1,6 @@
 export class PermanentHost {
   id?: string;
-  name?: string;
+  label?: string;
   description?: string;
   static?: boolean;
   updateLocationWithSensor?: string;

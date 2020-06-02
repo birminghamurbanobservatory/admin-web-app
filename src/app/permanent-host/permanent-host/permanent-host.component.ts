@@ -113,7 +113,7 @@ export class PermanentHostComponent implements OnInit {
   openDeleteDialog(): void {
     const dialogRef = this.dialog.open(DeletePermanentHostDialog, {
       width: '250px',
-      data: {permanentHostName: this.permanentHost.name}
+      data: {permanentHostLabel: this.permanentHost.label}
     });
 
     dialogRef.afterClosed().subscribe(choseToDelete => {
@@ -144,7 +144,7 @@ export class DeletePermanentHostDialog {
 
   constructor(
     public dialogRef: MatDialogRef<DeletePermanentHostDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: {permanentHostName: string}
+    @Inject(MAT_DIALOG_DATA) public data: {permanentHostLabel: string}
   ) {}
 
 }

@@ -61,7 +61,7 @@ export class EditProcedureComponent implements OnInit {
 
       this.editProcedureForm = this.fb.group({
         label: [procedure.label, Validators.required],
-        comment: [procedure.comment],
+        description: [procedure.description],
         listed: [procedure.listed],
         inCommonVocab: [procedure.inCommonVocab],
         belongsToDeployment: [

@@ -1,6 +1,6 @@
 export class Sensor {
   id?: string;
-  name?: string;
+  label?: string;
   description?: string;
   hasDeployment?: string;
   isHostedBy?: string;

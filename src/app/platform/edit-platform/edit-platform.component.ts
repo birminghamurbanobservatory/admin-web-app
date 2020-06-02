@@ -75,8 +75,8 @@ export class EditPlatformComponent implements OnInit {
       }
 
       this.editPlatformForm = this.fb.group({
-        name: [
-          platform.name || '',
+        label: [
+          platform.label || '',
           Validators.required
         ],
         description: [

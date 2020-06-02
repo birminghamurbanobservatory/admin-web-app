@@ -71,8 +71,8 @@ export class EditSensorComponent implements OnInit {
       this.logger.debug(sensor);
 
       this.editSensorForm = this.fb.group({
-        name: [
-          sensor.name || ''
+        label: [
+          sensor.label || ''
         ],
         description: [
           sensor.description || ''
@@ -174,7 +174,7 @@ export class EditSensorComponent implements OnInit {
       cleanedUpdates.currentConfig = cleanedUpdates.currentConfig.map(this.stripIdFromObject);
     }
 
-    const keysToNullOrRemove = ['name', 'permanentHost', 'hasDeployment', 'isHostedBy'];
+    const keysToNullOrRemove = ['label', 'permanentHost', 'hasDeployment', 'isHostedBy'];
     keysToNullOrRemove.forEach((key) => {  
       if (cleanedUpdates[key] === '') {
         if (this.sensor[key]) {

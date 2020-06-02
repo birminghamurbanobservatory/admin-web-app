@@ -36,7 +36,7 @@ export class CreateProcedureComponent implements OnInit {
     this.createProcedureForm = this.fb.group({
       id: ['', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
       label: ['', Validators.required],
-      comment: '',
+      description: '',
       listed: true,
       inCommonVocab: false,
       // N.B. this snapshot approach is fine as long as you never reuse the component, i.e. you always naviagate to another component before coming back to this one, e.g. with a different permanentHost.

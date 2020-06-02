@@ -64,7 +64,7 @@ export class SensorComponent implements OnInit {
   openDeleteDialog(): void {
     const dialogRef = this.dialog.open(DeleteSensorDialog, {
       width: '250px',
-      data: {sensorName: this.sensor.name}
+      data: {sensorLabel: this.sensor.label}
     });
 
     dialogRef.afterClosed().subscribe(choseToDelete => {
@@ -88,7 +88,7 @@ export class DeleteSensorDialog {
 
   constructor(
     public dialogRef: MatDialogRef<DeleteSensorDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: {sensorName: string}
+    @Inject(MAT_DIALOG_DATA) public data: {sensorLabel: string}
   ) {}
 
 }

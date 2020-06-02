@@ -22,7 +22,7 @@
           <mat-option value="--all--">- All Deployments -</mat-option>
           <mat-option value="--none--">- Unassigned -</mat-option>
           <mat-option *ngFor="let deployment of deployments" [value]="deployment.id">
-            {{deployment.name}}
+            {{deployment.label}}
           </mat-option>
         </mat-select>
       </mat-form-field>

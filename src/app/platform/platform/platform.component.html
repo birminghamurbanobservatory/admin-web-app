@@ -8,8 +8,8 @@
   </div>
 
   <div class="detail">
-    <h4 class="detail__title">Name</h4>
-    <p class="detail__value">{{platform.name}}</p>
+    <h4 class="detail__title">Label</h4>
+    <p class="detail__value">{{platform.label}}</p>
   </div>
 
   <div class="detail">
@@ -76,10 +76,10 @@
     <ul>
       <li *ngFor="let hostee of platform.hosts">
         <span *ngIf="hostee.type === 'Sensor'">
-          Sensor: <a [routerLink]="['/sensors/view', hostee.id]">{{hostee.name || hostee.id}}</a>
+          Sensor: <a [routerLink]="['/sensors/view', hostee.id]">{{hostee.label || hostee.id}}</a>
         </span>
         <span *ngIf="hostee.type === 'Platform'">
-          Platform: <a [routerLink]="['/platforms/view', hostee.id]">{{hostee.name || hostee.id}}</a>
+          Platform: <a [routerLink]="['/platforms/view', hostee.id]">{{hostee.label || hostee.id}}</a>
         </span>
       </li>
     </ul>

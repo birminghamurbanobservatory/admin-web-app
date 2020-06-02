@@ -2,7 +2,7 @@
 export interface FeatureOfInterest {
   id?: string;
   label?: string;
-  comment?: string;
+  description?: string;
   listed?: boolean;
   inCommonVocab?: boolean;
   belongsToDeployment?: string;

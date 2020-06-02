@@ -23,7 +23,7 @@
         <mat-select formControlName="inDeployment">
           <mat-option [value]="">- All Deployments -</mat-option>
           <mat-option *ngFor="let deployment of deployments" [value]="deployment.id">
-            {{deployment.name}}
+            {{deployment.label}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -62,7 +62,7 @@
             <mat-panel-title>
               <strong>
                 <span>{{'-'.repeat(platform.depth)}}</span>
-                {{platform.name}}
+                {{platform.label}}
               </strong>
             </mat-panel-title>
           </mat-expansion-panel-header>

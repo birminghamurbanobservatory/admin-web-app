@@ -36,7 +36,7 @@ export class CreatePlatformComponent implements OnInit {
   ngOnInit() {
 
     this.createPlatformForm = this.fb.group({
-      name: ['', Validators.required],
+      label: ['', Validators.required],
       id: ['', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
       description: '',
       static: true,

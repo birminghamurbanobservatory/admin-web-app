@@ -27,7 +27,7 @@ export class CreateDeploymentComponent implements OnInit {
   ngOnInit() {
 
     this.createDeploymentForm = this.fb.group({
-      name: ['', Validators.required],
+      label: ['', Validators.required],
       id: ['', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
       description: '',
       public: true

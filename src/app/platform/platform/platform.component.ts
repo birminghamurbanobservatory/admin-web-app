@@ -65,7 +65,7 @@ export class PlatformComponent implements OnInit {
   openDeleteDialog(): void {
     const dialogRef = this.dialog.open(DeletePlatformDialog, {
       width: '250px',
-      data: {platformName: this.platform.name}
+      data: {platformLabel: this.platform.label}
     });
 
     dialogRef.afterClosed().subscribe(choseToDelete => {
@@ -92,7 +92,7 @@ export class DeletePlatformDialog {
 
   constructor(
     public dialogRef: MatDialogRef<DeletePlatformDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: {platformName: string}
+    @Inject(MAT_DIALOG_DATA) public data: {platformLabel: string}
   ) {}
 
 }

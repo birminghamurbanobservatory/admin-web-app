@@ -31,12 +31,12 @@ export class CreatePermanentHostComponent implements OnInit, OnDestroy {
 
     this.createPermanentHostForm = this.fb.group({
       id: ['', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
-      name: '',
+      label: '',
       description: '',
       static: false
     });
 
-    // Begin by setting the form as invalid, because neither the id or name has been specified yet.
+    // Begin by setting the form as invalid, because neither the id or label has been specified yet.
     // We need to use setTimeout here to wait till the next 'tick' otherwise the form validation won't have had a chance to run.
     setTimeout(() => {
       this.createPermanentHostForm.setErrors({invalid: true});
@@ -51,8 +51,8 @@ export class CreatePermanentHostComponent implements OnInit, OnDestroy {
     this.createPermanentHostForm.valueChanges
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe((values) => {
-      if (values.id === '' && values.name === '') {
-        this.logger.debug('Form is currently invalid because neither an id or name is given');
+      if (values.id === '' && values.label === '') {
+        this.logger.debug('Form is currently invalid because neither an id or label is given');
         this.createPermanentHostForm.setErrors({invalid: true});
       }
     });

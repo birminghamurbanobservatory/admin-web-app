@@ -8,7 +8,7 @@
 
     <div *ngIf="auth.userProfile$ | async as profile">
       <p *ngIf="profile.nickname">Nickname: {{profile.nickname}}</p>
-      <p *ngIf="profile.name">Name: {{profile.name}}</p>
+      <p *ngIf="profile.name">Name: {{profile.label}}</p>
       <p *ngIf="profile.email">Email: {{profile.email}}</p>
       <p *ngIf="profile.email_verified">Email verified: {{profile.email_verified}}</p>
       <p>User ID: {{profile.sub}}</p>

@@ -70,7 +70,7 @@ export class EditFeatureOfInterestComponent implements OnInit {
 
       this.editFeatureOfInterestForm = this.fb.group({
         label: [featureOfInterest.label, Validators.required],
-        comment: [featureOfInterest.comment],
+        description: [featureOfInterest.description],
         listed: [featureOfInterest.listed],
         inCommonVocab: [featureOfInterest.inCommonVocab],
         belongsToDeployment: [

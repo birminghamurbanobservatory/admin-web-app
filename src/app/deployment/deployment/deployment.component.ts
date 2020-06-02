@@ -63,7 +63,7 @@ export class DeploymentComponent implements OnInit {
   openDeleteDialog(): void {
     const dialogRef = this.dialog.open(DeleteDeploymentDialog, {
       width: '250px',
-      data: {deploymentName: this.deployment.name}
+      data: {deploymentLabel: this.deployment.label}
     });
 
     dialogRef.afterClosed().subscribe(choseToDelete => {
@@ -86,7 +86,7 @@ export class DeleteDeploymentDialog {
 
   constructor(
     public dialogRef: MatDialogRef<DeleteDeploymentDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: {deploymentName: string}
+    @Inject(MAT_DIALOG_DATA) public data: {deploymentLabel: string}
   ) {}
 
 }

@@ -56,8 +56,8 @@ export class EditDeploymentComponent implements OnInit {
       this.logger.debug(deployment);
 
       this.editDeploymentForm = this.fb.group({
-        name: [
-          deployment.name || '',
+        label: [
+          deployment.label || '',
           Validators.required
         ],
         description: [
