@@ -7,7 +7,8 @@ export const environment = {
   // apiUrl: 'http://localhost:8080',
   apiUrl: 'https://api.birminghamurbanobservatory.com',
   audience: 'https://api.birminghamurbanobservatory.com',
-  logLevel: 'debug' // off, debug, info, warn, error
+  logLevel: 'debug', // off, debug, info, warn, error,
+  googleMapsApiKey: 'AIzaSyDOT34BxSKrFJc4kN6fATO2VZebVOeCGo4'
 };
 
 /*
