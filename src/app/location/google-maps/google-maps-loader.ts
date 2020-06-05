@@ -3,7 +3,7 @@
 
 // Note the google api key into the url below
 // You can omit the version number from the URL in which case Google will automatically give you the latest version, but I was having issues with version 3.32, thus rolled back to 3.31.
-const url = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDioUseva8LN7Fv3cTgvD_ZI8gxJByRLA4&callback=__onGoogleMapsLoaded&libraries=drawing';
+const url = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDS-Evzqr-4IPzGWflXDDafglhHV-KTYZQ&callback=__onGoogleMapsLoaded&libraries=drawing';
 // N.B. I've also requested the drawing library so users can draw their own polygon, etc.
 
 export class GoogleMapsLoader {
