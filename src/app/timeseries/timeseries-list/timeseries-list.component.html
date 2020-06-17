@@ -1,0 +1,77 @@
+<div class="container container--padded-top container--padded-bottom">
+
+  <h2>Timeseries</h2>
+
+  <form [formGroup]="optionsForm">
+
+    <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="30px">
+      <mat-form-field class="form__field--y-spaced form--max-width-600" hintLabel="paste ID or search by name">
+        <input type="text" placeholder="Filter by sensor" matInput formControlName="madeBySensor" [matAutocomplete]="autoSen" id="made-by-sensor">
+        <mat-autocomplete #autoSen="matAutocomplete">
+          <mat-option *ngFor="let sensorChoice of sensorChoices" [value]="sensorChoice.id">
+            {{sensorChoice.id}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <button (click)="applyMadeBySensor()" [disabled]="!optionsForm.get('madeBySensor').value" mat-raised-button color="primary" type="button">Apply</button>
+      <button (click)="clearMadeBySensor()" mat-raised-button color="warn" type="button">Clear</button>
+    </div>
+
+
+    <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="30px">
+      <mat-form-field class="form__field--y-spaced form--max-width-600" hintLabel="paste ID or search by name">
+        <input type="text" placeholder="Filter by observed property" matInput formControlName="observedProperty" [matAutocomplete]="autoObsProp" id="observed-property">
+        <mat-autocomplete #autoObsProp="matAutocomplete">
+          <mat-option *ngFor="let observedProperty of observedPropertyChoices" [value]="observedProperty.id">
+            {{observedProperty.id}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <button (click)="applyObservedProperty()" [disabled]="!optionsForm.get('observedProperty').value" mat-raised-button color="primary" type="button">Apply</button>
+      <button (click)="clearObservedProperty()" mat-raised-button color="warn" type="button">Clear</button>
+    </div>
+
+
+
+  </form>
+
+  <div *ngIf="timeseriesList.length > 0">
+    <mat-paginator 
+      [length]="meta.total"
+      [pageSize]="limit"
+      [pageIndex]="calculatePageIndex()"
+      [pageSizeOptions]="limitOptions"
+      [showFirstLastButtons]="true"
+      (page)="pageEvent($event)"
+    >
+    </mat-paginator>
+  </div>
+
+  <div *ngIf="state === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner></mat-spinner>
+    <p>Getting Timeseries</p>
+  </div>
+
+  <div *ngIf="state === 'failed'">
+    <p class="text--warn">{{getErrorMessage}}</p>
+  </div>
+
+  <div *ngIf="state === 'got'">
+
+    <div *ngIf="timeseriesList.length > 0">
+      <mat-card *ngFor="let timeseries of timeseriesList" class="timeseries-card">
+        <uo-single-timeseries [timeseries]="timeseries" (merged)="onMerged($event)" (deleted)="onDeleted($event)"></uo-single-timeseries>
+      </mat-card>
+    </div>
+
+    <div *ngIf="timeseriesList.length === 0" fxLayout="row" fxLayoutAlign="center">
+      <p>No timeseries were found</p>
+    </div>  
+
+  </div>
+
+
+  
+</div>
+
+

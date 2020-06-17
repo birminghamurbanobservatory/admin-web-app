@@ -25,6 +25,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   color: #F44236 !important;
 }
 
+.text--success {
+  color: #50A45C !important;
+}
+
 .text__center {
   text-align: center;
 }

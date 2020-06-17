@@ -1,0 +1,123 @@
+<div *ngIf="timeseries">
+
+  <div class="detail">
+    <h4 class="detail__title">ID</h4>
+    <p class="detail__value">{{timeseries.id}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">First observation at</h4>
+    <p class="detail__value">{{timeseries.startDate | date:'medium'}}</p>
+  </div>
+
+  <div class="detail">
+    <h4 class="detail__title">Most recent observation at</h4>
+    <p class="detail__value">{{timeseries.endDate | date:'medium'}}</p>
+  </div>
+
+  <div class="detail" *ngIf="timeseries.madeBySensor">
+    <h4 class="detail__title">Sensor</h4>
+    <p class="detail__value">{{timeseries.madeBySensor}}</p>
+  </div>
+
+  <div class="detail" *ngIf="timeseries.observedProperty">
+    <h4 class="detail__title">Observed property</h4>
+    <p class="detail__value">{{timeseries.observedProperty}}</p>
+  </div>
+
+  <div class="detail" *ngIf="timeseries.unit">
+    <h4 class="detail__title">Unit</h4>
+    <p class="detail__value">{{timeseries.unit}}</p>
+  </div>
+
+  <div class="detail" *ngIf="timeseries.aggregation">
+    <h4 class="detail__title">Aggregation</h4>
+    <p class="detail__value">{{timeseries.aggregation}}</p>
+  </div>
+
+  <div class="detail" *ngIf="timeseries.hasDeployment">
+    <h4 class="detail__title">Deployment</h4>
+    <p class="detail__value">{{timeseries.hasDeployment}}</p>
+  </div>
+
+  <div class="detail" *ngIf="timeseries.ancestorPlatforms">
+    <h4 class="detail__title">Platforms</h4>
+    <p class="detail__value">{{timeseries.ancestorPlatforms.join(', ')}}</p>
+  </div>
+
+  <div class="detail" *ngIf="timeseries.hasFeatureOfInterest">
+    <h4 class="detail__title">Feature of interest</h4>
+    <p class="detail__value">{{timeseries.hasFeatureOfInterest}}</p>
+  </div>
+
+  <div class="detail" *ngIf="timeseries.usedProcedures">
+    <h4 class="detail__title">Used procedures</h4>
+    <p class="detail__value">{{timeseries.usedProcedures.join(', ')}}</p>
+  </div>
+
+  <div class="detail" *ngIf="timeseries.disciplines">
+    <h4 class="detail__title">Disciplines</h4>
+    <p class="detail__value">{{timeseries.disciplines.join(', ')}}</p>
+  </div>
+
+  <!-- Merge -->
+  <div>
+
+    <h4 class="detail__title">
+      Merge Timeseries
+    </h4>
+
+    <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+
+      <div>
+        <mat-form-field>
+          <input type="text" matInput [formControl]="idOfTimeseriesToMergeIntoThisOne">
+          <mat-hint>Enter the id of the timeseries you wish to merge into this one</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <button mat-raised-button color="primary" [disabled]="idOfTimeseriesToMergeIntoThisOne.invalid" (click)="mergeTimeseries()">
+          <!-- Pending -->
+          <span *ngIf="mergeState === 'pending'">Merge</span>
+          <!-- Merging -->
+          <div *ngIf="mergeState === 'merging'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+            <span>Merging</span>
+            <mat-spinner diameter="18" color="accent"></mat-spinner>
+          </div>
+          <!-- Failed -->
+          <div *ngIf="mergeState === 'failed'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px" >
+            <span>Failed</span>
+            <mat-icon aria-hidden="true">close</mat-icon>
+          </div>
+        </button>
+      </div>
+
+      <div *ngIf="mergeErrorMessage">
+        <p class="text--warn">{{mergeErrorMessage}}</p>
+      </div>
+
+      <div *ngIf="mergeSuccessMessage">
+        <p class="text--success">{{mergeSuccessMessage}}</p>
+      </div>
+
+    </div> 
+
+  </div> 
+
+
+  <div fxLayout="row wrap" fxLayoutAlign="space-around">
+
+    <button mat-raised-button color="warn" (click)="deleteButtonClicked()" class="btn--m-5">
+      <span *ngIf="state === 'pending'">
+        Delete
+      </span>
+      <div *ngIf="state === 'deleting'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+        <span>Deleting</span>
+        <mat-spinner diameter="18"></mat-spinner>
+      </div>
+    </button>
+
+  </div>
+
+</div>

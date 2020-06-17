@@ -20,7 +20,7 @@ export class PermanentHostsComponent implements OnInit {
   getErrorMessage: string;
   permanentHosts: PermanentHost[] = [];
   meta: CollectionMeta;
-  limit = 10;
+  limit = 50;
   limitOptions = [10, 50, 100];
   offset = 0;
   optionsForm;

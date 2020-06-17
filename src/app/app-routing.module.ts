@@ -49,6 +49,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'timeseries',
+    loadChildren: () => import('./timeseries/timeseries.module').then(m => m.TimeseriesModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'account',
     loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
     canActivate: [AuthGuard]

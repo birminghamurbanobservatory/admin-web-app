@@ -48,7 +48,7 @@ export class ProcedureComponent implements OnInit {
       })
     )
     .subscribe(() => {
-      this.logger.debug(`Deployment ${this.procedure.id} successfully deleted`);
+      this.logger.debug(`Procedure ${this.procedure.id} successfully deleted`);
       this.deleted.emit(this.procedure.id);
     })  
   }
@@ -84,11 +84,8 @@ export class ProcedureComponent implements OnInit {
   templateUrl: './delete-procedure-dialog.html',
 })
 export class DeleteProcedureDialog {
-
   constructor(
     public dialogRef: MatDialogRef<DeleteProcedureDialog>,
     @Inject(MAT_DIALOG_DATA) public data: {procedureLabel: string}
   ) {}
-
-
 }

@@ -21,7 +21,7 @@ export class SensorService {
 
 
   getSensors(
-    where: {id?: any; permanentHost?: string; hasDeployment?: any; isHostedBy?: any} = {}, 
+    where: {id?: any; permanentHost?: string; hasDeployment?: any; isHostedBy?: any; search?: string} = {}, 
     options: {limit?: number; offset?: number} = {}
   ): Observable<{data: Sensor[], meta: CollectionMeta}> {
     const qs = this.utilsService.whereToQueryString(Object.assign({}, where, options));

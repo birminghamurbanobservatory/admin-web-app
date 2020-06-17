@@ -49,7 +49,7 @@ export class FeatureOfInterestComponent implements OnInit {
       })
     )
     .subscribe(() => {
-      this.logger.debug(`Deployment ${this.featureOfInterest.id} successfully deleted`);
+      this.logger.debug(`Feature of interest ${this.featureOfInterest.id} successfully deleted`);
       this.deleted.emit(this.featureOfInterest.id);
     })  
   }
