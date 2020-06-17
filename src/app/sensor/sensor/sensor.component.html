@@ -93,6 +93,10 @@
       <mat-icon aria-label="edit">edit</mat-icon> Edit
     </a>
 
+    <a [routerLink]="['/timeseries']" [queryParams]="{madeBySensor: sensor.id}" mat-raised-button color="primary" class="btn--m-5">
+      View timeseries
+    </a>
+
     <button mat-raised-button color="warn" (click)="deleteButtonClicked()" class="btn--m-5">
       <span *ngIf="state === 'pending'">
         Delete

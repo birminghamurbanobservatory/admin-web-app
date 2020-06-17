@@ -34,7 +34,7 @@ export class CreateProcedureComponent implements OnInit {
   ngOnInit() {
 
     this.createProcedureForm = this.fb.group({
-      id: ['', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
+      id: [this.route.snapshot.paramMap.get('id') || '', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
       label: ['', Validators.required],
       description: '',
       listed: true,

@@ -18,6 +18,7 @@ export class ViewProcedureComponent implements OnInit {
   getState = 'getting';
   deleteState = 'pending';
   getErrorMessage = '';
+  procedureNotFound = false;
 
   constructor(
     private logger: UoLoggerService,
@@ -37,6 +38,10 @@ export class ViewProcedureComponent implements OnInit {
         catchError((error) => {
           this.getState = 'failed';
           this.getErrorMessage = error.message;
+          console.log(error);
+          if (error.errorCode === 'ProcedureNotFound') {
+            this.procedureNotFound = true;
+          }
           return throwError(error);
         })
       )

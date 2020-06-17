@@ -20,7 +20,7 @@
 
   <div class="detail" *ngIf="timeseries.madeBySensor">
     <h4 class="detail__title">Sensor</h4>
-    <p class="detail__value">{{timeseries.madeBySensor}}</p>
+    <p class="detail__value"><a [routerLink]="['/sensors/view', timeseries.madeBySensor]">{{timeseries.madeBySensor}}</a></p>
   </div>
 
   <div class="detail" *ngIf="timeseries.observedProperty">
@@ -40,27 +40,37 @@
 
   <div class="detail" *ngIf="timeseries.hasDeployment">
     <h4 class="detail__title">Deployment</h4>
-    <p class="detail__value">{{timeseries.hasDeployment}}</p>
+    <p class="detail__value"><a [routerLink]="['/deployments/view', timeseries.hasDeployment]">{{timeseries.hasDeployment}}</a></p>
   </div>
 
   <div class="detail" *ngIf="timeseries.ancestorPlatforms">
     <h4 class="detail__title">Platforms</h4>
-    <p class="detail__value">{{timeseries.ancestorPlatforms.join(', ')}}</p>
+    <ul>
+      <li *ngFor="let platform of timeseries.ancestorPlatforms">
+        <a [routerLink]="['/platforms/view', platform]">{{platform}}</a>
+      </li>
+    </ul>
   </div>
 
   <div class="detail" *ngIf="timeseries.hasFeatureOfInterest">
     <h4 class="detail__title">Feature of interest</h4>
-    <p class="detail__value">{{timeseries.hasFeatureOfInterest}}</p>
+    <p class="detail__value"><a [routerLink]="['/features-of-interest/view', timeseries.hasFeatureOfInterest]">{{timeseries.hasFeatureOfInterest}}</a></p>
   </div>
 
   <div class="detail" *ngIf="timeseries.usedProcedures">
     <h4 class="detail__title">Used procedures</h4>
-    <p class="detail__value">{{timeseries.usedProcedures.join(', ')}}</p>
+    <ul>
+      <li *ngFor="let procedure of timeseries.usedProcedures">
+        <a [routerLink]="['/procedures/view', procedure]">{{procedure}}</a>
+      </li>
+    </ul>
   </div>
 
   <div class="detail" *ngIf="timeseries.disciplines">
     <h4 class="detail__title">Disciplines</h4>
-    <p class="detail__value">{{timeseries.disciplines.join(', ')}}</p>
+    <ul>
+      <li *ngFor="let discipline of timeseries.disciplines">{{discipline}}</li>
+    </ul>
   </div>
 
   <!-- Merge -->
@@ -98,10 +108,6 @@
 
       <div *ngIf="mergeErrorMessage">
         <p class="text--warn">{{mergeErrorMessage}}</p>
-      </div>
-
-      <div *ngIf="mergeSuccessMessage">
-        <p class="text--success">{{mergeSuccessMessage}}</p>
       </div>
 
     </div> 

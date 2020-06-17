@@ -8,9 +8,15 @@
         <p>Getting procedure {{procedureId}}</p>
       </div>
 
-      <div *ngIf="getState === 'failed' && getErrorMessage" fxLayout="row" fxLayoutAlign="center">
-        <p class="text--warn">{{getErrorMessage}}</p>
+      <div *ngIf="getState === 'failed' && getErrorMessage">
+        <div fxLayout="row" fxLayoutAlign="center">
+          <p class="text--warn">{{getErrorMessage}}</p>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center" *ngIf="procedureNotFound">
+          <a [routerLink]="['/procedures/create', {id: procedureId}]" mat-raised-button color="accent">Create it?</a>
+        </div>
       </div>
+      
 
       <div *ngIf="getState === 'got' && procedure">
         <uo-procedure [procedure]="procedure" (deleted)="onDeleted($event)"></uo-procedure>

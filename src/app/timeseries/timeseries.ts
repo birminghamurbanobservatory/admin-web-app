@@ -12,4 +12,5 @@ export interface Timeseries {
     disciplines?: any[];
     hasDeployment?: any;
     hasFeatureOfInterest?: any;
+    usedProcedures: any[];
 }
