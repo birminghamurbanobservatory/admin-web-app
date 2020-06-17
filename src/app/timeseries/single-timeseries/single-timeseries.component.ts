@@ -7,6 +7,8 @@ import {UoLoggerService} from 'src/app/utils/uo-logger.service';
 import {catchError, filter, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import {throwError, timer} from 'rxjs';
 import {FormControl, Validators} from '@angular/forms';
+import {ObservationService} from 'src/app/observation/observation.service';
+import {Observation} from 'src/app/observation/observation';
 
 @Component({
   selector: 'uo-single-timeseries',
@@ -21,13 +23,17 @@ export class SingleTimeseriesComponent implements OnInit {
   state = 'pending';
   idOfTimeseriesToMergeIntoThisOne;
   mergeState = 'pending';
+  getObsState = 'pending';
   mergeErrorMessage = '';
-  mergeSuccessMessage = '';
+  getObsErrorMessage = '';
+  latestObservation: Observation;
+  
 
   constructor(
     private logger: UoLoggerService,
     public dialog: MatDialog,
     private timeseriesService: TimeseriesService,
+    private observationService: ObservationService,
     private _snackBar: MatSnackBar
   ) { }
 
@@ -38,6 +44,35 @@ export class SingleTimeseriesComponent implements OnInit {
   }
 
 
+  getLatestObservation() {
+
+    this.getObsErrorMessage = '';
+    this.getObsState = 'getting';
+
+    this.observationService.getObservations({
+      inTimeseries: this.timeseries.id
+    }, {
+      limit: 1,
+      sortBy: 'resultTime',
+      sortOrder: 'desc'
+    })
+    .pipe(
+      catchError((err) => {
+        this.logger.debug(err.message);
+        this.getObsErrorMessage = err.message;
+        this.getObsState = 'pending';
+        return throwError(err);
+      })
+    )
+    .subscribe(({data: observations}) => {
+      this.logger.debug('Got latest observation');
+      this.latestObservation = observations[0]; 
+      delete this.latestObservation.id; // As we don't want to show both id and @id.
+      this.getObsState = 'pending';
+    })
+
+  }
+
 
   mergeTimeseries() {
 
@@ -46,25 +81,25 @@ export class SingleTimeseriesComponent implements OnInit {
 
     this.mergeState = 'merging';
     this.mergeErrorMessage = '';
-    this.mergeSuccessMessage = '';
     this.logger.debug(`Merging timeseries ${timeseriesIdsMerged[0]} into ${goodTimeseriesIdKept}`);
 
     this.timeseriesService.mergeTimeseries(this.timeseries.id, timeseriesIdsMerged)
     .pipe(
-      catchError((error) => {
+      catchError((err) => {
         this.mergeState = 'failed';
-        this.mergeErrorMessage = error.message;
+        this.mergeErrorMessage = err.message;
         timer(1400).subscribe(() => {
           // not that this really matters as the whole component should be removed
           this.mergeState = 'pending';
         });
-        return throwError(error);
+        return throwError(err);
       })
     )
     .subscribe(({nObservationsMerged}) => {
       this.logger.debug(`Merged ${nObservationsMerged} observations`);
       this.mergeState = 'pending';
-      this.mergeSuccessMessage = `Successfully merged ${nObservationsMerged} observations.`
+      // We use a snackbar here, because when a merge occurs the parent component will likely update this component, e.g. because the start and end dates of the timeseries have changed, and therefore any success messages written in the component itself will be lost, however the snackbar will persist. 
+      this.showMergeSuccessSnackBar(`Successfully merged ${nObservationsMerged} observations.`);
       this.merged.emit({
         goodTimeseriesIdKept,
         timeseriesIdsMerged,
@@ -74,10 +109,26 @@ export class SingleTimeseriesComponent implements OnInit {
 
   }
 
+
   showMergeSuccessSnackBar(message: string) {
     this._snackBar.open(message, 'Close', {
       duration: 8000,
     });
+  }
+
+
+  copyToClipboard(val: string){
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = val;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
   }
 
 

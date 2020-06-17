@@ -14,7 +14,7 @@
         </mat-autocomplete>
       </mat-form-field>
       <button (click)="applyMadeBySensor()" [disabled]="!optionsForm.get('madeBySensor').value" mat-raised-button color="primary" type="button">Apply</button>
-      <button (click)="clearMadeBySensor()" mat-raised-button color="warn" type="button">Clear</button>
+      <button (click)="clearMadeBySensor()" [disabled]="!optionsForm.get('madeBySensor').value" mat-raised-button color="warn" type="button">Clear</button>
     </div>
 
 
@@ -28,12 +28,12 @@
         </mat-autocomplete>
       </mat-form-field>
       <button (click)="applyObservedProperty()" [disabled]="!optionsForm.get('observedProperty').value" mat-raised-button color="primary" type="button">Apply</button>
-      <button (click)="clearObservedProperty()" mat-raised-button color="warn" type="button">Clear</button>
+      <button (click)="clearObservedProperty()" [disabled]="!optionsForm.get('observedProperty').value" mat-raised-button color="warn" type="button">Clear</button>
     </div>
 
-
-
   </form>
+
+  <br>
 
   <div *ngIf="timeseriesList.length > 0">
     <mat-paginator 

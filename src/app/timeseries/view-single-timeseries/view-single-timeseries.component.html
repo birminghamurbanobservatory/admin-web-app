@@ -1,1 +1,28 @@
-<p>view-single-timeseries works!</p>
+<div class="container container--padded-top container--padded-bottom">
+
+  <mat-card>
+
+    <div *ngIf="deleteState === 'pending'">
+      <div *ngIf="getState === 'getting'" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner></mat-spinner>
+        <p>Getting timeseries {{timeseriesId}}</p>
+      </div>
+
+      <div *ngIf="getState === 'failed' && getErrorMessage" fxLayout="row" fxLayoutAlign="center">
+        <p class="text--warn">{{getErrorMessage}}</p>
+      </div>
+
+      <div *ngIf="getState === 'got' && timeseries">
+        <uo-single-timeseries [timeseries]="timeseries" (merged)="onMerged($event)" (deleted)="onDeleted($event)"></uo-single-timeseries>
+      </div>
+
+    </div>
+
+    <div *ngIf="deleteState === 'deleted'" fxLayout="column" fxLayoutAlign="center center">
+      <p>Timeseries <em>{{timeseries.id}}</em> has been deleted.</p>
+      <a mat-stroked-button color="primary" [routerLink]="['/timeseries']">Return to all timeseries</a>
+    </div>
+
+  </mat-card>
+
+</div>

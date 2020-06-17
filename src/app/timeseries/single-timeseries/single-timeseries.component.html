@@ -2,7 +2,10 @@
 
   <div class="detail">
     <h4 class="detail__title">ID</h4>
-    <p class="detail__value">{{timeseries.id}}</p>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <p class="detail__value"><a [routerLink]="['/timeseries/view', timeseries.id]">{{timeseries.id}}</a></p>
+      <button mat-icon-button (click)="copyToClipboard(timeseries.id)" matTooltip="copy" [matTooltipPosition]="'right'"><mat-icon>content_copy</mat-icon></button>
+    </div>
   </div>
 
   <div class="detail">
@@ -104,6 +107,25 @@
     </div> 
 
   </div> 
+
+  <br>
+
+  <!-- Latest observation -->
+  <div class="detail">
+    <h4 class="detail__title">Latest observation</h4>
+    <button mat-stroked-button color="primary" class="btn--m-5" (click)="getLatestObservation()"> 
+      <span *ngIf="getObsState === 'pending'">
+        {{latestObservation ? 'Refresh' : 'Get'}}
+      </span>
+      <div *ngIf="getObsState === 'getting'" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+        <span>Getting</span>
+        <mat-spinner diameter="18"></mat-spinner>
+      </div>
+    </button>
+    <p *ngIf="getObsErrorMessage" class="text-warn">{{getObsErrorMessage}}</p>
+    <!-- TODO: Might want to make this a little fancier and show the value with the unit symbol and the time(window) and a map of the location. -->
+    <pre *ngIf="latestObservation" style="overflow: auto; max-width: 100%">{{latestObservation | json}}</pre>
+  </div>
 
 
   <div fxLayout="row wrap" fxLayoutAlign="space-around">
