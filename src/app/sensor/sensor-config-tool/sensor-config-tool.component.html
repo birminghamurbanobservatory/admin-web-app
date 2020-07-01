@@ -1,4 +1,7 @@
 
 <json-editor [options]="editorOptions" [data]="jsonDataForTool" (change)=onJsonDataChange($event)></json-editor>
 
-<button (click)="reset()" type="button">Reset</button>
+<div fxLayout="row" fxLayoutAlign="space-between">
+  <span class="text--grey text--small">New line: <i>shift + enter</i></span>
+  <button (click)="reset()" type="button" mat-stroked-button class="btn--small">Reset</button>
+</div>

@@ -167,6 +167,7 @@ export class EditSensorComponent implements OnInit {
     const cleanedUpdates = this.utilsService.removeUnchangedUpdates(updatesWithConfigAdded, this.sensor);
 
     // I don't want any IDs included for the config objects
+    // TODO: This may well be obsolete now as these config sub-documents don't have ids anymore.
     if (cleanedUpdates.initialConfig) {
       cleanedUpdates.initialConfig = cleanedUpdates.initialConfig.map(this.stripIdFromObject); 
     }
