@@ -252,7 +252,7 @@ export class CreateSensorComponent implements OnInit, OnDestroy {
         catchError((err) => {
           // Catch instances where the permanent host already exists, it just didn't happened to be present in the list of permanent hosts. This would be rare, but could potentially occur on slow internet.
           if (err.errorCode === 'PermanentHostAlreadyExists') {
-            this.logger.debug('Server told us that permanent host already exists so no need to create.')
+            this.logger.debug('Server response indicates that permanent host already exists, so no need to create.')
             return of(null);
           } else {
             return throwError(err);
