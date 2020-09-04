@@ -43,7 +43,8 @@ export class CreatePlatformComponent implements OnInit {
       // N.B. this snapshot approach is fine as long as you never reuse the component, i.e. you always naviagate to another component before coming back to this one, e.g. with a different permanentHost.
       inDeployment: [this.route.snapshot.paramMap.get('inDeployment') || '', Validators.required],
       isHostedBy: [this.route.snapshot.paramMap.get('isHostedBy') || ''],
-      height: [{value: null, disabled: true}] // should be disabled until a location is available
+      height: [{value: null, disabled: true}], // should be disabled until a location is available,
+      passLocationToObservations: true
     });
 
     this.listenForImportantChanges();

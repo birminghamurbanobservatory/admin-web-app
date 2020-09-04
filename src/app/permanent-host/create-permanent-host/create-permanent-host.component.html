@@ -31,6 +31,8 @@
           </div>
         </mat-radio-group>
 
+        <mat-slide-toggle formControlName="passLocationToObservations" class="form__field--y-spaced">Pass location to observations</mat-slide-toggle>
+
         <div fxLayout="row" fxLayoutAlign="center">
           <button mat-raised-button color="accent" type="submit" [disabled]="createPermanentHostForm.invalid || state !== 'pending'">
             <!-- Pending -->

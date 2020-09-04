@@ -20,9 +20,14 @@
     <p class="detail__value">{{permanentHost.static ? 'static' : 'mobile'}}</p>
   </div>
 
+  <div *ngIf="permanentHost.updateLocationWithSensor" class="detail">
+    <h4 class="detail__title">Location updated by</h4>
+    <p class="detail__value">{{permanentHost.updateLocationWithSensor}}</p>
+  </div>
+
   <div class="detail">
-    <h4 class="detail__title">ID</h4>
-    <p class="detail__value">{{permanentHost.id}}</p>
+    <h4 class="detail__title">Passes location to observations</h4>
+    <p class="detail__value">{{permanentHost.passLocationToObservations ? 'Yes' : 'No'}}</p>
   </div>
 
   <div class="detail">

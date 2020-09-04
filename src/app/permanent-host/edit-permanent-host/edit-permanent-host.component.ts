@@ -99,6 +99,9 @@ export class EditPermanentHostComponent implements OnInit {
           ],
           updateLocationWithSensor: [
             this.hostedSensors.length > 0 ? this.hostedSensors[hostedSensorIdx].id : null
+          ],
+          passLocationToObservations: [
+            permanentHost.passLocationToObservations
           ]
         });
 

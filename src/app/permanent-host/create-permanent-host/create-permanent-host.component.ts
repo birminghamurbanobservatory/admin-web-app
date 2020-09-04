@@ -33,7 +33,8 @@ export class CreatePermanentHostComponent implements OnInit, OnDestroy {
       id: ['', Validators.pattern('[a-z0-9]+(-[a-z0-9]+)*$')],
       label: '',
       description: '',
-      static: false
+      static: false,
+      passLocationToObservations: true
     });
 
     // Begin by setting the form as invalid, because neither the id or label has been specified yet.

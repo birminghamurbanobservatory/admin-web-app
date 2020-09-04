@@ -4,6 +4,7 @@ export class PermanentHost {
   description?: string;
   static?: boolean;
   updateLocationWithSensor?: string;
+  passLocationToObservations?: boolean;
   registrationKey?: string;
   registeredAs?: string;
   createdAt?: string;
