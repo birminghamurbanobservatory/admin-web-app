@@ -95,8 +95,8 @@ export class EditPlatformComponent implements OnInit {
           value: check.number(height) ? height : null,
           disabled: this.pointLocation ? false : true
         },
-        passLocationToObservation: [
-          platform.passLocationToObservation
+        passLocationToObservations: [
+          platform.passLocationToObservations
         ]
       });
 

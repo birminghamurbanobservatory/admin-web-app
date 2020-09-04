@@ -9,7 +9,7 @@ export interface Platform {
   static?: boolean;
   location?: Location;
   updateLocationWithSensor?: string;
-  passLocationToObservation?: boolean;
+  passLocationToObservations?: boolean;
   hosts?: any[];
   createdAt?: string;
   updatedAt?: string;
