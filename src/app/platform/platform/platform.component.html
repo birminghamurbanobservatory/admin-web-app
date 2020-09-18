@@ -46,6 +46,11 @@
     <p class="detail__value">{{platform.updatedAt| date:'long'}}</p>
   </div>
 
+  <div class="detail">
+    <h4 class="detail__title">Passes location to observations</h4>
+    <p class="detail__value">{{platform.passLocationToObservations ? 'Yes' : 'No'}}</p>
+  </div>
+
   <div class="detail" *ngIf="platform.updateLocationWithSensor">
     <h4 class="detail__title">Updating location with sensor</h4>
     <p class="detail__value">{{platform.updateLocationWithSensor}}</p>
