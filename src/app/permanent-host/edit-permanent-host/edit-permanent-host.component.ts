@@ -122,8 +122,9 @@ export class EditPermanentHostComponent implements OnInit {
 
     const clonedUpdates = cloneDeep(updates);
 
-    // If the permanentHost was being updated by a sensor, and now this feature has been disabled then we need to make sure the updateLocationWithSensor property will be removed the server-side is removed.
-    if (this.permanentHost.updateLocationWithSensor && clonedUpdates.allowUpdateLocationWithSensor === false ) {
+    // If the permanentHost location was being updated by a sensor, and now this feature has been disabled then we need to make sure the updateLocationWithSensor property will be removed.
+    if (clonedUpdates.allowUpdateLocationWithSensor === false ) {
+      this.logger.debug('Setting updateLocationWithSensor as null');
       clonedUpdates.updateLocationWithSensor = null;
     }
 
